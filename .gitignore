@@ -1,7 +1,7 @@
 # generated files
 target/
 generated/
-
+node_modules/
 # dependencies
 Dependencies.toml
 
