@@ -5,10 +5,10 @@ const jwt = require('jsonwebtoken');
 const Usuario = require('../models/usuarios.js');
 
 const crearUsuario = async(req, res) => {
-    var { email, password} = req.body;
+    var { email, password, nombre} = req.body;
     try{
        
-        const existeEmail = await Usuario.findOne({ where: { email: email }});
+        const existeEmail = await Usuario.findOne({ email });
         if (existeEmail) {
             return res.status(400).json({
               ok: false,
@@ -30,6 +30,7 @@ const crearUsuario = async(req, res) => {
     const usuario = new Usuario(req.body);
 
     try {     
+        usuario.nombre = nombre;
         usuario.password = password_encriptada;
         const token = await generarJWT(usuario.id);
         
