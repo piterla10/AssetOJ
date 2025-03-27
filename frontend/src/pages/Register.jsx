@@ -80,7 +80,7 @@ function Register() {
               id='name'
               name='name'
               value={name}
-              placeholder='Enter your name'
+              placeholder='Introduce tu name'
               onChange={onChange}
             />
           </div>
@@ -91,7 +91,7 @@ function Register() {
               id='email'
               name='email'
               value={email}
-              placeholder='Enter your email'
+              placeholder='Introduce tu email'
               onChange={onChange}
             />
           </div>
@@ -102,7 +102,7 @@ function Register() {
               id='password'
               name='password'
               value={password}
-              placeholder='Enter password'
+              placeholder='Introduce tu contraseña'
               onChange={onChange}
             />
           </div>
@@ -113,13 +113,13 @@ function Register() {
               id='password2'
               name='password2'
               value={password2}
-              placeholder='Confirm password'
+              placeholder='Confirmar contraseña'
               onChange={onChange}
             />
           </div>
           <div className='form-group'>
             <button type='submit' className='btn btn-block'>
-              Submit
+              Enviar
             </button>
           </div>
         </form>
