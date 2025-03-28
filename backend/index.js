@@ -18,3 +18,5 @@ app.listen(process.env.PORT, () => {
 
 app.use('/api/login', require('./router/auth'));
 app.use('/api/usuarios', require('./router/usuarios'));
+app.use('/api/assets', require('./router/assets'));
+app.use('/api/comentarios', require('./router/comentarios'));
