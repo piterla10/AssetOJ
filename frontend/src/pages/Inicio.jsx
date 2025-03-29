@@ -1,8 +1,8 @@
-import React from 'react' // ya no es necesario importar esto pero lo dejo por si acaso
+import React from 'react'
 
-function Inicio() {
+function Inicio() { 
   return (
-    <div>Inicio</div>
+    <div>Pagina principal</div>
   )
 }
 
