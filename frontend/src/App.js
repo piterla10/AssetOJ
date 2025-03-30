@@ -9,10 +9,10 @@ import Categorias from './pages/Categorias'
 import DetallesAsset from './pages/DetallesAsset'
 import EditarAsset from './pages/EditarAsset'
 import MiPerfil from './pages/MiPerfil'
-import OtroPerfil from './pages/otroPerfil'
+import OtroPerfil from './pages/OtroPerfil'
 import Siguiendo from './pages/Siguiendo'
 import SubirAsset from './pages/SubirAsset'
-import Login from './pages/login'
+import Login from './pages/Login'
 
 function App() {
   return (
