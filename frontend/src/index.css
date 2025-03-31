@@ -138,10 +138,10 @@ h3 {
 .form-control{
   background-color: transparent; 
   height: 60px;
+  color: white !important; 
 }
 .form-control::placeholder {
   font-size: 18px; /* Tamaño del texto del placeholder */
-
 }
 .form-group label {
   text-align: left;
@@ -162,6 +162,53 @@ h3 {
   align-items: center;
   justify-content: center;
 }
+.btn-header {
+  background-color: #252360;
+  border: 2px solid white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-header a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+}
+
+.btn-header:hover {
+  background-color: #1a1a4d;
+}
+.search-bar {
+  display: flex;
+  align-items: center;
+  width: 50%;
+  background: #252360;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.search-bar input {
+  width: 100%;
+  background: transparent;
+  border: 2px solid white;
+  padding: 8px;
+  color: white;
+  outline: none;
+}
+
+.search-bar button {
+  background: transparent;
+  border: 2px solid white;
+  border-left: 0px solid white;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.search-bar button:hover {
+  background: #252360;
+}
 
 .btn svg {
   margin-right: 8px;
@@ -181,7 +228,22 @@ h3 {
 .btn:hover {
   transform: scale(0.98);
 }
+.enlacesPaginas{
+  display: flex;
+  justify-content: end;
+  width: 20%;
+}
+.enlace {
+  transition: all 0.5s;
+}
 
+.enlace a {
+  transition: color 0.5s; 
+}
+
+.enlace a:hover {
+  color: #0B0A1C;
+}
 .loadingSpinnerContainer {
   position: fixed;
   top: 0;

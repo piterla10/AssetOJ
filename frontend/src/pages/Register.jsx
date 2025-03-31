@@ -64,11 +64,11 @@ function Register() {
 
   return (
     <>
+    <div className="login-container"> 
       <section className='heading'>
         <h1>
-          <FaUser /> Registro
+          Registro
         </h1>
-        <p>Crea una cuenta</p>
       </section>
 
       <section className='form'>
@@ -80,7 +80,7 @@ function Register() {
               id='name'
               name='name'
               value={name}
-              placeholder='Introduce tu name'
+              placeholder='Introduce tu nombre'
               onChange={onChange}
             />
           </div>
@@ -119,11 +119,12 @@ function Register() {
           </div>
           <div className='form-group'>
             <button type='submit' className='btn btn-block'>
-              Enviar
+              Confirmar
             </button>
           </div>
         </form>
       </section>
+    </div>
     </>
   )
 }
