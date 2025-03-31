@@ -36,7 +36,7 @@ function Header() {
               </Link>
             </li>
             <li>
-              <Link to='/register'>
+              <Link to='/registro'>
                 Registro
               </Link>
             </li>
