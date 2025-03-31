@@ -16,12 +16,16 @@ function Login() {
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
-
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
-    (state) => state.auth
+  
+  // useSelector sirve para acceder al estado global, en este caso de las variables entre corchetes
+  const { user, isLoading, isError, isSuccess, message } = useSelector( 
+    (state) => state.auth // state.auth sirve para referenciar de donde se cogen las variables locales, auth es el nombre dado en store.js
   )
 
-  useEffect(() => {
+  // función que se ejecuta cuando se monta el componente, es util en llamadas a API y en subscripciones y limpieza de efectos.
+  useEffect(() => { 
+    // El primer argumento: Es una función que contiene el código que quieres ejecutar como "efecto secundario". 
+    // Este código se ejecuta después de que el componente se renderiza.
     if (isError) {
       toast.error(message)
     }
@@ -30,7 +34,9 @@ function Login() {
       navigate('/')
     }
 
-    dispatch(reset())
+    dispatch(reset()) // función para ejecutar acciones del slice
+    
+    // Array de dependencias, si se pasa una lista de dependencias, el efecto se ejecutará cada vez que cambien esas dependencias.
   }, [user, isError, isSuccess, message, navigate, dispatch])
 
   const onChange = (e) => {
@@ -48,7 +54,7 @@ function Login() {
       password,
     }
 
-    dispatch(login(userData))
+    dispatch(login(userData)) // función para ejecutar acciones del slice
   }
 
   if (isLoading) {
