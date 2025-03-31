@@ -4,16 +4,17 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  color: #fff;
 }
 
 body {
   font-family: 'Poppins', sans-serif;
   height: 100vh;
+  background-color: #0B0A1C;
 }
 
 a {
   text-decoration: none;
-  color: #000;
 }
 
 p {
@@ -37,9 +38,8 @@ h3 {
 
 .container {
   width: 100%;
-  max-width: 960px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 2px;
   text-align: center;
 }
 
@@ -47,9 +47,11 @@ h3 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 0;
-  border-bottom: 1px solid #e6e6e6;
+  padding: 10px 15px;
+  padding-left: 3px;
   margin-bottom: 60px;
+  background-color: #252360;
+  height: 60px; 
 }
 
 .header ul {
@@ -68,7 +70,7 @@ h3 {
 }
 
 .header ul li a:hover {
-  color: #777;
+  color: #ccc;
 }
 
 .header ul li a svg {
@@ -78,6 +80,8 @@ h3 {
 .heading {
   font-size: 2rem;
   font-weight: 700;
+  border-bottom: 2px solid #fff; 
+  padding-bottom: 10px; 
   margin-bottom: 50px;
   padding: 0 20px;
 }
@@ -116,6 +120,7 @@ h3 {
 
 .form-group {
   margin-bottom: 10px;
+  
 }
 
 .form-group input,
@@ -127,11 +132,19 @@ h3 {
   border-radius: 5px;
   margin-bottom: 10px;
   font-family: inherit;
+  color: #000;
 }
 
+.form-control{
+  background-color: transparent; 
+  height: 60px;
+}
+.form-control::placeholder {
+  font-size: 18px; /* Tamaño del texto del placeholder */
+
+}
 .form-group label {
   text-align: left;
-  display: block;
   margin: 0 0 5px 3px;
 }
 
@@ -139,8 +152,7 @@ h3 {
   padding: 10px 20px;
   border: 1px solid #000;
   border-radius: 5px;
-  background: #000;
-  color: #fff;
+  background: #252360;
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
@@ -161,7 +173,8 @@ h3 {
 }
 
 .btn-block {
-  width: 100%;
+  margin-left: 25%;
+  width: 50%;
   margin-bottom: 20px;
 }
 
@@ -191,6 +204,22 @@ h3 {
   animation: spin 1.2s linear infinite;
 }
 
+.logo {
+  margin-top: 2px;
+  width: 100px;
+  height: auto;  /* Mantener proporciones */
+  max-height: 100px;  /* Limita la altura máxima */
+  object-fit: contain;  /* Asegura que la imagen se ajuste sin distorsionarse */
+  display: block;
+}
+.login-container {
+  background-color: #121130;
+  padding: 30px; 
+  border-radius: 10px; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  max-width: 600px; 
+  margin: 0 auto; 
+}
 @keyframes spin {
   0% {
     transform: rotate(0deg);

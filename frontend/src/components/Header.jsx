@@ -16,9 +16,11 @@ function Header() {
 
   return (
     <header className='header'>
-      <div className='logo'>
-        <Link to='/'>AssetsOJ</Link>
-      </div>
+    <div className='logo'>
+      <Link to='/'>
+        <img src='/Logo_con_fondo_mas_letras.png' alt='AssetsOJ' class="logo"/>
+      </Link>
+    </div>
       <ul>
         {user ? (
           <li>
@@ -30,12 +32,12 @@ function Header() {
           <>
             <li>
               <Link to='/login'>
-                <FaSignInAlt /> Login
+                Login
               </Link>
             </li>
             <li>
               <Link to='/register'>
-                <FaUser /> Registro
+                Registro
               </Link>
             </li>
           </>
