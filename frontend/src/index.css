@@ -77,6 +77,26 @@ h3 {
   margin-right: 5px;
 }
 
+.listaAssets{
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.asset-card {
+  background: #222;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+  width: 200px;
+}
+
+.asset-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
 .heading {
   font-size: 1.2rem;
   font-weight: 700;
