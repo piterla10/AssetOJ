@@ -32,14 +32,25 @@ function Header() {
     <header className='header'>
       <div className='logo'>
         <Link to='/'>
-          <img src='/Logo_con_fondo_mas_letras.png' alt='AssetsOJ' class="logo"/>
+          <img src='/Logo_con_fondo_mas_letras.png' alt='AssetsOJ' className="logo"/>
         </Link>
       </div>
       <div className='enlacesPaginas'>
+        {user && (
+          <>  
+          <div className='enlace'>
+            <Link to='/SubirAsset'>Subir Asset</Link>
+          </div>
+          <div className="separador"></div> 
+          <div className='enlace'>
+            <Link to='/Siguiendo'>Siguiendo</Link>
+          </div>
+          <div className="separador"></div> 
+          </>
+        )}
         <div className='enlace'>
           <Link to='/Categorias'>Categorías</Link>
         </div>
-       
       </div>
       <form className="search-bar" onSubmit={handleSearch}>
         <input
@@ -53,9 +64,14 @@ function Header() {
       <ul>
         {user ? (
           <li>
-            <button className='btn' onClick={onLogout}>
-              <FaSignOutAlt /> Logout
-            </button>
+            {/* <button className='btn-header' onClick={onLogout}>
+                Logout
+              </button> */}
+            <div className='logo'>
+              <Link to='/MiPerfil'>
+                <img src='https://drive.google.com/uc?id=1wdv6VT-kX-PwrOXT14iYYr1JK6YY-NMG' alt='MiPerfil' className="logo"/>
+              </Link>
+            </div>
           </li>
         ) : (
           <>

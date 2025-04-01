@@ -6,7 +6,7 @@ const Asset = require('../models/assets.js');
 const obtenerAssetsPorTipo = async (req, res) => {
     try {
         const { tipo } = req.params; // Se obtiene el tipo desde los parámetros de la URL
-
+        console.log(tipo);
         // Buscar los assets que coincidan con el tipo
         const assets = await Asset.find({ tipo });
 

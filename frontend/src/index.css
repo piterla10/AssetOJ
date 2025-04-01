@@ -251,10 +251,16 @@ h3 {
 .enlacesPaginas{
   display: flex;
   justify-content: end;
-  width: 20%;
+  align-items: center;
+  gap: 20px;
+  width: 25%;
+  margin: 0;
+  flex-wrap: nowrap;
 }
 .enlace {
   transition: all 0.5s;
+
+
 }
 
 .enlace a {
@@ -301,6 +307,52 @@ h3 {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
   max-width: 500px; 
   margin: 0 auto; 
+}
+.contenedorPadre{
+  display: flex;
+  justify-content: center;
+  gap: 70px;
+  position: relative;
+}
+.contenedorPadre::after{
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  width: 70%; /* Ajusta el tamaño de la línea */
+  height: 2px;
+  background-color: #ffffff;
+  transform: translateX(-50%); /* Centra la línea */
+}
+.contenedorHijo{
+
+  
+}
+.separador {
+  width: 2px; 
+  height: 30px;
+  background-color: #ccc; 
+  margin: 10px auto;
+}
+
+.noAssets{
+  margin-top: 20%;
+}
+
+.titulo::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 3px;
+  background-color: transparent;
+  transition: color 0.3s ease;
+}
+.titulo:hover{
+  cursor: pointer;
+}
+
+.contenedorHijo.activo .titulo {
+  color: #FDF972;
 }
 @keyframes spin {
   0% {
