@@ -275,10 +275,16 @@ h3 {
 .logo {
   margin-top: 2px;
   width: 100px;
-  height: auto;  /* Mantener proporciones */
-  max-height: 100px;  /* Limita la altura máxima */
-  object-fit: contain;  /* Asegura que la imagen se ajuste sin distorsionarse */
+  height: auto;  
+  max-height: 100px;  
+  object-fit: contain; 
   display: block;
+}
+.logoPerfil{
+  width: 60px;
+  height: 60px;  
+  object-fit: contain; 
+  margin-left: 40px;
 }
 .login-container {
   background-color: #121130;

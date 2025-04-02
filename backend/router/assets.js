@@ -6,13 +6,10 @@ const {obtenerAssetsPorTipo,crearAsset} = require('../controllers/assets');
 const router = Router();
 
 router.get('/:tipo', [
-    //check('x-token', 'El argumento x-token es obligatorio').not().isEmpty(),
-    //validarJWT,
     validarCampos,
 ], obtenerAssetsPorTipo);
 
 router.post('/', [
-    check('x-token', 'El argumento x-token es obligatorio').not().isEmpty(),
     validarJWT,
     validarCampos,
 ], crearAsset);

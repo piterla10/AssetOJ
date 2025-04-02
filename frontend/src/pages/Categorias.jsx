@@ -21,7 +21,7 @@ function Categorias() {
     
     fetchAssets(); // Llamada a la API
   }, [categoriaActiva]); // Se ejecuta cada vez que cambia la categoría activa
-
+  
   return (
     <>
       <div className='contenedorPadre'>

@@ -7,14 +7,12 @@ const router = Router();
 
 
 router.get('/', [
-    check('x-token', 'El argumento x-token es obligatorio').not().isEmpty(),
     validarJWT,
     validarCampos,
 ], obtenerComentarios);
 
 
 router.post('/', [
-    check('x-token', 'El argumento x-token es obligatorio').not().isEmpty(),
     validarJWT,
     validarCampos,
 ], crearComentario);

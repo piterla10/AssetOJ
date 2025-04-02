@@ -3,6 +3,21 @@ const bcrypt = require('bcrypt');
 const {generarJWT} = require('../helpers/jwt');
 const jwt = require('jsonwebtoken');
 const Usuario = require('../models/usuarios.js');
+const obtenerUsuario = async (req, res) => {
+    try {
+        const { id } = req.params; // Obtener el ID de los parámetros de la URL
+        const usuario = await Usuario.findById(id); // Buscar usuario en la base de datos
+
+        if (!usuario) {
+            return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+        }
+
+        res.status(200).json(usuario); // Devolver usuario encontrado
+    } catch (error) {
+        console.error('Error al obtener usuario:', error);
+        res.status(500).json({ mensaje: 'Error del servidor' });
+    }
+};
 
 const crearUsuario = async(req, res) => {
     var { email, password, name} = req.body;
@@ -47,4 +62,4 @@ const crearUsuario = async(req, res) => {
     
 }
 
-module.exports = {crearUsuario}
+module.exports = {crearUsuario,obtenerUsuario}

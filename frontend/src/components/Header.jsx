@@ -69,7 +69,7 @@ function Header() {
               </button> */}
             <div className='logo'>
               <Link to='/MiPerfil'>
-                <img src='https://drive.google.com/uc?id=1wdv6VT-kX-PwrOXT14iYYr1JK6YY-NMG' alt='MiPerfil' className="logo"/>
+                <img src="https://lh3.googleusercontent.com/d/1HnpfJ7K0A1cLf1wNGZIWP__4riQb85f9"  className="logoPerfil" alt="Imagen del proyecto"/>
               </Link>
             </div>
           </li>
