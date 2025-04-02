@@ -68,44 +68,42 @@ function Login() {
         <h1>
           Iniciar Sesión
         </h1>
-
       </section>
-  
       
-        <section className='form'>
-          <form onSubmit={onSubmit}>
-            <div className='form-group'>
-              <input
-                type='email'
-                className='form-control'
-                id='email'
-                name='email'
-                value={email}
-                placeholder='Introduce tu email'
-                onChange={onChange}
-              />
-            </div>
-            <div className='form-group'>
-              <input
-                type='password'
-                className='form-control'
-                id='password'
-                name='password'
-                value={password}
-                placeholder='Introduce tu contraseña'
-                onChange={onChange}
-              />
-            </div>
-  
-            <div className='form-group'>
-              <button type='submit' className='btn btn-block'>
-                Confirmar
-              </button>
-            </div>
-          </form>
-        </section>
-      </div>
-    </>
+      <section className='form'>
+        <form onSubmit={onSubmit}>
+          <div className='form-group'>
+            <input
+              type='email'
+              className='form-control'
+              id='email'
+              name='email'
+              value={email}
+              placeholder='Introduce tu email'
+              onChange={onChange}
+            />
+          </div>
+          <div className='form-group'>
+            <input
+              type='password'
+              className='form-control'
+              id='password'
+              name='password'
+              value={password}
+              placeholder='Introduce tu contraseña'
+              onChange={onChange}
+            />
+          </div>
+
+          <div className='form-group'>
+            <button type='submit' className='btn btn-block'>
+              Confirmar
+            </button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </>
   )
   
 }
