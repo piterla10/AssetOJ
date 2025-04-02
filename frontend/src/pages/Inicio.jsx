@@ -4,25 +4,36 @@ import AssetLista from '../components/AssetLista'
 function Inicio() { 
   return (
     <>
-      <section className='heading'>
+      <section className='contenedorTitulo'>
         <h1>Más populares</h1>
       </section>
-      <div className='heading'>
-        <h1>3D</h1>
+      <div className='contenedor'>
+        <h1 className='titulo2'>3D</h1>
+        <div className='contenedor2'>
+          <AssetLista className="lista" cantidad={6} categoria={'3D'}/>
+        </div>
       </div>
-        <AssetLista cantidad={6} categoria={'3D'}/>
-      <div className='heading'>
-        <h1>2D</h1>
+      <div className='contenedor'>
+        <h1 className='titulo2'>2D</h1>
+        <div className='contenedor2'>
+          <AssetLista cantidad={6} categoria={'2D'} />
+        </div>
       </div>
-        <AssetLista cantidad={6} categoria={'2D'} />
-      <div className='heading'>
-        <h1>Audio</h1>
+       
+      <div className='contenedor'>
+        <h1 className='titulo2'>Audio</h1>
+        <div className='contenedor2'>
+          <AssetLista cantidad={6} categoria={'Audio'}/>
+        </div>
       </div>
-        <AssetLista cantidad={6} categoria={'Audio'}/>
-      <div className='heading'>
-        <h1>Addons</h1>
+       
+      <div className='contenedor'>
+        <h1 className='titulo2'>Addons</h1>
+        <div className='contenedor2'>
+         <AssetLista cantidad={6} categoria={'Addons'}/>
+        </div>
       </div>
-        <AssetLista cantidad={6} categoria={'Addons'}/>
+  
     </>
   )
 }

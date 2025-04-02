@@ -8,6 +8,8 @@ const assetSchema = new mongoose.Schema({
     etiquetas: { type: [String] }, // Ahora es un array de strings
     imagenes: {type: [String]},
     likes: {type: Number, required: false},
+    autor:[{ type: mongoose.Schema.Types.ObjectId, ref: "Usuario" }],
+    fecha:{type: Date, required:false},
     descargas: {type:Number, required:false},
     valoracion: {type:Number, required:false},
     valoracionNota: {type:Number, required:false},

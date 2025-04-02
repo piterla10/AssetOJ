@@ -360,6 +360,61 @@ h3 {
 .contenedorHijo.activo .titulo {
   color: #FDF972;
 }
+.contenedorInicio{
+  display: b;
+
+}
+
+.titulo2 {
+  display: block;
+  position: relative; 
+  width: 100%;
+  text-align: start;
+  padding-left: 30px;
+
+}
+
+.titulo2::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 80%; 
+  height: 2px; 
+  background-color: #ffffff; 
+}
+.contenedor{
+  display: flex;
+  margin-left: 10%;
+  padding-top: 40px;
+  width: 100%;
+  flex-direction: column; 
+  align-items: center;
+
+}
+.contenedor2{
+  width: 100%;
+
+}
+.contenedorTitulo{
+  display: flex;
+  justify-content: center;
+  position: relative; 
+  width: 100%;
+  text-align: center;
+  padding-bottom: 10px;
+}
+.contenedorTitulo::after{
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  width: 50%; 
+  height: 2px; 
+  background-color: #ffffff; 
+}
+.lista{
+
+}
 @keyframes spin {
   0% {
     transform: rotate(0deg);
