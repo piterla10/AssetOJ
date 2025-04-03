@@ -4,6 +4,7 @@ import AssetLista from '../components/AssetLista'
 function Inicio() { 
   return (
     <>
+    <div className='contenedorPrincipal'>
       <section className='contenedorTitulo'>
         <h1>Más populares</h1>
       </section>
@@ -33,7 +34,7 @@ function Inicio() {
          <AssetLista cantidad={6} categoria={'Addons'}/>
         </div>
       </div>
-  
+     </div>
     </>
   )
 }

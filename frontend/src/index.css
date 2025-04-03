@@ -379,22 +379,29 @@ h3 {
   position: absolute;
   left: 0;
   bottom: -5px;
-  width: 80%; 
+  width: 100%; 
   height: 2px; 
   background-color: #ffffff; 
 }
 .contenedor{
   display: flex;
-  margin-left: 10%;
   padding-top: 40px;
-  width: 100%;
+  width: 90%;
   flex-direction: column; 
   align-items: center;
-
 }
 .contenedor2{
   width: 100%;
 
+}
+.contenedorPrincipal{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border:2px solid black;
+  margin-left: 4%;
+  margin-right: 4%;
 }
 .contenedorTitulo{
   display: flex;
