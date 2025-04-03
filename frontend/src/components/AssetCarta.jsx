@@ -5,7 +5,7 @@ const AssetCarta = ({ asset }) => {
     <div className="asset-card">
       <img src={asset.imagenes[0]} alt={asset.nombre} />
       <h3>{asset.nombre}</h3>
-      {/*<p>{asset.author}</p>*/}
+      {<p>{asset.autor.nombre}</p>}
       <p>⭐ {asset.valoracion} | ❤️ {asset.likes}</p>
     </div>
   );
