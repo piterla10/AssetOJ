@@ -19,6 +19,21 @@ const obtenerUsuario = async (req, res) => {
     }
 };
 
+const obtenerUsuarios = async (req, res) => {
+    try {
+        const usuarios = await Usuario.find(); // Recupera todos los documentos de la colección 'usuarios'
+
+        if (usuarios.length === 0) {
+            return res.status(404).json({ mensaje: 'No se encontraron usuarios' });
+        }
+
+        res.status(200).json(usuarios); // Devuelve la lista de usuarios encontrados
+    } catch (error) {
+        console.error('Error al obtener usuarios:', error);
+        res.status(500).json({ mensaje: 'Error del servidor' });
+    }
+};
+
 const crearUsuario = async(req, res) => {
     var { email, password, name} = req.body;
     try{
@@ -62,4 +77,4 @@ const crearUsuario = async(req, res) => {
     
 }
 
-module.exports = {crearUsuario,obtenerUsuario}
+module.exports = {crearUsuario,obtenerUsuario,obtenerUsuarios}

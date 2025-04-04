@@ -3,12 +3,14 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout, reset } from '../features/auth/authSlice'
 import { useState } from "react";
+import usuarioService from '../features/usuarios/usuarioService';
 function Header() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { user } = useSelector((state) => state.auth)
+  const usuario = JSON.parse(localStorage.getItem('usuario'));
   const [searchTerm, setSearchTerm] = useState("");
-
+  console.log(user);
   // Manejar cambios en el input
   const handleChange = (e) => {
     setSearchTerm(e.target.value);
@@ -69,7 +71,7 @@ function Header() {
               </button> */}
             <div className='logo'>
               <Link to='/MiPerfil'>
-                <img src="https://lh3.googleusercontent.com/d/1HnpfJ7K0A1cLf1wNGZIWP__4riQb85f9"  className="logoPerfil" alt="Imagen del proyecto"/>
+                <img src={usuario.imagenPerfil}  className="logoPerfil" alt="Imagen del proyecto"/>
               </Link>
             </div>
           </li>
