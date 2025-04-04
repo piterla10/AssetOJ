@@ -78,52 +78,50 @@ h3 {
   margin-right: 5px;
 }
 
-.listaAssets{
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
+.listaAssets{ /*Esto hace que se creen columnas dependiendo de cuantos asset caben*/
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 215px); /* Ancho de tus cards */
+  gap: 10px;
+  justify-content: center; /* Centra las columnas en el contenedor */
+}
+
+.listaAssets::after {
+  /*Esto es un truco que mezclao con lo de arriba rellena el resto de columnas 
+  en caso de que no haya asset en ellas*/
+  content: "";
+  flex: auto;
+  grid-column: 1 / -1; /* Ocupa toda la fila */
+  height: 0;
 }
 
 .asset-card {
   padding: 10px;
-  border-radius: 10px;
-  text-align: left; /* Alineación del texto */
-  width: 220px; /* Un poco más ancha */
-  color: #ececec; /* Texto blanco */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra suave */
+  text-align: left; 
+  width: 215px; 
+  color: #ececec;
 }
 
 .asset-card img {
   width: 200px;
-  height: 200px; /* Ajusta la altura */
-  object-fit: cover; /* Recorta para llenar */
+  height: 200px;
+  object-fit: cover;
 }
 
 .asset-card h3 {
-  font-size: 1.1em;
   font-weight: bold;
-  margin: 5px 0;
+  font-size: 18px;
+  margin: 0px 0;
 }
-
-.asset-card .author {
-  font-size: 0.9em;
-  color: #bababa; /* Texto gris */
-}
-
-.asset-card .stats {
+.asset-card p {
+  font-size: 12px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-top: 5px;
-  font-size: 0.9em;
+  gap: 5px;
 }
 
-.asset-card .stars {
-  color: gold;
-}
-
-.asset-card .likes {
-  color: red;
+.autor {
+  color: #bababa; 
+  font-size: 16px;
   font-weight: bold;
 }
 
@@ -400,7 +398,7 @@ h3 {
   width: 100%;
   text-align: start;
   padding-left: 30px;
-
+  font-size: 50px;
 }
 
 .titulo2::after {
@@ -420,6 +418,7 @@ h3 {
   align-items: center;
 }
 .contenedor2{
+  margin-top: 7px;
   width: 100%;
 
 }
@@ -446,9 +445,6 @@ h3 {
   width: 50%; 
   height: 2px; 
   background-color: #ffffff; 
-}
-.lista{
-
 }
 .contenedorPerfilPrincipal{
   width: 100%;
@@ -548,9 +544,6 @@ h3 {
   font-weight: bold;
   font-size: 16px;
   margin-bottom: 5px;
-}
-.starRating{
-  line-height: 1;
 }
 
 .letraNano{
