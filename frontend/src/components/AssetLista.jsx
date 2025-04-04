@@ -5,14 +5,22 @@ import assetService from "../features/assets/assetService";
 // pasamos la cantidad de asset de cierta categoría que queremos mostrar, las etiquetas en caso de que queramos
 // filtrarlos y lo mismo con la valoración y la fecha, en caso de que no nos pasen estos parámetros, obtendrán los
 // valores que les asignamos debajo.
-const AssetLista = ({ cantidad, categoria, etiquetas = [], valoracion = null, fecha = null }) => {
+const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, paginacion = null, etiquetas = [], valoracion = null, fecha = null }) => {
   const [assets, setAssets] = useState([]);
+  
+  // esta variable sirve para poner paginación en caso de que nos la hayan pasado
+  const inicio = paginacion ? paginacion : 0;
 
   // para cargar los datos de la API
   useEffect(() => { 
     const fetchAssets = async () => {
       try {
-        const data = await assetService.getAssets(categoria);
+        let data = [];
+        if (datosUsuario){
+          data = datosUsuario;
+        }else{
+          data = await assetService.getAssets(categoria);
+        }
 
         // !Array.isArray(data.assets) es para saber si data NO es un array
         if (!data || !Array.isArray(data.assets)) {
@@ -75,8 +83,8 @@ const AssetLista = ({ cantidad, categoria, etiquetas = [], valoracion = null, fe
         }
 
 
-        // cantidad a mostrar
-        setAssets(filteredAssets.slice(0, cantidad));
+        // cantidad a mostrar teniendo en cuenta la paginación
+        setAssets(filteredAssets.slice(inicio, inicio + cantidad));
       } catch (error) {
         console.error("Error al obtener los assets:", error);
         setAssets([]);
