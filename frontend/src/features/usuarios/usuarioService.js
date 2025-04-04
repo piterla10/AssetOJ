@@ -4,14 +4,14 @@ const API_URL = '/api/usuarios/'
 const token = localStorage.getItem('token'); // Recuperar el token almacenado
 
 const config = {
-  headers: {
-    Authorization: `Bearer ${token}`, // Agregar el token en los headers
-    'Content-Type': 'application/json',
-  },
+    headers: {
+        'x-token': token, 
+        'Content-Type': 'application/json',
+    },
 };
-// Register user
+
 const obtenerUsuario = async (email) => {
-  const response = await axios.get('http://localhost:5000'+ API_URL + '/' + email, config)
+  const response = await axios.get('http://localhost:5000'+ API_URL + email, config)
   console.log(response.data);
 
   return response.data

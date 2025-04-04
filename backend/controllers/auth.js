@@ -4,11 +4,15 @@ const {generarJWT} = require('../helpers/jwt');
 const jwt = require('jsonwebtoken');
 const Usuario = require('../models/usuarios.js');
 const login = async (req, res) => {
-    const { email, password } = req.body;
-
+    const { email, password1 } = req.body;
+    console.log(password1)
     try {
         // Buscar usuario en la base de datos por email
-        const usuarioBD = await Usuario.findOne({ email });
+        const usuarioBD = await Usuario.findOne({ email }).populate([
+            'assets',
+            'descargas',
+            'guardados'
+        ]);
 
         // Si no se encuentra el usuario
         if (!usuarioBD) {
@@ -20,7 +24,7 @@ const login = async (req, res) => {
         }
 
         // Verificar contraseña
-       const validPassword = bcrypt.compareSync(password, usuarioBD.password);
+       const validPassword = bcrypt.compareSync(password1, usuarioBD.password);
         if (!validPassword) {
             return res.status(400).json({
                 ok: false,
@@ -31,12 +35,14 @@ const login = async (req, res) => {
 
         // Generar JWT
         const token = await generarJWT(usuarioBD.id);
-
+          
+        const usuarioResponse = usuarioBD.toObject();
+        const { imagenPerfil, valoracionesNota, valoracionesNum,password,informacionAutor, seguidores, seguidos, descargas, assets, guardados, ...userInfo } = usuarioResponse;
         res.json({
             ok: true,
             msg: 'Login exitoso',
             token,
-            usuario: usuarioBD,
+            usuario: userInfo
         });
 
     } catch (error) {
@@ -54,7 +60,7 @@ const token = async(req,res = response) =>{
     const token = req.headers['x-token'];
     
     try{
-        const { usuario, rol, ...object } = jwt.verify(token, process.env.JWTSECRET);
+        const { usuario, ...object } = jwt.verify(token, process.env.JWTSECRET);
         const usuarioBD = await Usuario.findByPk(usuario);
         if (!usuarioBD) {
             return res.status(400).json({
@@ -63,7 +69,7 @@ const token = async(req,res = response) =>{
                 token: ''
             });
         }
-        const nuevotoken = await generarJWT(usuario, rol);
+        const nuevotoken = await generarJWT(usuario);
         res.json({
             ok: true,
             msg: 'token',

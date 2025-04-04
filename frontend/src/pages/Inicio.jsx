@@ -17,21 +17,21 @@ function Inicio() {
       <div className='contenedor'>
         <h1 className='titulo2'>2D</h1>
         <div className='contenedor2'>
-          <AssetLista cantidad={6} categoria={'2D'} />
+          <AssetLista  className="lista"  cantidad={6} categoria={'2D'} />
         </div>
       </div>
        
       <div className='contenedor'>
         <h1 className='titulo2'>Audio</h1>
         <div className='contenedor2'>
-          <AssetLista cantidad={6} categoria={'Audio'}/>
+          <AssetLista  className="lista"  cantidad={6} categoria={'Audio'}/>
         </div>
       </div>
        
       <div className='contenedor'>
         <h1 className='titulo2'>Addons</h1>
         <div className='contenedor2'>
-         <AssetLista cantidad={6} categoria={'Addons'}/>
+          <AssetLista  className="lista"  cantidad={6} categoria={'Addons'}/>
         </div>
       </div>
      </div>

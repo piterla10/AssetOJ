@@ -7,10 +7,8 @@ const router = Router();
 
 router.post('/', [
     check('email', 'El argumento email es obligatorio').not().isEmpty(),
-    check('password', 'El argumento email es obligatorio').not().isEmpty(),
+    check('password1', 'El argumento email es obligatorio').not().isEmpty(),
     validarCampos,
-    validarJWT
-    
 ], crearUsuario);
 
 

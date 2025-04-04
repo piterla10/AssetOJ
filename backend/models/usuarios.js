@@ -5,14 +5,14 @@ const usuarioSchema = new mongoose.Schema({
     informacionAutor:{ type: String, required: false},
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    imagenPerfil: { type: String }, // URL de la imagen de perfil
-    seguidores: [{ type: mongoose.Schema.Types.ObjectId, ref: "Usuario" }], // Lista de seguidores
-    seguidos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Usuario" }], // Lista de usuarios seguidos
-    descargas: [{ type: mongoose.Schema.Types.ObjectId, ref: "Assets" }],
-    assets:[{ type: mongoose.Schema.Types.ObjectId, ref: "Assets" }],
-    guardados: [{ type: mongoose.Schema.Types.ObjectId, ref: "Assets" }],
-    valoracionesNum: { type: Number, required: false},
-    valoracionesNota: { type: Number, required: false},
+    imagenPerfil: { type: String, default: '' }, // URL de la imagen de perfil
+    seguidores: [{ type: mongoose.Schema.Types.ObjectId, ref: "Usuario", default: [] }],
+    seguidos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Usuario", default: [] }],
+    descargas: [{ type: mongoose.Schema.Types.ObjectId, ref: "Assets", default: [] }],
+    assets: [{ type: mongoose.Schema.Types.ObjectId, ref: "Assets", default: [] }],
+    guardados: [{ type: mongoose.Schema.Types.ObjectId, ref: "Assets", default: [] }],
+    valoracionesNum: { type: Number, default: 0 },
+    valoracionesNota: { type: Number, default: 0 }
 
   });
 

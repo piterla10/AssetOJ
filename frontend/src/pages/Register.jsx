@@ -10,11 +10,11 @@ function Register() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    password: '',
+    password1: '',
     password2: '',
   })
 
-  const { name, email, password, password2 } = formData
+  const { name, email, password1, password2 } = formData
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -45,13 +45,13 @@ function Register() {
   const onSubmit = (e) => {
     e.preventDefault()
 
-    if (password !== password2) {
+    if (password1 !== password2) {
       toast.error('Passwords do not match')
     } else {
       const userData = {
         name,
         email,
-        password,
+        password1,
       }
 
       dispatch(register(userData))
@@ -99,9 +99,9 @@ function Register() {
             <input
               type='password'
               className='form-control'
-              id='password'
-              name='password'
-              value={password}
+              id='password1'
+              name='password1'
+              value={password1}
               placeholder='Introduce tu contraseña'
               onChange={onChange}
             />

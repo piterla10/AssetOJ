@@ -9,10 +9,10 @@ import Spinner from '../components/Spinner'
 function Login() {
   const [formData, setFormData] = useState({
     email: '',
-    password: '',
+    password1: '',
   })
 
-  const { email, password } = formData
+  const { email, password1 } = formData
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -51,7 +51,7 @@ function Login() {
 
     const userData = {
       email,
-      password,
+      password1,
     }
 
     dispatch(login(userData)) // función para ejecutar acciones del slice
@@ -87,9 +87,9 @@ function Login() {
             <input
               type='password'
               className='form-control'
-              id='password'
-              name='password'
-              value={password}
+              id='password1'
+              name='password1'
+              value={password1}
               placeholder='Introduce tu contraseña'
               onChange={onChange}
             />

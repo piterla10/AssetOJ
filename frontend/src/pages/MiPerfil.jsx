@@ -1,35 +1,59 @@
 import React from 'react'
 import usuarioService from '../features/usuarios/usuarioService';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import StarRating from '../components/estrellas';
+import AssetLista from '../components/AssetLista';
 
 function MiPerfil() {
-    // Cargar los assets cuando la categoría activa cambia
-    const usuario = JSON.parse(localStorage.getItem('usuario'));
-    const [email, setEmail] = useState(usuario.email);
-    const [password, setPassword] = useState(usuario.password);
-    const [nombre, setNombre] = useState(usuario.nombre);
-    const [imagenPerfil, setImagenPerfil] = useState(usuario.imagenPerfil);
-    const [valoracionNota, setValoracion] = useState(usuario.valoracionesNota || 0);
-    console.log(valoracionNota);
-    const handleEmailChange = (e) => {
-      setEmail(e.target.value);
-    };
-    
-    const handlePasswordChange = (e) => {
-      setPassword(e.target.value);
-    };
-    
-    const handleNombreChange = (e) => {
-      setNombre(e.target.value);
-    };
-    
-    const [activo, setActivo] = useState('Mis Assets');
+  const [usuario, setUsuario] = useState(null);  // Inicializamos como null
+  const [activo, setActivo] = useState('Mis Assets');
+  const [datosUsuario, setDatosUsuario] = useState([]);
+  const [valoracionNota, setValoracion] = useState(0);
+  
+  const opciones = ['Mis Assets', 'Descargas', 'Guardados'];
 
-    const opciones = ['Mis Assets', 'Descargas', 'Guardados'];
+  useEffect(() => {
+    const usuarioLocal = JSON.parse(localStorage.getItem('usuario'));
+    
+    if (usuarioLocal) {
+      const fetchAssets = async () => {
+        try {
+          const usuarioData = await usuarioService.obtenerUsuario(usuarioLocal._id);
+          setUsuario(usuarioData); // Almacenar los datos del usuario en el estado
+          setValoracion(usuarioData.valoracionesNota || 0);
+          setDatosUsuario(usuarioData.assets); // Establecer los assets al cargar
+        } catch (error) {
+          console.error('Error al obtener los assets:', error);
+        }
+      };
+
+      fetchAssets();
+    }
+  }, []); // Solo se ejecuta al cargar el componente
+
+  if (!usuario) {
+    return <div>Loading...</div>; // O cualquier otra interfaz de carga
+  }
+
+  const manejarCambio = (opcion) => {
+    setActivo(opcion);
+    switch (opcion) {
+      case 'Mis Assets':
+        setDatosUsuario(usuario.assets);
+        break;
+      case 'Descargas':
+        setDatosUsuario(usuario.descargas);
+        break;
+      case 'Guardados':
+        setDatosUsuario(usuario.guardados);
+        break;
+      default:
+        setDatosUsuario([]);
+    }
+  };
+
   return (
     <div className='contenedorPerfilPrincipal'>
-   
       <div className="ParteDatos">
         <div className='parte1'>
           <img
@@ -60,7 +84,6 @@ function MiPerfil() {
             <input
               type="email"
               value={usuario.email}
-              onChange={handleEmailChange}
               className="inputField"
               disabled
             />
@@ -68,35 +91,37 @@ function MiPerfil() {
             <input
               type="password"
               value={usuario.password}
-              onChange={handlePasswordChange}
               className="inputField"
               disabled
             />
           </div>
-         
         </div>
       </div>
       <div className='parte3'>
-          <h2 className='subtituloPerfil'>Descripción:</h2>
-          <div className='contenedorDescripcion'>
-            <h2 className='descripcion'>{usuario.informacionAutor}</h2>
-          </div>
+        <h2 className='subtituloPerfil'>Descripción:</h2>
+        <div className='contenedorDescripcion'>
+          <h2 className='descripcion'>{usuario.informacionAutor}</h2>
+        </div>
       </div>
       <div className='parte4'>
         {opciones.map((titulo, index) => (
           <React.Fragment key={titulo}>
-            <div className='submenuMiPerfil' onClick={() => setActivo(titulo)}>
+            <div className='submenuMiPerfil' onClick={() => manejarCambio(titulo)}>
               <h1 className={`tituloPersonalizado ${activo === titulo ? 'activo' : ''}`}>
                 {titulo}
               </h1>
             </div>
-            {index !== opciones.length - 1 && <div className="separadorPerfil"></div>}
+            {index !== 2 && <div className="separadorPerfil"></div>}
           </React.Fragment>
         ))}
       </div>
       <div className="lineaDebajo"></div>
+      <div className='assetsPerfil'>
+        {console.log(datosUsuario)}
+        <AssetLista className="lista" datosUsuario={datosUsuario} />
+      </div>
     </div>
-  )
+  );
 }
 
-export default MiPerfil
+export default MiPerfil;

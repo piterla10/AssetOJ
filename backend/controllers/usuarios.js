@@ -6,7 +6,11 @@ const Usuario = require('../models/usuarios.js');
 const obtenerUsuario = async (req, res) => {
     try {
         const { id } = req.params; // Obtener el ID de los parámetros de la URL
-        const usuario = await Usuario.findById(id); // Buscar usuario en la base de datos
+        const usuario = await Usuario.findById(id).populate([
+            'assets',
+            'descargas',
+            'guardados'
+        ]); // Buscar usuario en la base de datos
 
         if (!usuario) {
             return res.status(404).json({ mensaje: 'Usuario no encontrado' });
@@ -56,7 +60,20 @@ const crearUsuario = async(req, res) => {
     const salt = bcrypt.genSaltSync(); // generamos un salt, una cadena aleatoria
     password_encriptada = bcrypt.hashSync(password, salt); // y aquí ciframos la contraseña
     
-    const usuario = new Usuario(req.body);
+    const usuario = new Usuario({
+        email,
+        password: password_encriptada,
+        nombre: name || '',
+        imagenPerfil: '',
+        informacionAutor: '',
+        seguidores: [],
+        seguidos: [],
+        descargas: [],
+        assets: [],
+        guardados: [],
+        valoracionesNum: 0,
+        valoracionesNota: 0
+    });
 
     try {     
         usuario.nombre = name;
@@ -64,12 +81,14 @@ const crearUsuario = async(req, res) => {
         const token = await generarJWT(usuario.id);
         
         await usuario.save();
-     
+        
+        const usuarioResponse = usuario.toObject();
+        const { password, imagenPerfil, informacionAutor, valoracionesNota, valoracionesNum,seguidores, seguidos, descargas, assets, guardados, ...userInfo } = usuarioResponse;
         res.json({
             ok: true,
             msg: 'crearUsuarios',
             token,
-            usuario
+            usuario: userInfo
         });
     } catch (error) {
         console.error('Error al contar o guardar usuarios:', error);
