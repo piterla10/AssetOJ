@@ -11,7 +11,7 @@ function Inicio() {
       <div className='contenedor'>
         <h1 className='titulo2'>3D</h1>
         <div className='contenedor2'>
-          <AssetLista cantidad={6} categoria={'3D'}/>
+          <AssetLista className="lista" cantidad={6} categoria={'3D'}/>
         </div>
       </div>
       <div className='contenedor'>

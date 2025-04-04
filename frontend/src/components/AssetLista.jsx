@@ -13,43 +13,44 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
 
   // para cargar los datos de la API
   useEffect(() => { 
+    let isMounted = true;  // Flag para controlar el desmontaje del componente
+
     const fetchAssets = async () => {
       try {
         let data = [];
-        if (datosUsuario){
+        if (datosUsuario) {
           data = datosUsuario;
-        }else{
+        } else {
           data = await assetService.getAssets(categoria);
         }
 
-        // !Array.isArray(data.assets) es para saber si data NO es un array
+        // Validación de si los datos no son válidos
         if (!data || !Array.isArray(data.assets)) {
           setAssets([]);
           return;
         }
-        
-        // si todo está yendo bien entonces haríamos el filtrado 
+
         let filteredAssets = data.assets;
 
-        // filtrado de etiquetas si se pasan
+        // Filtrado de etiquetas si se pasan
         if (etiquetas.length > 0) {
           filteredAssets = filteredAssets.filter(asset =>
-            etiquetas.every(tag => asset.etiquetas.includes(tag))
+            etiquetas.every(tag => asset.etiquetas && asset.etiquetas.includes(tag))
           );
         }
-        
-        // filtrado por valoración
+
+        // Filtrado por valoración
         if (valoracion !== null) {
           filteredAssets = filteredAssets.filter(asset => 
             asset.valoracionNota === valoracion
           );
         }
 
-        // filtrado por fecha
+        // Filtrado por fecha
         if (fecha !== null) {
           const ahora = new Date();
           let fechaLimite;
-          
+
           switch (fecha) {
             case 1:
               fechaLimite = new Date();
@@ -74,7 +75,7 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
             default:
               fechaLimite = null;
           }
-          
+
           if (fechaLimite) {
             filteredAssets = filteredAssets.filter(asset => 
               new Date(asset.fecha) >= fechaLimite
@@ -82,23 +83,36 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
           }
         }
 
-
-        // cantidad a mostrar teniendo en cuenta la paginación
-        setAssets(filteredAssets.slice(inicio, inicio + cantidad));
+        // Solo actualizamos el estado si el componente sigue montado
+        if (isMounted) {
+          // Filtrar los assets nulos o vacíos
+          const validAssets = filteredAssets.filter(asset => asset != null && asset.nombre);
+          setAssets(validAssets.slice(inicio, inicio + cantidad));
+        }
       } catch (error) {
         console.error("Error al obtener los assets:", error);
-        setAssets([]);
+        if (isMounted) {
+          setAssets([]);
+        }
       }
     };
 
     fetchAssets(); // Llamada a la API
-  }, [categoria, cantidad, JSON.stringify(etiquetas)]);
+
+    return () => {
+      isMounted = false; // Limpiar el flag cuando el componente se desmonte
+    };
+  }, [categoria, cantidad, JSON.stringify(etiquetas), datosUsuario]);
+
+  console.log(assets); // Para depuración
 
   return ( 
     <div className="listaAssets">
-      {/*aquí lo que hacemos es mostrar los assets o el texto de que no hay disponibles en caso de que no haya devuelto nada la bd*/}
+      {/* Mostrar los assets o un mensaje si no hay disponibles */}
       {assets.length > 0 ? (
-        assets.map(asset => <AssetCarta key={asset._id} asset={asset} />)
+        assets.map(asset => (
+          <AssetCarta key={asset._id} asset={asset} />
+        ))
       ) : (
         <p>No hay assets disponibles.</p>
       )}
