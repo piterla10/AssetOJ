@@ -490,10 +490,21 @@ h3 {
   padding-bottom: 0;
   align-items: center;
 }
-.tituloPersonalizado{
-  margin-top: 10px;
+.tituloPersonalizado {
   font-size: 24px;
   font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+.ajustes{
+  margin-top: 10px;
+  margin-left: 20%;
+  width: 5%;
+  height: 5%;
+}
+.tituloPersonalizado.activo {
+  color: #FFD700; /* Amarillo */
 }
 .contenedorDescripcion{
   background-color: #121130;
@@ -514,6 +525,7 @@ h3 {
 }
 .seguidos{
   display: flex;
+  border: 2px solid black;
   gap: 60px;
 }
 .subtituloPerfil{
