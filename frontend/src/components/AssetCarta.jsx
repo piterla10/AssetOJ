@@ -1,12 +1,13 @@
 import React from "react";
+import StarRating from "./estrellas";
 
 const AssetCarta = ({ asset }) => {
   return (
     <div className="asset-card">
-      <img src={asset.imagenes[0]} alt={asset.nombre} />
+      <img src={asset.imagenes[0]} alt={asset.nombre}/>
+      <p>{asset.autor.nombre}</p>
       <h3>{asset.nombre}</h3>
-      {<p>{asset.autor.nombre}</p>}
-      <p>⭐ {asset.valoracion} | ❤️ {asset.likes}</p>
+      <p><StarRating value={asset.valoracionNota} className="starRating" /> ({asset.valoracion}) | ❤️ ({asset.likes})</p>
     </div>
   );
 };

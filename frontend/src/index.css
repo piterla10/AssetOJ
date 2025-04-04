@@ -85,18 +85,48 @@ h3 {
 }
 
 .asset-card {
-  background: #222;
   padding: 10px;
   border-radius: 10px;
-  text-align: center;
-  width: 200px;
+  text-align: left; /* Alineación del texto */
+  width: 220px; /* Un poco más ancha */
+  color: #ececec; /* Texto blanco */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra suave */
 }
 
 .asset-card img {
-  width: 100%;
-  height: auto;
-  border-radius: 10px;
+  width: 200px;
+  height: 200px; /* Ajusta la altura */
+  object-fit: cover; /* Recorta para llenar */
 }
+
+.asset-card h3 {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+.asset-card .author {
+  font-size: 0.9em;
+  color: #bababa; /* Texto gris */
+}
+
+.asset-card .stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 5px;
+  font-size: 0.9em;
+}
+
+.asset-card .stars {
+  color: gold;
+}
+
+.asset-card .likes {
+  color: red;
+  font-weight: bold;
+}
+
 
 .heading {
   font-size: 1.2rem;
@@ -260,8 +290,6 @@ h3 {
 }
 .enlace {
   transition: all 0.5s;
-
-
 }
 
 .enlace a {
@@ -522,8 +550,6 @@ h3 {
   margin-bottom: 5px;
 }
 .starRating{
-  margin: 0;
-  padding: 0;
   line-height: 1;
 }
 
