@@ -24,7 +24,9 @@ function MiPerfil() {
       setNombre(e.target.value);
     };
     
-    
+    const [activo, setActivo] = useState('Mis Assets');
+
+    const opciones = ['Mis Assets', 'Descargas', 'Guardados'];
   return (
     <div className='contenedorPerfilPrincipal'>
    
@@ -51,7 +53,7 @@ function MiPerfil() {
               <h2 className='subtituloPerfil'>Seguidos</h2>
               <h2 className='subtituloPerfil'>{usuario.seguidos.length || 0}</h2>
             </div>
-
+            <img src='https://lh3.googleusercontent.com/d/1lmEovHAO0x41N51UcK63nEXlBQ0tJ9je' className='ajustes'></img>
           </div>
           <div className='campos'>
             <h2 className='subtituloPerfil'>Email:</h2>
@@ -60,6 +62,7 @@ function MiPerfil() {
               value={usuario.email}
               onChange={handleEmailChange}
               className="inputField"
+              disabled
             />
             <h2 className='subtituloPerfil'>Contraseña:</h2>
             <input
@@ -67,6 +70,7 @@ function MiPerfil() {
               value={usuario.password}
               onChange={handlePasswordChange}
               className="inputField"
+              disabled
             />
           </div>
          
@@ -79,17 +83,16 @@ function MiPerfil() {
           </div>
       </div>
       <div className='parte4'>
-        <div className='submenuMiPerfil'>
-          <h1 className='tituloPersonalizado'>Mis Assets</h1>
-        </div>
-        <div className="separadorPerfil"></div> 
-        <div className='submenuMiPerfil'>
-          <h1 className='tituloPersonalizado'>Descargas</h1>
-        </div>
-        <div className="separadorPerfil"></div> 
-        <div className='submenuMiPerfil'>
-          <h1 className='tituloPersonalizado'>Guardados</h1>
-        </div>
+        {opciones.map((titulo, index) => (
+          <React.Fragment key={titulo}>
+            <div className='submenuMiPerfil' onClick={() => setActivo(titulo)}>
+              <h1 className={`tituloPersonalizado ${activo === titulo ? 'activo' : ''}`}>
+                {titulo}
+              </h1>
+            </div>
+            {index !== opciones.length - 1 && <div className="separadorPerfil"></div>}
+          </React.Fragment>
+        ))}
       </div>
       <div className="lineaDebajo"></div>
     </div>
