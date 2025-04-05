@@ -13,7 +13,6 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
 
   // para cargar los datos de la API
   useEffect(() => { 
-    let isMounted = true;  // Flag para controlar el desmontaje del componente
 
     const fetchAssets = async () => {
       try {
@@ -84,16 +83,13 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
         }
 
         // Solo actualizamos el estado si el componente sigue montado
-        if (isMounted) {
+    
           // Filtrar los assets nulos o vacíos
           const validAssets = filteredAssets.filter(asset => asset != null && asset.nombre);
           setAssets(validAssets.slice(inicio, inicio + cantidad));
-        }
+   
       } catch (error) {
         console.error("Error al obtener los assets:", error);
-        if (isMounted) {
-          setAssets([]);
-        }
       }
     };
 

@@ -32,7 +32,7 @@ function MiPerfil() {
   }, []); // Solo se ejecuta al cargar el componente
 
   if (!usuario) {
-    return <div>Loading...</div>; // O cualquier otra interfaz de carga
+    return <div>Cargando...</div>;
   }
 
   const manejarCambio = (opcion) => {
@@ -118,7 +118,7 @@ function MiPerfil() {
       <div className="lineaDebajo"></div>
       <div className='assetsPerfil'>
         {console.log(datosUsuario)}
-        <AssetLista className="lista" datosUsuario={datosUsuario} />
+        <AssetLista className="lista" cantidad={10} datosUsuario={datosUsuario} />
       </div>
     </div>
   );
