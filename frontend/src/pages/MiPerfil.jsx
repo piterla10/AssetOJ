@@ -1,25 +1,50 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import usuarioService from '../features/usuarios/usuarioService';
-import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import StarRating from '../components/estrellas';
 import AssetLista from '../components/AssetLista';
+import { logout, reset } from '../features/auth/authSlice';
+import Modal from '../components/Modal';
 
 function MiPerfil() {
-  const [usuario, setUsuario] = useState(null);  // Inicializamos como null
+  const [usuario, setUsuario] = useState(null);
   const [activo, setActivo] = useState('Mis Assets');
   const [datosUsuario, setDatosUsuario] = useState([]);
   const [valoracionNota, setValoracion] = useState(0);
-  
-  const opciones = ['Mis Assets', 'Descargas', 'Guardados'];
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditingName, setIsEditingName] = useState(false); // Control de edición para el nombre
+  const [isEditingDescripcion, setIsEditingDescripcion] = useState(false); // Control de edición para la descripción
+  const [isEditingEmail, setIsEditingEmail] = useState(false); 
+  const [newName, setNewName] = useState('');
+  const [newEmail, setNewEmail] = useState('');
+  const [newDescripcion, setNewDescripcion] = useState('');
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // Función para abrir el modal
+  const openModal = () => setIsModalOpen(true);
+
+  // Función para cerrar el modal
+  const closeModal = () => setIsModalOpen(false);
+
+  const onLogout = () => {
+    localStorage.removeItem('usuario');
+    localStorage.removeItem('token');
+    closeModal();
+    dispatch(logout());
+    dispatch(reset());
+    navigate('/');
+  };
 
   useEffect(() => {
     const usuarioLocal = JSON.parse(localStorage.getItem('usuario'));
-    
+
     if (usuarioLocal) {
       const fetchAssets = async () => {
         try {
           const usuarioData = await usuarioService.obtenerUsuario(usuarioLocal._id);
-          setUsuario(usuarioData); // Almacenar los datos del usuario en el estado
+          setUsuario(usuarioData);
           setValoracion(usuarioData.valoracionesNota || 0);
           setDatosUsuario(usuarioData.assets); // Establecer los assets al cargar
         } catch (error) {
@@ -52,16 +77,67 @@ function MiPerfil() {
     }
   };
 
+  // Función para habilitar la edición del nombre
+  const handleEditName = () => {
+    setNewName(usuario.nombre);
+    setIsEditingName(true);
+  };
+  const handleEditEmail = () => {
+    setNewEmail(usuario.email);
+    setIsEditingEmail(true);
+  };
+
+  // Función para habilitar la edición de la descripción
+  const handleEditDescripcion = () => {
+    setNewDescripcion(usuario.informacionAutor);
+    setIsEditingDescripcion(true);
+  };
+
+  // Función para guardar cambios
+  const handleSaveChanges = async () => {
+    try {
+      // Aquí actualizar los campos que deseas cambiar
+      const updatedUser = await usuarioService.actualizarUsuario(usuario._id, {
+        nombre: newName || usuario.nombre,  // Si newName está vacío, se usa el valor original
+        email: newEmail || usuario.email,  // Si newEmail está vacío, se usa el valor original
+        informacionAutor: newDescripcion || usuario.informacionAutor,
+      });
+
+      setUsuario(updatedUser);
+      setIsEditingName(false);
+      setIsEditingDescripcion(false);
+      setIsEditingEmail(false); 
+    } catch (error) {
+      console.error('Error al guardar los cambios:', error);
+    }
+  };
+
   return (
     <div className='contenedorPerfilPrincipal'>
       <div className="ParteDatos">
         <div className='parte1'>
-          <img
-            src={usuario.imagenPerfil}
-            alt="Imagen de perfil"
-            className="cambiarImagen"
-          />
-          <h2 className='subtituloPerfil'>{usuario.nombre}</h2>
+          <div className='marginLeft'>
+            <img
+              src={usuario.imagenPerfil}
+              alt="Imagen de perfil"
+              className="cambiarImagen"
+            />
+            <div className='divParaIcono'>
+              <h2 className='subtituloPerfil'>
+                {isEditingName ? (
+                  <input
+                    type="text"
+                    value={newName || usuario.nombre}
+                    className="inputField"
+                    onChange={(e) => setNewName(e.target.value)}
+                  />
+                ) : (
+                  usuario.nombre
+                )}
+              </h2>
+              <img className='botonIcono' src='/editar.png' onClick={handleEditName} />
+            </div>
+          </div>
           <div className="contenedorValoracion">
             <StarRating value={valoracionNota} className="starRating" />
             <p className="letraNano">{usuario.valoracionesNum} valoraciones</p>
@@ -77,34 +153,56 @@ function MiPerfil() {
               <h2 className='subtituloPerfil'>Seguidos</h2>
               <h2 className='subtituloPerfil'>{usuario.seguidos.length || 0}</h2>
             </div>
-            <img src='https://lh3.googleusercontent.com/d/1lmEovHAO0x41N51UcK63nEXlBQ0tJ9je' className='ajustes'></img>
+            <img src='https://lh3.googleusercontent.com/d/1lmEovHAO0x41N51UcK63nEXlBQ0tJ9je' onClick={openModal} className='ajustes' />
+            <Modal
+              show={isModalOpen}
+              onClose={closeModal}
+              onLogout={onLogout}
+            />
           </div>
           <div className='campos'>
             <h2 className='subtituloPerfil'>Email:</h2>
-            <input
-              type="email"
-              value={usuario.email}
-              className="inputField"
-              disabled
-            />
+            <div className='divParaIcono2'>
+              <input
+                type="email"
+                value={newEmail || usuario.email}
+                className="inputField"
+                disabled={!isEditingEmail} // No se puede editar si no estás en modo de edición del nombre
+                onChange={(e) => setNewEmail(e.target.value)}
+              />
+              <img className='botonIcono' src='/editar.png' onClick={handleEditEmail} />
+            </div>
             <h2 className='subtituloPerfil'>Contraseña:</h2>
-            <input
-              type="password"
-              value={usuario.password}
-              className="inputField"
-              disabled
-            />
+            <div className='divParaIcono2'>
+              <input
+                type="password"
+                value="...."
+                className="inputField"
+                disabled
+              />
+              <img className='botonIcono' src='/editar.png' />
+            </div>
           </div>
         </div>
       </div>
       <div className='parte3'>
         <h2 className='subtituloPerfil'>Descripción:</h2>
         <div className='contenedorDescripcion'>
-          <h2 className='descripcion'>{usuario.informacionAutor}</h2>
+          {isEditingDescripcion ? (
+            <input
+              type="text"
+              value={newDescripcion || usuario.informacionAutor}
+              className="inputField"
+              onChange={(e) => setNewDescripcion(e.target.value)}
+            />
+          ) : (
+            <h2 className='descripcion'>{usuario.informacionAutor}</h2>
+          )}
+          <img className='botonIcono' src='/editar.png' onClick={handleEditDescripcion} />
         </div>
       </div>
       <div className='parte4'>
-        {opciones.map((titulo, index) => (
+        {['Mis Assets', 'Descargas', 'Guardados'].map((titulo, index) => (
           <React.Fragment key={titulo}>
             <div className='submenuMiPerfil' onClick={() => manejarCambio(titulo)}>
               <h1 className={`tituloPersonalizado ${activo === titulo ? 'activo' : ''}`}>
@@ -117,9 +215,13 @@ function MiPerfil() {
       </div>
       <div className="lineaDebajo"></div>
       <div className='assetsPerfil'>
-        {console.log(datosUsuario)}
         <AssetLista className="lista" cantidad={10} datosUsuario={datosUsuario} />
       </div>
+
+      {/* Botón para guardar cambios */}
+      {(isEditingName || isEditingDescripcion || isEditingEmail) && (
+        <button onClick={handleSaveChanges}>Guardar cambios</button>
+      )}
     </div>
   );
 }

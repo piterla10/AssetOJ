@@ -21,10 +21,15 @@ const obtenerUsuarios = async (email) => {
     console.log(response.data);
   
     return response.data
-  }
+}
+const actualizarUsuario = async (id,body) => {
+    const response = await axios.put('http://localhost:5000'+ API_URL + id, body, config)
+    console.log(response.data);
   
+    return response.data
+}
 const usuarioService = {
-    obtenerUsuarios,obtenerUsuario
+    obtenerUsuarios,obtenerUsuario,actualizarUsuario
 }
 
 export default usuarioService

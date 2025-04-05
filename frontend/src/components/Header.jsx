@@ -2,16 +2,39 @@ import { FaSignInAlt, FaSignOutAlt, FaUser } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout, reset } from '../features/auth/authSlice'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import usuarioService from '../features/usuarios/usuarioService';
 function Header() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const [usuario, setUsuario] = useState(null);
   const { user } = useSelector((state) => state.auth)
-  const usuario = JSON.parse(localStorage.getItem('usuario'));
   const [searchTerm, setSearchTerm] = useState("");
   console.log(user);
   // Manejar cambios en el input
+
+  useEffect(() => {
+    const usuarioLocal = JSON.parse(localStorage.getItem('usuario'));
+    
+    if (usuarioLocal) {
+      const fetchAssets = async () => {
+        try {
+          const usuarioData = await usuarioService.obtenerUsuario(usuarioLocal._id);
+          setUsuario(usuarioData);
+        } catch (error) {
+          console.error('Error al obtener los assets:', error);
+        }
+      };
+
+      fetchAssets();
+    }
+  }, []);
+  
+  if (!usuario) {
+    return <div>Cargando...</div>;
+  }
+
+  console.log(usuario);
   const handleChange = (e) => {
     setSearchTerm(e.target.value);
   };
@@ -24,11 +47,6 @@ function Header() {
     }
   };
 
-  const onLogout = () => {
-    dispatch(logout())
-    dispatch(reset())
-    navigate('/')
-  }
 
   return (
     <header className='header'>

@@ -95,5 +95,29 @@ const crearUsuario = async(req, res) => {
     }
     
 }
+const actualizarUsuario = async (req, res) => {
+    const { usuario } = req.params;  // Asumimos que el ID del usuario se pasa como un parámetro en la URL
+    const { nombre, email,estado,informacionAutor,...rest } = req.body; // Aquí puedes obtener los campos a actualizar desde el body
+    console.log(estado);
+    console.log(email,nombre,informacionAutor)
+    try {
+      // Buscamos y actualizamos al usuario usando findByIdAndUpdate
+      const updatedUser = await Usuario.findByIdAndUpdate(
+        usuario, // ID del usuario a actualizar
+        { nombre, email,estado, informacionAutor, ...rest }, // Datos a actualizar
+        { new: true, runValidators: true } // Devuelve el documento actualizado y valida los datos
+      );
+  
+      if (!updatedUser) {
+        return res.status(404).json({ message: 'Usuario no encontrado' });
+      }
+  
+      // Si todo fue bien, respondemos con el usuario actualizado
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error al actualizar el usuario', error: error.message });
+    }
 
-module.exports = {crearUsuario,obtenerUsuario,obtenerUsuarios}
+}
+module.exports = {crearUsuario,obtenerUsuario,obtenerUsuarios,actualizarUsuario}

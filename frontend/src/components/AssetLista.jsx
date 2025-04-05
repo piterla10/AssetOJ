@@ -85,8 +85,8 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
         // Solo actualizamos el estado si el componente sigue montado
     
           // Filtrar los assets nulos o vacíos
-          const validAssets = filteredAssets.filter(asset => asset != null && asset.nombre);
-          setAssets(validAssets.slice(inicio, inicio + cantidad));
+        const validAssets = filteredAssets.filter(asset => asset != null && asset.nombre);
+        setAssets(validAssets.slice(inicio, inicio + cantidad));
    
       } catch (error) {
         console.error("Error al obtener los assets:", error);
