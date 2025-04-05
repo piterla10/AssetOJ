@@ -92,7 +92,7 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
     };
 
     fetchAssets(); // Llamada a la API
-  }, [categoria, cantidad, JSON.stringify(etiquetas)]);
+  }, [categoria, cantidad, JSON.stringify(etiquetas)], datosUsuario, paginacion, etiquetas, valoracion, fecha);
 
   return ( 
     <div className="listaAssets">
