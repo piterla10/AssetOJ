@@ -98,13 +98,7 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
     };
 
     fetchAssets(); // Llamada a la API
-
-    return () => {
-      isMounted = false; // Limpiar el flag cuando el componente se desmonte
-    };
-  }, [categoria, cantidad, JSON.stringify(etiquetas), datosUsuario]);
-
-  console.log(assets); // Para depuración
+  }, [categoria, cantidad, JSON.stringify(etiquetas)], datosUsuario, paginacion, etiquetas, valoracion, fecha);
 
   return ( 
     <div className="listaAssets">
