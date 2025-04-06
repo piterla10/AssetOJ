@@ -20,6 +20,7 @@ function MiPerfil() {
   const [newName, setNewName] = useState('');
   const [newEmail, setNewEmail] = useState('');
   const [newDescripcion, setNewDescripcion] = useState('');
+  const [imagenPerfil, setImagenPerfil] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -103,6 +104,35 @@ function MiPerfil() {
       console.error('Error al actualizar contraseña', error);
     }
   };
+  const handleImageClick = () => {
+    // Llamar al input para seleccionar la imagen
+    document.getElementById('fileInput').click();
+  };
+
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // Vista previa (opcional)
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagenPerfil(reader.result); // Actualiza la vista previa
+      };
+      reader.readAsDataURL(file);
+  
+      // Llama al servicio para subir la imagen
+      try {
+        const formData = new FormData();
+        formData.append('imagen', file); // Nombre del campo que espera tu backend
+  
+ 
+        const updatedUser = await usuarioService.actualizarImagenPerfil(usuario._id, formData);
+  
+        setUsuario(updatedUser); // Actualiza el estado del usuario
+      } catch (error) {
+        console.error('Error al cambiar la imagen de perfil:', error);
+      }
+    }
+  };
   // Función para guardar cambios
   const handleSaveChanges = async () => {
     try {
@@ -128,9 +158,17 @@ function MiPerfil() {
         <div className='parte1'>
           <div className='marginLeft'>
             <img
-              src={usuario.imagenPerfil}
+              src={imagenPerfil || usuario.imagenPerfil}
               alt="Imagen de perfil"
               className="cambiarImagen"
+              onClick={handleImageClick}
+            />
+            <input
+              type="file"
+              id="fileInput"
+              style={{ display: 'none' }}
+              accept="image/*" 
+              onChange={handleFileChange}
             />
             <div className='divParaIcono'>
               <h2 className='subtituloPerfil'>

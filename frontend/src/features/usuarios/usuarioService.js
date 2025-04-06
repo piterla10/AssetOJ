@@ -34,8 +34,17 @@ const actualizarContrasena = async (id,body) => {
   
     return response.data
 }
+
+const actualizarImagenPerfil = async (id,body) => {
+    const response = await axios.put('http://localhost:5000'+API_URL+'cambioImagenPerfil/'+id, body, config)
+    console.log(response.data);
+  
+    return response.data
+}
+
+
 const usuarioService = {
-    obtenerUsuarios,obtenerUsuario,actualizarUsuario,actualizarContrasena
+    obtenerUsuarios,obtenerUsuario,actualizarUsuario,actualizarContrasena,actualizarImagenPerfil
 }
 
 export default usuarioService

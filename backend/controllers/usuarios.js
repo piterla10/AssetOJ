@@ -2,6 +2,7 @@ const { response } = require('express');
 const bcrypt = require('bcrypt');
 const {generarJWT} = require('../helpers/jwt');
 const jwt = require('jsonwebtoken');
+const cloudinary = require('../helpers/cloudinary.js');
 const Usuario = require('../models/usuarios.js');
 const obtenerUsuario = async (req, res) => {
     try {
@@ -145,4 +146,38 @@ const cambiarContrasena = async (req, res) => {
       res.status(500).json({ message: 'Error del servidor', error: error.message });
     }
 };
-module.exports = {crearUsuario,obtenerUsuario,obtenerUsuarios,actualizarUsuario,cambiarContrasena}
+
+const subirImagenPerfil = async (req, res) => {
+    const { usuario } = req.params; // Asumimos que el ID del usuario está en los parámetros
+
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: 'No se ha recibido ninguna imagen' });
+      }
+  
+      // Subir el archivo directamente desde la memoria a Cloudinary
+      cloudinary.uploader.upload_stream(
+        {
+          folder: 'perfiles', // Carpeta donde se guardarán las imágenes
+        },
+        async (error, result) => {
+          if (error) {
+            return res.status(500).json({ message: 'Error al subir la imagen', error });
+          }
+  
+          // Una vez que la imagen se suba, obtenemos la URL de Cloudinary
+          const usuarioActualizado = await Usuario.findByIdAndUpdate(
+            usuario,  // ID del usuario a actualizar
+            { imagenPerfil: result.secure_url },  // Guardamos la URL de la imagen en el campo imagenPerfil
+            { new: true }
+          );
+  
+          res.status(200).json(usuarioActualizado); // Respondemos con el usuario actualizado
+        }
+      ).end(req.file.buffer); // Subimos el archivo en memoria (req.file.buffer)
+    } catch (error) {
+      console.error('Error al subir imagen:', error);
+      res.status(500).json({ message: 'Error al subir imagen', error });
+    }
+}
+module.exports = {crearUsuario,obtenerUsuario,obtenerUsuarios,actualizarUsuario,cambiarContrasena, subirImagenPerfil}
