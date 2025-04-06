@@ -28,8 +28,14 @@ const actualizarUsuario = async (id,body) => {
   
     return response.data
 }
+const actualizarContrasena = async (id,body) => {
+    const response = await axios.put('http://localhost:5000'+API_URL+'cambioPassword/'+id, body, config)
+    console.log(response.data);
+  
+    return response.data
+}
 const usuarioService = {
-    obtenerUsuarios,obtenerUsuario,actualizarUsuario
+    obtenerUsuarios,obtenerUsuario,actualizarUsuario,actualizarContrasena
 }
 
 export default usuarioService

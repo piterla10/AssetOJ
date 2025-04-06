@@ -98,8 +98,6 @@ const crearUsuario = async(req, res) => {
 const actualizarUsuario = async (req, res) => {
     const { usuario } = req.params;  // Asumimos que el ID del usuario se pasa como un parámetro en la URL
     const { nombre, email,estado,informacionAutor,...rest } = req.body; // Aquí puedes obtener los campos a actualizar desde el body
-    console.log(estado);
-    console.log(email,nombre,informacionAutor)
     try {
       // Buscamos y actualizamos al usuario usando findByIdAndUpdate
       const updatedUser = await Usuario.findByIdAndUpdate(
@@ -120,4 +118,31 @@ const actualizarUsuario = async (req, res) => {
     }
 
 }
-module.exports = {crearUsuario,obtenerUsuario,obtenerUsuarios,actualizarUsuario}
+const cambiarContrasena = async (req, res) => {
+    const { usuario } = req.params; // ID del usuario
+    const { password } = req.body;
+
+    try {
+
+      // Hashear la nueva contraseña
+      const salt = bcrypt.genSaltSync();
+      const hashedPassword = bcrypt.hashSync(password, salt);
+
+      // Buscar y actualizar solo la contraseña
+      const usuarioActualizado = await Usuario.findByIdAndUpdate(
+        usuario,
+        { password: hashedPassword },
+        { new: true }
+      );
+  
+      if (!usuarioActualizado) {
+        return res.status(404).json({ message: 'Usuario no encontrado' });
+      }
+  
+      res.status(200).json({ message: 'Contraseña actualizada correctamente' });
+    } catch (error) {
+      console.error('Error al cambiar la contraseña:', error);
+      res.status(500).json({ message: 'Error del servidor', error: error.message });
+    }
+};
+module.exports = {crearUsuario,obtenerUsuario,obtenerUsuarios,actualizarUsuario,cambiarContrasena}

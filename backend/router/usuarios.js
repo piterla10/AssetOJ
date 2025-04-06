@@ -2,7 +2,7 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 const {validarCampos} = require('../middlewares/validar-campos');
 const {validarJWT} = require('../middlewares/validar-jwt');
-const {crearUsuario,obtenerUsuario,obtenerUsuarios,actualizarUsuario} = require('../controllers/usuarios');
+const {crearUsuario,obtenerUsuario,obtenerUsuarios,actualizarUsuario,cambiarContrasena} = require('../controllers/usuarios');
 const router = Router();
 
 router.post('/', [
@@ -26,5 +26,10 @@ router.put('/:usuario', [
     validarJWT
     
 ], actualizarUsuario);
+
+router.put('/cambioPassword/:usuario', [
+    validarJWT
+    
+], cambiarContrasena);
 
 module.exports = router;

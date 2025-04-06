@@ -6,7 +6,7 @@ import StarRating from '../components/estrellas';
 import AssetLista from '../components/AssetLista';
 import { logout, reset } from '../features/auth/authSlice';
 import Modal from '../components/Modal';
-
+import ModalCambiarContrasena from '../components/ModalCambiarContrasena';
 function MiPerfil() {
   const [usuario, setUsuario] = useState(null);
   const [activo, setActivo] = useState('Mis Assets');
@@ -16,6 +16,7 @@ function MiPerfil() {
   const [isEditingName, setIsEditingName] = useState(false); // Control de edición para el nombre
   const [isEditingDescripcion, setIsEditingDescripcion] = useState(false); // Control de edición para la descripción
   const [isEditingEmail, setIsEditingEmail] = useState(false); 
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [newName, setNewName] = useState('');
   const [newEmail, setNewEmail] = useState('');
   const [newDescripcion, setNewDescripcion] = useState('');
@@ -92,7 +93,16 @@ function MiPerfil() {
     setNewDescripcion(usuario.informacionAutor);
     setIsEditingDescripcion(true);
   };
-
+  const handleSavePassword = async (nuevaPassword) => {
+    try {
+      await usuarioService.actualizarContrasena(usuario._id, {
+        password: nuevaPassword,
+      });
+      alert('Contraseña actualizada exitosamente');
+    } catch (error) {
+      console.error('Error al actualizar contraseña', error);
+    }
+  };
   // Función para guardar cambios
   const handleSaveChanges = async () => {
     try {
@@ -130,6 +140,16 @@ function MiPerfil() {
                     value={newName || usuario.nombre}
                     className="inputField"
                     onChange={(e) => setNewName(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        handleSaveChanges();
+                      }
+                    }}
+                    onBlur={() => {
+                      if (isEditingName) {
+                        handleSaveChanges();
+                      }
+                    }}
                   />
                 ) : (
                   usuario.nombre
@@ -169,6 +189,16 @@ function MiPerfil() {
                 className="inputField"
                 disabled={!isEditingEmail} // No se puede editar si no estás en modo de edición del nombre
                 onChange={(e) => setNewEmail(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSaveChanges();
+                  }
+                }}
+                onBlur={() => {
+                  if (isEditingEmail) {
+                    handleSaveChanges();
+                  }
+                }}
               />
               <img className='botonIcono' src='/editar.png' onClick={handleEditEmail} />
             </div>
@@ -180,7 +210,12 @@ function MiPerfil() {
                 className="inputField"
                 disabled
               />
-              <img className='botonIcono' src='/editar.png' />
+              <img className='botonIcono' src='/editar.png'  onClick={() => setShowPasswordModal(true)} />
+              <ModalCambiarContrasena
+                show={showPasswordModal}
+                onClose={() => setShowPasswordModal(false)}
+                onSave={handleSavePassword}
+              />
             </div>
           </div>
         </div>
@@ -194,6 +229,16 @@ function MiPerfil() {
               value={newDescripcion || usuario.informacionAutor}
               className="inputField"
               onChange={(e) => setNewDescripcion(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSaveChanges();
+                }
+              }}
+              onBlur={() => {
+                if (isEditingDescripcion) {
+                  handleSaveChanges();
+                }
+              }}
             />
           ) : (
             <h2 className='descripcion'>{usuario.informacionAutor}</h2>
