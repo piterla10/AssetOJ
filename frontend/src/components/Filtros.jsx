@@ -31,8 +31,8 @@ const FiltrosPorCategoria = ({ categoria, onFilterChange }) => {
     const [fechaSeleccionada, setFechaSeleccionada] = useState('Todo');
     const [valoracionSeleccionada, setValoracionSeleccionada] = useState(0);
     useEffect(() => {
-      onFilterChange({ filtrosSeleccionados, fechaSeleccionada });
-    }, [filtrosSeleccionados, fechaSeleccionada]);
+      onFilterChange({ filtrosSeleccionados, fechaSeleccionada, valoracionSeleccionada });
+    }, [filtrosSeleccionados, fechaSeleccionada, valoracionSeleccionada]);
   
     const toggleFiltro = (filtro) => {
       const yaSeleccionado = filtrosSeleccionados.includes(filtro);

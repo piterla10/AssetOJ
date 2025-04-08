@@ -4,7 +4,9 @@ import FiltrosPorCategoria from '../components/Filtros';
 import AssetLista from '../components/AssetLista';
 function Categorias() {
   const categorias = ['3D', '2D', 'Audio', 'Add-Ons'];
-  const [filtrosActivos, setFiltrosActivos] = useState([]);
+  const [filtrosSeleccionados, setFiltrosSeleccionados] = useState([]);
+  const [fechaSeleccionada, setFechaSeleccionada] = useState('Todo');
+  const [valoracionSeleccionada, setValoraciónSeleccionada] = useState('0');
   const [categoriaActiva, setCategoriaActiva] = useState('3D');
   const [assets, setAssets] = useState([]);
 
@@ -32,7 +34,9 @@ function Categorias() {
             className={`contenedorHijo ${categoriaActiva === categoria ? 'activo' : ''}`}
             onClick={() => {
               setCategoriaActiva(categoria);
-              setFiltrosActivos([]); // Reiniciar filtros al cambiar categoría
+              setFiltrosSeleccionados(null); // Reiniciar filtros al cambiar categoría
+              setValoraciónSeleccionada('0');
+              setFechaSeleccionada('Todo');
             }}
           >
             <h1 className='titulo'>{categoria}</h1>
@@ -54,14 +58,16 @@ function Categorias() {
       >
         <FiltrosPorCategoria 
           categoria={categoriaActiva} 
-          onFilterChange={({ filtrosSeleccionados, fechaSeleccionada }) => {
-            console.log('Filtrando por:', filtrosSeleccionados, fechaSeleccionada);
+          onFilterChange={({ filtrosSeleccionados, fechaSeleccionada,valoracionSeleccionada }) => {
+            setFiltrosSeleccionados(filtrosSeleccionados);
+            setFechaSeleccionada(fechaSeleccionada);
+            setValoraciónSeleccionada(valoracionSeleccionada);
           }}
         />
       </div>
       )}
-      <div className='assetsContainer'>
-        <AssetLista  categoria={categoriaActiva}/>
+      <div className='assetsContainer' style={{width:'60%', alignSelf:'center', marginTop:'10px'}}>
+        <AssetLista cantidad={20} valoracion={valoracionSeleccionada} categoria={categoriaActiva} etiquetas={filtrosSeleccionados} fecha={fechaSeleccionada}></AssetLista>
       </div>
     </>
   );

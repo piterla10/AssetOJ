@@ -32,8 +32,6 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
           return;
         }
 
-        
-
         // Filtrado de etiquetas si se pasan
         if (etiquetas.length > 0) {
           filteredAssets = filteredAssets.filter(asset =>
