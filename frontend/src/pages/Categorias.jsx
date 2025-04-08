@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import assetService from '../features/assets/assetService'; // Asegúrate de importar correctamente el service
-
+import FiltrosPorCategoria from '../components/Filtros';
 
 function Categorias() {
   const categorias = ['3D', '2D', 'Audio', 'Add-Ons'];
+  const [filtrosActivos, setFiltrosActivos] = useState([]);
   const [categoriaActiva, setCategoriaActiva] = useState('3D');
   const [assets, setAssets] = useState([]);
 
@@ -25,24 +26,40 @@ function Categorias() {
   return (
     <>
       <div className='contenedorPadre'>
-        {/* Iteramos sobre las categorías predefinidas */}
         {categorias.map((categoria) => (
           <div 
             key={categoria} 
             className={`contenedorHijo ${categoriaActiva === categoria ? 'activo' : ''}`}
-            onClick={() => setCategoriaActiva(categoria)}
+            onClick={() => {
+              setCategoriaActiva(categoria);
+              setFiltrosActivos([]); // Reiniciar filtros al cambiar categoría
+            }}
           >
             <h1 className='titulo'>{categoria}</h1>
           </div>
         ))}
       </div>
-      
+
+      {/* Mostrar filtros solo si hay una categoría activa */}
+      {categoriaActiva && (
+        <FiltrosPorCategoria 
+          categoria={categoriaActiva} 
+          onFilterChange={setFiltrosActivos} 
+        />
+      )}
+
       <div className='assetsContainer'>
         <ul>
           {assets.length > 0 ? (
-            assets.map((asset, index) => (
-              <li key={index}>{asset}</li>
-            ))
+            assets
+              .filter((asset) => {
+                // Lógica de filtrado si hay filtros activos
+                if (filtrosActivos.length === 0) return true;
+                return filtrosActivos.includes(asset.subcategoria); // O el campo que uses
+              })
+              .map((asset, index) => (
+                <li key={index}>{asset.nombre}</li> // Asegúrate que `asset` tenga nombre o el campo que desees
+              ))
           ) : (
             <p className='noAssets'>No hay assets disponibles o cargando...</p>
           )}
