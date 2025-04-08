@@ -67,7 +67,7 @@ function Categorias() {
       </div>
       )}
       <div className='assetsContainer' style={{width:'60%', alignSelf:'center', marginTop:'10px'}}>
-        <AssetLista cantidad={20} valoracion={valoracionSeleccionada} categoria={categoriaActiva} etiquetas={filtrosSeleccionados} fecha={fechaSeleccionada}></AssetLista>
+        <AssetLista cantidad={20} valoracion={valoracionSeleccionada} categoria={categoriaActiva} etiquetas={filtrosSeleccionados} fecha={fechaSeleccionada} orden={"likes"}></AssetLista>
       </div>
     </>
   );
