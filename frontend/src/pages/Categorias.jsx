@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import assetService from '../features/assets/assetService'; // Asegúrate de importar correctamente el service
 import FiltrosPorCategoria from '../components/Filtros';
-
+import AssetLista from '../components/AssetLista';
 function Categorias() {
   const categorias = ['3D', '2D', 'Audio', 'Add-Ons'];
   const [filtrosActivos, setFiltrosActivos] = useState([]);
@@ -42,28 +42,26 @@ function Categorias() {
 
       {/* Mostrar filtros solo si hay una categoría activa */}
       {categoriaActiva && (
+      <div
+        style={{
+          position: 'absolute',
+          top: '200px',
+          right: '20px', // Se posiciona a la derecha
+          zIndex: 1000, // Asegura que esté por encima si es necesario
+          padding: '16px',
+          boxShadow: '0px 4px 12px rgba(0,0,0,0.1)',
+        }}
+      >
         <FiltrosPorCategoria 
           categoria={categoriaActiva} 
-          onFilterChange={setFiltrosActivos} 
+          onFilterChange={({ filtrosSeleccionados, fechaSeleccionada }) => {
+            console.log('Filtrando por:', filtrosSeleccionados, fechaSeleccionada);
+          }}
         />
+      </div>
       )}
-
       <div className='assetsContainer'>
-        <ul>
-          {assets.length > 0 ? (
-            assets
-              .filter((asset) => {
-                // Lógica de filtrado si hay filtros activos
-                if (filtrosActivos.length === 0) return true;
-                return filtrosActivos.includes(asset.subcategoria); // O el campo que uses
-              })
-              .map((asset, index) => (
-                <li key={index}>{asset.nombre}</li> // Asegúrate que `asset` tenga nombre o el campo que desees
-              ))
-          ) : (
-            <p className='noAssets'>No hay assets disponibles o cargando...</p>
-          )}
-        </ul>
+        <AssetLista  categoria={categoriaActiva}/>
       </div>
     </>
   );
