@@ -18,8 +18,16 @@ const getAssets = async (tipo) => {
   return response.data
 }
 
+const getAsset = async (tipo) => {
+    const response = await axios.get('http://localhost:5000/api/assets/obtenerUnAsset/'+tipo,config)
+    console.log(response.data);
+  
+    return response.data
+}
+
 const assetService = {
     getAssets,
+    getAsset
 }
 
 export default assetService
