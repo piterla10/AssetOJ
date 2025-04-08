@@ -20,7 +20,6 @@ const getAssets = async (tipo) => {
 
 const getAsset = async (tipo) => {
     const response = await axios.get('http://localhost:5000/api/assets/obtenerUnAsset/'+tipo,config)
-    console.log(response.data);
   
     return response.data
 }
