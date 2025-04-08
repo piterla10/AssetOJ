@@ -51,13 +51,19 @@ const FiltrosPorCategoria = ({ categoria, onFilterChange }) => {
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
             }}
+            onClick={() => {
+                // Restablecer los filtros
+                setFiltrosSeleccionados([]);
+                setFechaSeleccionada('Todo');
+                setValoracionSeleccionada('0');
+            }}
             onMouseEnter={(e) => (e.target.style.textDecoration = 'underline')}
             onMouseLeave={(e) => (e.target.style.textDecoration = 'none')}>Borrar Filtros</button>
         </div>
         {/* Checkboxes por categoría */}
         <div style={{display:'flex',flexDirection:'column',alignItems:'flex-start',padding:'10px'}}>
-            <h3 className="text-lg font-semibold mb-2" style={{ fontSize: '26px' }}>Etiquetas</h3>
-            <div style={{display:'flex', fontSize:'16px',flexDirection:'column',justifyItems:'flex-start',alignItems:'flex-start',marginLeft:'10px'}}>
+            <h3 className="text-lg font-semibold mb-2" style={{ fontSize: '26px',marginLeft:'20px' }}>Etiquetas</h3>
+            <div style={{display:'flex', fontSize:'16px',flexDirection:'column',justifyItems:'flex-start',alignItems:'flex-start',marginLeft:'30px'}}>
                 {filtros.map((filtro) => (
                 <label key={filtro} style={{margin:'4px'}}>
                     <input
@@ -74,8 +80,8 @@ const FiltrosPorCategoria = ({ categoria, onFilterChange }) => {
         <hr></hr>
         { /* Por Valoración*/}
         <div  style={{display:'flex',flexDirection:'column',alignItems:'flex-start',padding:'10px'}}>
-            <h3 className="text-lg font-semibold mb-2" style={{ fontSize: '26px' }}>Valoración</h3>
-            <div className="flex gap-1" style={{marginLeft:'20px'}}>
+            <h3 className="text-lg font-semibold mb-2" style={{ fontSize: '26px',marginLeft:'20px' }}>Valoración</h3>
+            <div className="flex gap-1" style={{marginLeft:'40px'}}>
             {[1, 2, 3, 4, 5].map((valor) => (
                 <span
                 key={valor}
@@ -100,8 +106,8 @@ const FiltrosPorCategoria = ({ categoria, onFilterChange }) => {
         <hr></hr>
         {/* Radios por fecha */}
         <div style={{display:'flex',flexDirection:'column',alignItems:'flex-start',padding:'10px'}}>
-          <h3 className="text-lg font-semibold mb-2" style={{fontSize:'26px'}}>Fechas</h3>
-          <div style={{display:'flex', fontSize:'16px',flexDirection:'column',justifyItems:'flex-start',alignItems:'flex-start',marginLeft:'10px'}}>
+          <h3 className="text-lg font-semibold mb-2" style={{fontSize:'26px', marginLeft:'20px'}}>Fechas</h3>
+          <div style={{display:'flex', fontSize:'16px',flexDirection:'column',justifyItems:'flex-start',alignItems:'flex-start',marginLeft:'30px'}}>
             {filtrosFecha.map((fecha) => (
               <label key={fecha} style={{margin:'4px'}}>
                 <input
