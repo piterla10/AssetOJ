@@ -80,7 +80,7 @@ h3 {
 
 .listaAssets{ /*Esto hace que se creen columnas dependiendo de cuantos asset caben*/
   display: grid;
-  grid-template-columns: repeat(auto-fit, 215px); /* Ancho de tus cards */
+  grid-template-columns: repeat(auto-fit, 200px); /* Ancho de tus cards */
   gap: 10px;
   justify-content: center; /* Centra las columnas en el contenedor */
 }
@@ -97,13 +97,13 @@ h3 {
 .asset-card {
   padding: 10px;
   text-align: left; 
-  width: 215px; 
+  width: 200px; 
   color: #ececec;
 }
 
 .asset-card img {
-  width: 200px;
-  height: 200px;
+  width: 190px;
+  height: 190px;
   object-fit: cover;
 }
 
@@ -392,13 +392,17 @@ h3 {
 
 }
 
+.tituloinicio{
+  font-size: 40px;
+}
+
 .titulo2 {
   display: block;
   position: relative; 
   width: 100%;
   text-align: start;
   padding-left: 30px;
-  font-size: 50px;
+  font-size: 40px;
 }
 
 .titulo2::after {
@@ -638,15 +642,6 @@ h3 {
   font-size: 16px;
   font-weight: normal;
 }
-.assetsPerfil{
-  margin-top: 10px;
-   
-  width: 100%;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-}
-
 
 .modal-overlay {
   position: fixed;

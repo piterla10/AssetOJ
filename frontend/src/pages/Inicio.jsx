@@ -6,7 +6,7 @@ function Inicio() {
     <>
     <div className='contenedorPrincipal'>
       <section className='contenedorTitulo'>
-        <h1>Más populares</h1>
+        <h1 className='tituloinicio'>Más populares</h1>
       </section>
       <div className='contenedor'>
         <h1 className='titulo2'>3D</h1>

@@ -10,7 +10,6 @@ function Header() {
   const [usuario, setUsuario] = useState(null);
   const { user } = useSelector((state) => state.auth)
   const [searchTerm, setSearchTerm] = useState("");
-  console.log(user);
   // Manejar cambios en el input
 
   useEffect(() => {
@@ -34,7 +33,6 @@ function Header() {
     return <div>Cargando...</div>;
   }
 
-  console.log(usuario);
   const handleChange = (e) => {
     setSearchTerm(e.target.value);
   };

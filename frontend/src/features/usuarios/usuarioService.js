@@ -12,7 +12,6 @@ const config = {
 
 const obtenerUsuario = async (email) => {
   const response = await axios.get('http://localhost:5000'+ API_URL + email, config)
-  console.log(response.data);
 
   return response.data
 }
