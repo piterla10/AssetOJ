@@ -54,30 +54,30 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
           let fechaLimite;
 
           switch (fecha) {
-            case 1:
+            case 'Hace 1 día':
               fechaLimite = new Date();
               fechaLimite.setDate(ahora.getDate() - 1);
               break;
-            case 2:
+            case 'Hace 1 semana':
               fechaLimite = new Date();
               fechaLimite.setDate(ahora.getDate() - 7);
               break;
-            case 3:
+            case 'Hace 1 mes':
               fechaLimite = new Date();
               fechaLimite.setMonth(ahora.getMonth() - 1);
               break;
-            case 4:
+            case 'Hace 6 meses':
               fechaLimite = new Date();
               fechaLimite.setMonth(ahora.getMonth() - 6);
               break;
-            case 5:
+            case 'Hace 1 año':
               fechaLimite = new Date();
               fechaLimite.setFullYear(ahora.getFullYear() - 1);
               break;
             default:
               fechaLimite = null;
           }
-
+          
           if (fechaLimite) {
             filteredAssets = filteredAssets.filter(asset => 
               new Date(asset.fecha) >= fechaLimite
@@ -99,7 +99,7 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
     fetchAssets(); // Llamada a la API
   }, [categoria, cantidad, JSON.stringify(etiquetas), datosUsuario, paginacion, valoracion, fecha]);
 
-  return ( 
+  return (
     <div className="listaAssets">
       {assets.length > 0 ? (
         assets.map(asset => (
