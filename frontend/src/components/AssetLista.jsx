@@ -5,9 +5,9 @@ import assetService from "../features/assets/assetService";
 // pasamos la cantidad de asset de cierta categoría que queremos mostrar, las etiquetas en caso de que queramos
 // filtrarlos y lo mismo con la valoración y la fecha, en caso de que no nos pasen estos parámetros, obtendrán los
 // valores que les asignamos debajo.
-const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, paginacion = null, etiquetas = [], valoracion = null, fecha = null }) => {
+const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, paginacion = null, etiquetas = [], valoracion = null, fecha = null, cantidadTotal, orden = null}) => {
   const [assets, setAssets] = useState([]);
-  
+
   // esta variable sirve para poner paginación en caso de que nos la hayan pasado
   const inicio = paginacion ? paginacion : 0;
 
@@ -24,6 +24,7 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
         } else {
           data = await assetService.getAssets(categoria);
           filteredAssets = data.assets;
+          cantidadTotal?.(filteredAssets.length);
         }
 
         // Validación de si los datos no son válidos
@@ -40,9 +41,16 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
         }
 
         // Filtrado por valoración
-        if (valoracion !== null) {
-          filteredAssets = filteredAssets.filter(asset => 
-            asset.valoracionNota === valoracion
+        if (valoracion !== null && valoracion > 0) {
+          const min = (valoracion - 1) + 0.01;
+          const max = valoracion;
+        
+          // Si valoracion es 1, queremos que incluya desde 0 hasta 1
+          const rangoMin = valoracion === 1 ? 0 : min;
+          const rangoMax = max;
+        
+          filteredAssets = filteredAssets.filter(asset =>
+            asset.valoracionNota >= rangoMin && asset.valoracionNota <= rangoMax
           );
         }
 
@@ -84,11 +92,41 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
         }
 
         // Solo actualizamos el estado si el componente sigue montado
+        
+             // Ordenamiento según la prop "orden"
+             if (orden) {
+               switch (orden) {
+                 case 'likes':
+                    filteredAssets.sort((a, b) => b.likes - a.likes);
+                   break;
+     
+                 case 'nombre':
+                   filteredAssets.sort((a, b) => a.nombre.localeCompare(b.nombre));
+                   break;
+     
+                 case 'descargas':
+                   filteredAssets.sort((a, b) => b.descargas - a.descargas);
+                   break;
+     
+                 case 'popularidad':
+                   const haceUnMes = new Date();
+                   haceUnMes.setMonth(haceUnMes.getMonth() - 1);
+     
+                   filteredAssets = filteredAssets
+                     .filter(asset => new Date(asset.fecha) >= haceUnMes)
+                     .sort((a, b) => b.likes - a.likes);
+                   break;
+     
+                 default:
+                   break;
+               }
+             }
     
           // Filtrar los assets nulos o vacíos
         const validAssets = filteredAssets.filter(asset => asset != null && asset.nombre);
         setAssets(validAssets.slice(inicio, inicio + cantidad));
-   
+
+
       } catch (error) {
         console.error("Error al obtener los assets:", error);
       }

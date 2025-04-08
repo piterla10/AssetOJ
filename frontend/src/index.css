@@ -80,7 +80,7 @@ h3 {
 
 .listaAssets{ /*Esto hace que se creen columnas dependiendo de cuantos asset caben*/
   display: grid;
-  grid-template-columns: repeat(auto-fit, 200px); /* Ancho de tus cards */
+  grid-template-columns: repeat(auto-fit, 190px); /* Ancho de tus cards */
   gap: 10px;
   justify-content: center; /* Centra las columnas en el contenedor */
 }
@@ -97,13 +97,13 @@ h3 {
 .asset-card {
   padding: 10px;
   text-align: left; 
-  width: 200px; 
+  width: 190px; 
   color: #ececec;
 }
 
 .asset-card img {
-  width: 190px;
-  height: 190px;
+  width: 180px;
+  height: 180px;
   object-fit: cover;
 }
 
