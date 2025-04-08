@@ -297,7 +297,7 @@ function MiPerfil() {
         ))}
       </div>
       <div className="lineaDebajo"></div>
-      <div className='assetsPerfil'>
+      <div className='contenedor2'>
         <AssetLista className="lista" cantidad={10} datosUsuario={datosUsuario} />
       </div>
 

@@ -17,19 +17,22 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
     const fetchAssets = async () => {
       try {
         let data = [];
+        let filteredAssets;
         if (datosUsuario) {
-          data = datosUsuario;
+          filteredAssets = datosUsuario;
+          console.log(filteredAssets);
         } else {
           data = await assetService.getAssets(categoria);
+          filteredAssets = data.assets;
         }
 
         // Validación de si los datos no son válidos
-        if (!data || !Array.isArray(data.assets)) {
+        if ((!data || !Array.isArray(data.assets)) && !datosUsuario) {
           setAssets([]);
           return;
         }
 
-        let filteredAssets = data.assets;
+        
 
         // Filtrado de etiquetas si se pasan
         if (etiquetas.length > 0) {
@@ -94,11 +97,10 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
     };
 
     fetchAssets(); // Llamada a la API
-  }, [categoria, cantidad, JSON.stringify(etiquetas)], datosUsuario, paginacion, etiquetas, valoracion, fecha);
+  }, [categoria, cantidad, JSON.stringify(etiquetas), datosUsuario, paginacion, valoracion, fecha]);
 
   return ( 
     <div className="listaAssets">
-      {/* Mostrar los assets o un mensaje si no hay disponibles */}
       {assets.length > 0 ? (
         assets.map(asset => (
           <AssetCarta key={asset._id} asset={asset} />

@@ -26,7 +26,7 @@ function App() {
             <Route path='/registro' element={<Register />} />
             <Route path='/Busqueda' element={<Busqueda />} />
             <Route path='/Categorias' element={<Categorias />} />
-            <Route path='/DetallesAsset' element={<DetallesAsset />} />
+            <Route path='/DetallesAsset/:id' element={<DetallesAsset />} />
             <Route path='/EditarAsset' element={<EditarAsset />} />
             <Route path='/MiPerfil' element={<MiPerfil />} />
             <Route path='/OtroPerfil' element={<OtroPerfil />} />

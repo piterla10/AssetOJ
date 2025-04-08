@@ -34,6 +34,38 @@ const obtenerAssetsPorTipo = async (req, res) => {
 };
 
 
+const obtenerAsset = async (req, res) => {
+    try {
+        const { id } = req.params; // Se obtiene el id desde los parámetros de la URL
+
+        // Buscar los assets que coincidan con el tipo
+        const assets = await Asset.findById( id ).populate('autor');
+        
+        
+        if (!assets) {
+            return res.status(404).json({
+                ok: false,
+                msg: "No existe el asset con ese id",
+            });
+        }
+
+        res.json({
+            ok: true,
+            msg: "Asset obtenido exitosamente",
+            assets,
+        });
+
+    } catch (error) {
+        console.error("Error al obtener el asset:", error);
+        res.status(500).json({
+            ok: false,
+            msg: "Error interno al obtener el asset",
+        });
+    }
+};
+
+
+
 const crearAsset = async (req, res) => {
     const { nombre, descripcion, tipo, visibilidad, etiquetas, imagenes, likes, descargas,valoracion, valoracionNota, comentarios  } = req.body;
     
@@ -74,4 +106,4 @@ const crearAsset = async (req, res) => {
 
 
 
-module.exports = { obtenerAssetsPorTipo , crearAsset}
+module.exports = { obtenerAssetsPorTipo , crearAsset, obtenerAsset}
