@@ -21,6 +21,7 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
         if (datosUsuario) {
           filteredAssets = datosUsuario;
           console.log(filteredAssets);
+          cantidadTotal?.(filteredAssets.length);
         } else {
           data = await assetService.getAssets(categoria);
           filteredAssets = data.assets;
@@ -96,19 +97,19 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
              // Ordenamiento según la prop "orden"
              if (orden) {
                switch (orden) {
-                 case 'likes':
+                 case 'Likes':
                     filteredAssets.sort((a, b) => b.likes - a.likes);
                    break;
      
-                 case 'nombre':
+                 case 'Nombre':
                    filteredAssets.sort((a, b) => a.nombre.localeCompare(b.nombre));
                    break;
      
-                 case 'descargas':
+                 case 'Descargas':
                    filteredAssets.sort((a, b) => b.descargas - a.descargas);
                    break;
      
-                 case 'popularidad':
+                 case 'Popularidad':
                    const haceUnMes = new Date();
                    haceUnMes.setMonth(haceUnMes.getMonth() - 1);
      
@@ -126,14 +127,13 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
         const validAssets = filteredAssets.filter(asset => asset != null && asset.nombre);
         setAssets(validAssets.slice(inicio, inicio + cantidad));
 
-
       } catch (error) {
         console.error("Error al obtener los assets:", error);
       }
     };
 
     fetchAssets(); // Llamada a la API
-  }, [categoria, cantidad, JSON.stringify(etiquetas), datosUsuario, paginacion, valoracion, fecha]);
+  }, [categoria, cantidad, JSON.stringify(etiquetas), datosUsuario, paginacion, valoracion, fecha, orden]);
 
   return (
     <div className="listaAssets">

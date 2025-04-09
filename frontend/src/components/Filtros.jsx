@@ -63,7 +63,7 @@ const FiltrosPorCategoria = ({ categoria, onFilterChange }) => {
         {/* Checkboxes por categoría */}
         <div style={{display:'flex',flexDirection:'column',alignItems:'flex-start',padding:'10px'}}>
             <h3 className="text-lg font-semibold mb-2" style={{ fontSize: '26px',marginLeft:'20px' }}>Etiquetas</h3>
-            <div style={{display:'flex', fontSize:'16px',flexDirection:'column',justifyItems:'flex-start',alignItems:'flex-start',marginLeft:'30px'}}>
+            <div style={{display:'flex', fontSize:'14px',flexDirection:'column',justifyItems:'flex-start',alignItems:'flex-start',marginLeft:'30px'}}>
                 {filtros.map((filtro) => (
                 <label key={filtro} style={{margin:'4px'}}>
                     <input

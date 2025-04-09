@@ -13,6 +13,9 @@ function Categorias() {
   const [listaVisible, setListaVisible] = useState(false); // Controla si la lista está visible
   const [ordenSeleccionado, setOrdenSeleccionado] = useState('Seleccionar'); // Valor por defecto
   const [resultadosVisible, setResultadosVisible] = useState(false); // Para "Resultados"
+  const [cantidadAssetsTotal, setAssetsTotal] = useState(0); // Para "Resultados"
+  const [paginasTotales, setPaginasTotales] = useState(0);
+  const [paginaActual, setPaginaActual] = useState(0);
   const listaRef = useRef(null); // Referencia para la lista desplegable
   const toggleButtonRef = useRef(null);
   // Ref para el botón de resultados
@@ -53,6 +56,15 @@ function Categorias() {
       setResultadosVisible(false);
     }
   };
+  const handleCantidadTotal = (total) => {
+    setAssetsTotal(total);
+  };
+
+
+  const handleCalculoPaginas = () => {
+    const paginas = Math.ceil(cantidadAssetsTotal / cantidadAssets);
+    setPaginasTotales(paginas);
+  };
   useEffect(() => {
     // Solo al montar/desmontar
     document.addEventListener('click', handleClickOutside);
@@ -60,6 +72,11 @@ function Categorias() {
       document.removeEventListener('click', handleClickOutside);
     };
   }, []);
+  useEffect(() => {
+    if (cantidadAssets > 0 && cantidadAssetsTotal > 0) {
+      handleCalculoPaginas();
+    }
+  }, [cantidadAssets, cantidadAssetsTotal]);
   // Cargar los assets cuando la categoría activa cambia
   useEffect(() => {
     const fetchAssets = async () => {
@@ -83,7 +100,7 @@ function Categorias() {
             className={`contenedorHijo ${categoriaActiva === categoria ? 'activo' : ''}`}
             onClick={() => {
               setCategoriaActiva(categoria);
-              setFiltrosSeleccionados(null); // Reiniciar filtros al cambiar categoría
+              setFiltrosSeleccionados(0); // Reiniciar filtros al cambiar categoría
               setValoraciónSeleccionada('0');
               setFechaSeleccionada('Todo');
             }}
@@ -114,7 +131,11 @@ function Categorias() {
         />
       </div>
       )}
+     
       <div style={{ display: 'flex', justifyContent: 'center', margin: '20px', alignItems:'center' }}>
+        <div style={{justifySelf:'left', position:'absolute',left:'150px'}}>
+          <h1 style={{ fontSize: '12px', margin:'0'}}>1 - {cantidadAssets} de {cantidadAssetsTotal} resultados</h1>
+        </div>
          {/* Título Ordenar Por */}
         <h1 
           style={{ fontSize: '18px', margin:'0' }} 
@@ -133,6 +154,7 @@ function Categorias() {
               border: '1px solid #ccc',
               position: 'absolute',
               marginTop:'200px',
+              marginLeft:'140px',
               backgroundColor: '#252360',
               boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
               zIndex: '1000',
@@ -140,7 +162,7 @@ function Categorias() {
               cursor: 'pointer',
             }}
           >
-            {['Popularidad', 'Descargas', 'Nombre', 'Guardado'].map((valor) => (
+            {['Popularidad', 'Descargas', 'Nombre', 'Likes'].map((valor) => (
               <li
                 key={valor}
                 onClick={() => handleSeleccionar(valor)}
@@ -218,8 +240,46 @@ function Categorias() {
           )}
         </div>
       </div>
-      <div className='assetsContainer' style={{width:'60%', alignSelf:'center', marginTop:'10px'}}>
-        <AssetLista cantidad={cantidadAssets} valoracion={valoracionSeleccionada} categoria={categoriaActiva} etiquetas={filtrosSeleccionados} fecha={fechaSeleccionada} orden={"likes"}></AssetLista>
+      <div className='assetsContainer' style={{width:'70%', alignSelf:'center', marginTop:'10px',marginLeft:'10%'}}>
+        <AssetLista cantidad={cantidadAssets} paginacion={paginaActual*cantidadAssets} valoracion={valoracionSeleccionada} categoria={categoriaActiva} etiquetas={filtrosSeleccionados} fecha={fechaSeleccionada} orden={ordenSeleccionado} cantidadTotal={handleCantidadTotal}></AssetLista>
+        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '20px' }}>
+          {/* Botón anterior */}
+          <button
+            onClick={() => setPaginaActual((prev) => Math.max(prev - 1, 0))}
+            disabled={paginaActual === 0}
+            style={{
+              padding: '8px 12px',
+              backgroundColor: '#121130',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: paginaActual === 0 ? 'not-allowed' : 'pointer',
+            }}
+          >
+            ←
+          </button>
+
+          {/* Página actual (mostramos +1 al usuario) */}
+          <span style={{ alignSelf: 'center', fontWeight: 'bold', color: 'white' }}>
+            Página {paginaActual + 1} de {paginasTotales}
+          </span>
+
+          {/* Botón siguiente */}
+          <button
+            onClick={() => setPaginaActual((prev) => Math.min(prev + 1, paginasTotales - 1))}
+            disabled={paginaActual === paginasTotales - 1}
+            style={{
+              padding: '8px 12px',
+              backgroundColor: '#121130',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: paginaActual === paginasTotales - 1 ? 'not-allowed' : 'pointer',
+            }}
+          >
+            →
+          </button>
+        </div>
       </div>
     </>
   );
