@@ -32,7 +32,34 @@ const obtenerAssetsPorTipo = async (req, res) => {
         });
     }
 };
+const obtenerAssetTodos = async (req, res) => {
+    try {
+      
+        // Buscar los assets que coincidan con el tipo
+        const assets = await Asset.find().populate('autor');
+        
+        console.log(assets);
+        if (!assets) {
+            return res.status(404).json({
+                ok: false,
+                msg: "No existe assets",
+            });
+        }
 
+        res.json({
+            ok: true,
+            msg: "Assets obtenidos exitosamente",
+            assets,
+        });
+
+    } catch (error) {
+        console.error("Error al obtener el asset:", error);
+        res.status(500).json({
+            ok: false,
+            msg: "Error interno al obtener el asset",
+        });
+    }
+}
 
 const obtenerAsset = async (req, res) => {
     try {
@@ -106,4 +133,4 @@ const crearAsset = async (req, res) => {
 
 
 
-module.exports = { obtenerAssetsPorTipo , crearAsset, obtenerAsset}
+module.exports = { obtenerAssetsPorTipo , crearAsset, obtenerAsset,obtenerAssetTodos}

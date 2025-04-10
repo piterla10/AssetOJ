@@ -4,13 +4,13 @@ import { useSelector, useDispatch } from 'react-redux'
 import { logout, reset } from '../features/auth/authSlice'
 import { useState, useEffect } from "react";
 import usuarioService from '../features/usuarios/usuarioService';
+
 function Header() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [usuario, setUsuario] = useState(null);
   const { user } = useSelector((state) => state.auth)
   const [searchTerm, setSearchTerm] = useState("");
-  // Manejar cambios en el input
 
   useEffect(() => {
     const usuarioLocal = JSON.parse(localStorage.getItem('usuario'));
@@ -29,22 +29,16 @@ function Header() {
     }
   }, []);
   
-  if (!usuario) {
-    return <div>Cargando...</div>;
-  }
+  if (!usuario) return <div>Cargando...</div>;
 
-  const handleChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
+  const handleChange = (e) => setSearchTerm(e.target.value);
 
-  // Redirigir al hacer la búsqueda
   const handleSearch = (e) => {
-    e.preventDefault(); // Evita el recargo de la página
+    e.preventDefault();
     if (searchTerm.trim() !== "") {
-      navigate(`/search?q=${searchTerm}`);
+      navigate(`/Busqueda?q=${searchTerm}`);
     }
   };
-
 
   return (
     <header className='header'>
@@ -53,23 +47,25 @@ function Header() {
           <img src='/Logo_con_fondo_mas_letras.png' alt='AssetsOJ' className="logo"/>
         </Link>
       </div>
+
       <div className='enlacesPaginas'>
         {user && (
           <>  
-          <div className='enlace'>
-            <Link to='/SubirAsset'>Subir Asset</Link>
-          </div>
-          <div className="separador"></div> 
-          <div className='enlace'>
-            <Link to='/Siguiendo'>Siguiendo</Link>
-          </div>
-          <div className="separador"></div> 
+            <div className='enlace'>
+              <Link to='/SubirAsset'>Subir Asset</Link>
+            </div>
+            <div className="separador"></div> 
+            <div className='enlace'>
+              <Link to='/Siguiendo'>Siguiendo</Link>
+            </div>
+            <div className="separador"></div> 
           </>
         )}
         <div className='enlace'>
           <Link to='/Categorias'>Categorías</Link>
         </div>
       </div>
+
       <form className="search-bar" onSubmit={handleSearch}>
         <input
           type="text"
@@ -79,12 +75,10 @@ function Header() {
         />
         <button type="submit">Buscar</button>
       </form>
+
       <ul>
         {user ? (
           <li>
-            {/* <button className='btn-header' onClick={onLogout}>
-                Logout
-              </button> */}
             <div className='logo'>
               <Link to='/MiPerfil'>
                 <img src={usuario.imagenPerfil}  className="logoPerfil" alt="Imagen del proyecto"/>
@@ -93,16 +87,16 @@ function Header() {
           </li>
         ) : (
           <>
-           <li>
-            <button className="btn-header">
-              <Link to='/login'>Login</Link>
-            </button>
-           </li>
-           <li>
-            <button className="btn-header">
-              <Link to='/registro'>Registro</Link>
-            </button>
-           </li>
+            <li>
+              <button className="btn-header">
+                <Link to='/login'>Login</Link>
+              </button>
+            </li>
+            <li>
+              <button className="btn-header">
+                <Link to='/registro'>Registro</Link>
+              </button>
+            </li>
           </>
         )}
       </ul>
