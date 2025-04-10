@@ -120,7 +120,7 @@ function Siguiendo() {
           <h1 
             style={{ fontSize: '18px', margin:'0' }} 
           >
-            Ordenar Por
+            Filtrar por
           </h1>
 
           {/* Lista desplegable */}
@@ -142,7 +142,7 @@ function Siguiendo() {
                 cursor: 'pointer',
               }}
             >
-              {['Popularidad', 'Descargas', 'Nombre', 'Likes'].map((valor) => (
+              {['3D', '2D', 'Audio', 'Add-On'].map((valor) => (
                 <li
                   key={valor}
                   onClick={() => handleSeleccionar(valor)}
@@ -221,7 +221,8 @@ function Siguiendo() {
           </div>
         </div>
         <div className='assetsContainer' style={{width:'70%', alignSelf:'center', marginTop:'10px',marginLeft:'10%'}}>
-          <AssetLista cantidad={cantidadAssets} paginacion={paginaActual*cantidadAssets} datosUsuario={datosUsuario}  orden={ordenSeleccionado} cantidadTotal={handleCantidadTotal}></AssetLista>
+          {console.log(ordenSeleccionado)}
+          <AssetLista cantidad={cantidadAssets} paginacion={paginaActual*cantidadAssets} datosUsuario={datosUsuario}  categoria={ordenSeleccionado} cantidadTotal={handleCantidadTotal}></AssetLista>
           <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '20px' }}>
           {/* Botón anterior */}
           <button
