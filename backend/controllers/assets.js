@@ -41,7 +41,7 @@ const obtenerAsset = async (req, res) => {
         // Buscar los assets que coincidan con el tipo
         const assets = await Asset.findById( id ).populate('autor');
         
-        
+        console.log(assets);
         if (!assets) {
             return res.status(404).json({
                 ok: false,

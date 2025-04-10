@@ -7,6 +7,7 @@ import AssetLista from '../components/AssetLista';
 import { logout, reset } from '../features/auth/authSlice';
 import Modal from '../components/Modal';
 import ModalCambiarContrasena from '../components/ModalCambiarContrasena';
+import assetService from '../features/assets/assetService';
 function MiPerfil() {
   const [usuario, setUsuario] = useState(null);
   const [activo, setActivo] = useState('Mis Assets');
@@ -74,12 +75,14 @@ function MiPerfil() {
     setAssetsTotal(total);
 
     const paginas = Math.max(1, Math.ceil(total / cantidadAssets));
+   
     setPaginasTotales(paginas);
   };
 
 
   const handleCalculoPaginas = () => {
     const paginas = Math.ceil(cantidadAssetsTotal / cantidadAssets);
+ 
     setPaginasTotales(paginas);
   };
   useEffect(() => {
@@ -114,12 +117,14 @@ function MiPerfil() {
     const usuarioLocal = JSON.parse(localStorage.getItem('usuario'));
 
     if (usuarioLocal) {
+   
       const fetchAssets = async () => {
         try {
           const usuarioData = await usuarioService.obtenerUsuario(usuarioLocal._id);
+          console.log(usuarioData);
           setUsuario(usuarioData);
           setValoracion(usuarioData.valoracionesNota || 0);
-          setDatosUsuario(usuarioData.assets); // Establecer los assets al cargar
+          setDatosUsuario(usuarioData.assets);
         } catch (error) {
           console.error('Error al obtener los assets:', error);
         }

@@ -8,9 +8,18 @@ const obtenerUsuario = async (req, res) => {
     try {
         const { id } = req.params; // Obtener el ID de los parámetros de la URL
         const usuario = await Usuario.findById(id).populate([
-            'assets',
-            'descargas',
-            'guardados'
+            {
+              path: 'assets',
+              populate: { path: 'autor' }
+            },
+            {
+              path: 'descargas',
+              populate: { path: 'autor' }
+            },
+            {
+              path: 'guardados',
+              populate: { path: 'autor' }
+            }
         ]); // Buscar usuario en la base de datos
 
         if (!usuario) {
@@ -38,7 +47,39 @@ const obtenerUsuarios = async (req, res) => {
         res.status(500).json({ mensaje: 'Error del servidor' });
     }
 };
-
+const obtenerSeguidos = async (req, res) => {
+    try {
+      const { id } = req.params;
+  
+      const usuario = await Usuario.findById(id).populate([
+        {
+          path: 'assets',
+          populate: { path: 'autor' }
+        },
+        {
+          path: 'descargas',
+          populate: { path: 'autor' }
+        },
+        {
+          path: 'guardados',
+          populate: { path: 'autor' }, 
+        },
+        {
+          path: 'seguidos',
+          populate: { path: 'assets' }, 
+        }
+      ]);
+  
+      if (!usuario) {
+        return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+      }
+  
+      res.status(200).json(usuario);
+    } catch (error) {
+      console.error('Error al obtener usuario:', error);
+      res.status(500).json({ mensaje: 'Error del servidor' });
+    }
+};
 const crearUsuario = async(req, res) => {
     var { email, password, name} = req.body;
     try{
@@ -180,4 +221,4 @@ const subirImagenPerfil = async (req, res) => {
       res.status(500).json({ message: 'Error al subir imagen', error });
     }
 }
-module.exports = {crearUsuario,obtenerUsuario,obtenerUsuarios,actualizarUsuario,cambiarContrasena, subirImagenPerfil}
+module.exports = {crearUsuario,obtenerUsuario,obtenerUsuarios,actualizarUsuario,cambiarContrasena, subirImagenPerfil,obtenerSeguidos}

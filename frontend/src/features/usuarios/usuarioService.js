@@ -40,10 +40,15 @@ const actualizarImagenPerfil = async (id,body) => {
   
     return response.data
 }
-
+const obtenerSeguidos = async (id) => {
+    const response = await axios.get('http://localhost:5000'+ API_URL+'/obtenerSeguidos/'+id, config)
+    console.log(response.data);
+  
+    return response.data
+}
 
 const usuarioService = {
-    obtenerUsuarios,obtenerUsuario,actualizarUsuario,actualizarContrasena,actualizarImagenPerfil
+    obtenerUsuarios,obtenerUsuario,actualizarUsuario,actualizarContrasena,actualizarImagenPerfil,obtenerSeguidos
 }
 
 export default usuarioService
