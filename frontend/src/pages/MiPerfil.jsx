@@ -197,7 +197,7 @@ function MiPerfil() {
             </div>
           </div>
           <div className="contenedorValoracion">
-            <StarRating value={valoracionNota} className="starRating" />
+            <StarRating value={valoracionNota} lugar={1}/>
             <p className="letraNano">{usuario.valoracionesNum} valoraciones</p>
           </div>
         </div>
