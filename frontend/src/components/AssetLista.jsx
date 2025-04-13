@@ -18,11 +18,15 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
       try {
         let data = [];
         let filteredAssets;
-        if (datosUsuario) {
+        if (datosUsuario && categoria) {
+          filteredAssets = datosUsuario.filter(asset => asset.tipo === categoria);
+          console.log(filteredAssets);
+          cantidadTotal?.(filteredAssets.length);
+        } else if(datosUsuario) {
           filteredAssets = datosUsuario;
           console.log(filteredAssets);
           cantidadTotal?.(filteredAssets.length);
-        } else {
+        }else {
           data = await assetService.getAssets(categoria);
           filteredAssets = data.assets;
           cantidadTotal?.(filteredAssets.length);
@@ -135,17 +139,27 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
     fetchAssets(); // Llamada a la API
   }, [categoria, cantidad, JSON.stringify(etiquetas), datosUsuario, paginacion, valoracion, fecha, orden]);
 
-  return (
-    <div className="listaAssets">
-      {assets.length > 0 ? (
-        assets.map(asset => (
+  if (assets.length > 0) {
+    return (
+      <div className="listaAssets">
+        {assets.map(asset => (
           <AssetCarta key={asset._id} asset={asset} />
-        ))
-      ) : (
-        <p>No hay assets disponibles.</p>
-      )}
-    </div>
-  );
+        ))}
+      </div>
+    );
+  } else {
+    return (
+      <div style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "200px",
+        fontSize: "20px"
+      }}>
+        <p style={{ color: "white" }}>No hay assets disponibles.</p>
+      </div>
+    );
+  }
 };
 
 export default AssetLista;
