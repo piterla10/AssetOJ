@@ -1,6 +1,7 @@
 const { response } = require('express');
 const Usuario = require('../models/usuarios.js');
 const Comentario = require('../models/comentario.js');
+const Asset = require('../models/assets.js');
 
 
 const obtenerComentarios = async (req, res) => {
@@ -43,14 +44,14 @@ const obtenerComentarios = async (req, res) => {
 
 
 const crearComentario = async (req, res) => {
-    try {
-        const { usuario, asset, texto, valoracion} = req.body;
+    try { // en asset lo que se le pasa es el id del asset del que se ha enviado 
+        const { usuario, texto, asset} = req.body;
 
         // Validar que los datos obligatorios estén presentes
-        if (!usuario || !asset || !texto) {
+        if (!usuario || !texto || !asset) {
             return res.status(400).json({
                 ok: false,
-                msg: "Usuario, asset y texto son obligatorios",
+                msg: "Usuario, id del asset y texto son obligatorios",
             });
         }
 
@@ -65,15 +66,20 @@ const crearComentario = async (req, res) => {
         // Crear el comentario
         const nuevoComentario = new Comentario({
             usuario: usuarioExiste._id,
-            asset,
-            texto,
-            valoracion: valoracion || 0, // Si no hay valoración, se asigna 0 por defecto
-            likes: 0, // Se inicializa con 0 likes
+            texto: texto,
+            likes, // esta variable y la de abajo tienen un default en models así que no 
+            fecha  // hace falta asignarle valores ni nada
         });
 
 
         // Guardar en la base de datos
         await nuevoComentario.save();
+
+        // Actualizamos el campo de comentarios del asset que le corresponda
+        await Asset.findByIdAndUpdate(
+            asset,
+            { $push: { comentarios: nuevoComentario._id } }
+          );
 
         res.status(201).json({
             ok: true,
@@ -90,11 +96,70 @@ const crearComentario = async (req, res) => {
     }
 };
 
+const likeComentario = async (req, res) => {
+    try { // tanto usuario como comentario son los id de cada uno
+        const { usuario, comentario} = req.body;
 
+        // Validar que los datos obligatorios estén presentes
+        if (!usuario || !comentario) {
+            return res.status(400).json({
+                ok: false,
+                msg: "Usuario y comentario son obligatorios",
+            });
+        }
 
+        // Comporbación de que existe el usuario
+        const usuarioExiste = await Usuario.findById(usuario);
+        if (!usuarioExiste) {
+            return res.status(404).json({
+                ok: false,
+                msg: "Usuario no encontrado",
+            });
+        }
 
+        // Comporbación de que existe comentario
+        const comentarioExiste = await Comentario.findById(comentario);
+        if (!comentarioExiste) {
+            return res.status(404).json({
+                ok: false,
+                msg: "Comentario no encontrado",
+            });
+        }
 
+        // Verificar si el usuario ya dio like
+        const yaDioLike = comentarioExiste.likes.includes(usuario);
 
+        let comentarioActualizado;
 
+        if (yaDioLike) {
+        // Si ya dio like, lo quitamos
+        comentarioActualizado = await Comentario.findByIdAndUpdate(
+            comentario,
+            { $pull: { likes: usuario } },
+            { new: true }
+        );
+        } else {
+        // Si no dio like, lo agregamos
+        comentarioActualizado = await Comentario.findByIdAndUpdate(
+            comentario,
+            { $push: { likes: usuario } },
+            { new: true }
+        );
+    }
 
-module.exports = { obtenerComentarios, crearComentario }
+        res.status(201).json({
+            ok: true,
+            msg: "Like del comentario modificado correctamente",
+            comentario: comentarioActualizado,
+        });
+
+    } catch (error) {
+        console.error("Error al modificar el comentario:", error);
+        res.status(500).json({
+            ok: false,
+            msg: "Error interno al modificar el comentario",
+        });
+    }
+};
+
+module.exports = { obtenerComentarios, crearComentario , likeComentario}

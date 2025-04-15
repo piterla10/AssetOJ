@@ -7,13 +7,17 @@ const assetSchema = new mongoose.Schema({
     visibilidad: { type: String, required: true },
     etiquetas: { type: [String] }, // Ahora es un array de strings
     imagenes: {type: [String]},
-    likes: {type: Number, required: false},
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Usuario", default: [] }],
     autor: { type: mongoose.Schema.Types.ObjectId, ref: "Usuario" },
     fecha:{type: Date, required:false},
     descargas: {type:Number, required:false},
-    valoracion: {type:Number, required:false},
+    valoracion: {
+        type: [[mongoose.Schema.Types.Mixed]], // puede contener [ObjectId, Number]
+        default: []
+    },
     valoracionNota: {type:Number, required:false},
-    comentarios: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comentario", default: [] }]
+    comentarios: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comentario", default: [] }],
+    contenido: { type: String, default: "" }
 
 });
 

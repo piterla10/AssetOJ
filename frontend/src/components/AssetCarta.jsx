@@ -9,7 +9,7 @@ const AssetCarta = ({ asset }) => {
         <img src={asset.imagenes[0]} alt={asset.autor.nombre}/>
         <span className="autor">{asset.autor.nombre}</span>
         <h3>{asset.nombre}</h3>
-        <p><StarRating value={asset.valoracionNota}/> ({asset.valoracion}) &nbsp;&nbsp;&nbsp;|&nbsp; ❤️ ({asset.likes})</p>
+        <p><StarRating value={asset.valoracionNota}/> ({asset.valoracion.length}) &nbsp;&nbsp;&nbsp;|&nbsp; ❤️ ({asset.likes.length})</p>
       </div>
     </Link>
   );
