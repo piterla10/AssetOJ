@@ -330,8 +330,9 @@ h3 {
 .logoPerfil{
   width: 60px;
   height: 60px;  
-  object-fit: contain; 
   margin-left: 40px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 .login-container {
   background-color: #121130;
@@ -541,12 +542,15 @@ h3 {
   background-color: transparent;
   border: none;
   font-size: 20px;
+  font-family: sans-serif;
   flex: 1;
-  line-height: 1.5;
+  line-height: 20px;
   padding: 10px;
   outline: none;
   width: 100%;
   resize: none;
+  overflow-y: auto;
+  max-height: calc(24px*5);
 }
 
 .comentarios button{
@@ -556,6 +560,35 @@ h3 {
   border-radius: 6px;
   font-size: 20px;
   cursor: pointer;
+}
+
+.comentarios-otros{
+  display: flex;
+  align-items: flex-start;
+  padding: 0 15px;
+  gap: 15px;
+  margin: 10px 0;
+  position: relative;
+  width: 100%;
+}
+
+.comentario-contenido {
+  flex: 1;
+  padding: 5px 10px;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+}
+
+.contenido-comentario-nombre{
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.contenido-comentario-nombre strong{
+  font-size: 22px;
 }
 
 .titulo2 {
@@ -622,15 +655,17 @@ h3 {
    
 }
 .cambiarImagen{
-  width: 300px;
-  height: 200px;
+  width: 250px;
+  height: 250px;
   margin-right: 20px;
   transition: all 0.5s ease-in-out;
+  border-radius: 50%;
+  object-fit: cover;
 
 }
 .cambiarImagen:hover{
   cursor: pointer;
-  transform: scale(1.1);
+  transform: scale(0.9);
 }
 .inputField{
   background-color: #121130;
