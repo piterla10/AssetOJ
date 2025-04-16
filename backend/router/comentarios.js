@@ -11,7 +11,6 @@ router.get('/', [
     validarCampos,
 ], obtenerComentarios);
 
-
 router.post('/', [
     validarJWT,
     validarCampos,

@@ -27,10 +27,32 @@ const getAsset = async (tipo) => {
     return response.data
 }
 
+const putLikeAsset = async ({ usuario, asset }) => {
+    const response = await axios.put(
+      'http://localhost:5000/api/assets/like',
+      { usuario, asset }, // <- body de la petición
+      config              // <- cabeceras (como el token, si lo necesitas)
+    );
+  
+    return response.data;
+};
+
+const putValoracionAsset = async ({ usuario, asset, valoracion}) => {
+    const response = await axios.put(
+      'http://localhost:5000/api/assets/valoracion',
+      { usuario, asset, valoracion }, // <- body de la petición
+      config              // <- cabeceras (como el token, si lo necesitas)
+    );
+  
+    return response.data;
+};
+
 const assetService = {
     getAssets,
     getAsset,
-    getAssetsTodos
+    getAssetsTodos,
+    putLikeAsset,
+    putValoracionAsset
 }
 
 export default assetService
