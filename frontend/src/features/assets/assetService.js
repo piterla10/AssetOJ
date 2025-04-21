@@ -40,8 +40,8 @@ const putLikeAsset = async ({ usuario, asset }) => {
 const putValoracionAsset = async ({ usuario, asset, valoracion}) => {
     const response = await axios.put(
       'http://localhost:5000/api/assets/valoracion',
-      { usuario, asset, valoracion }, // <- body de la petición
-      config              // <- cabeceras (como el token, si lo necesitas)
+      { usuario, asset, valoracion },
+      config
     );
   
     return response.data;

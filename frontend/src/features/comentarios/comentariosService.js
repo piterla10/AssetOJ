@@ -13,17 +13,17 @@ const config = {
 const getComentarios = async () => {
   const response = await axios.get('http://localhost:5000/api/comentarios/',config)
 
-  return response.data
+  return response.data;
 }
 const postComentario = async (data) => {
     const response = await axios.post('http://localhost:5000/api/comentarios/', data ,config)
 
-    return response.data
+    return response.data;
 }
 
 const putLikeComentario = async ({ usuario, comentario }) => {
     const response = await axios.put(
-      'http://localhost:5000/api/comentarios/like',
+      'http://localhost:5000/api/comentarios',
       { usuario, comentario }, // <- body de la petición
       config              // <- cabeceras (como el token, si lo necesitas)
     );

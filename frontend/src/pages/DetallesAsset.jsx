@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import assetService from '../features/assets/assetService';
 import StarRating from '../components/estrellas';
 import usuarioService from '../features/usuarios/usuarioService';
+import comentariosService from '../features/comentarios/comentariosService';
 import { FaHeart } from "react-icons/fa";
 
 function DetallesAsset() {
@@ -12,6 +13,7 @@ function DetallesAsset() {
   const [usuario, setUsuario] = useState(null);
   const [comentario, setComentario] = useState('');
   const [haylike, setHayLike] = useState(false);
+  const [valoracionUsuario, setValoracionUsuario] = useState(0);
 
   useEffect(() => {
     const usuarioLocal = JSON.parse(localStorage.getItem('usuario'));
@@ -26,25 +28,68 @@ function DetallesAsset() {
         const data = await assetService.getAsset(id);
         setAsset(data.assets);
         setImgPrincipal(data.assets.imagenes[0]);
-        if (asset && usuario) {
-          setHayLike(tieneLike(asset));
-        }
       } catch (error) {
         console.error("Error al obtener el asset:", error);
       }
     };
     fetchAsset();
-  }, [id, asset]);
+  }, [id]);
+  
+  useEffect(() => {
+    if (asset && usuario) {
+      // para manejar el like del asset
+      setHayLike(asset.likes.includes(usuario._id));
+
+      // Para saber si el usuario ha valorado ya el asset: 
+      const entrada = asset.valoracion.find(([id, _]) => {
+        const idStr = typeof id === "string" ? id : id.$oid;
+        return idStr === usuario._id;
+      });
+  
+      setValoracionUsuario(entrada ? entrada[1] : null);
+    }
+  }, [asset, usuario]);  
   
 
+  // controlador para la valoración de un asset
+  const handleValoracion = async (nuevaValoracion) => {
+    try {
+      await assetService.putValoracionAsset({
+        usuario: usuario._id, // o el objeto `usuario`, según cómo lo gestiones
+        asset: id, // o asset.id si es el caso
+        valoracion: nuevaValoracion,
+      });
   
+      // Refresca la valoración del asset si lo necesitas
+      const data = await assetService.getAsset(id);
+      setAsset(data.assets);
+    } catch (error) {
+      console.error("Error al valorar el asset", error);
+    }
+  };  
+
   // controlador para subir un comentario
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (comentario.trim()) {
-      //Logica para subir el comentario
-      
-      setComentario('');
+  const handleSubmit = async (e) => {
+    try{
+      e.preventDefault();
+      if (comentario.trim()) {
+        const data = {
+          usuario: usuario._id,
+          texto: comentario,
+          asset: id
+        }
+        
+        const respuesta = await comentariosService.postComentario(data);
+        console.log("Comentario creado: ", respuesta);
+        setComentario('');
+        
+        // para actualizar la lista de comentarios lo que hacemos es actualizar 
+        // el propio asset que los contiene 
+        const nuevoAsset = await assetService.getAsset(id);
+        setAsset(nuevoAsset.assets)
+      }
+    }catch(error){
+      console.error("Error al enviar el comentario: ", error);
     }
   };
   
@@ -83,11 +128,38 @@ function DetallesAsset() {
         </div>
         <div className='stats'>
           <span><img src="/descarga.png" style={{height: "30px", width: "30px"}}/> ({asset.descargas})</span>
-          <span><StarRating value={asset.valoracionNota} lugar={1}/> ({asset.valoracion.length})</span>
+          <span style={{position: "relative"}}>
+            <StarRating 
+              userValue={valoracionUsuario}
+              value={asset.valoracionNota} 
+              lugar={1} 
+              editable={true}
+              onChange={handleValoracion}/> 
+            ({asset.valoracion.length})
+          </span>
           <span> 
           <FaHeart
-              onClick={() => {
-                // Aquí podrías llamar a una función para gestionar el like, si lo necesitás
+              onClick={async () => {
+                // Actualización optimista para hacer los cambios visuales instantáneos
+                const assetOriginal = asset;
+                const nuevoEstadoLike = !haylike;
+                const nuevosLikes = nuevoEstadoLike
+                  ? [...asset.likes, usuario._id]
+                  : asset.likes.filter(id => id !== usuario._id);
+              
+                setAsset({ ...asset, likes: nuevosLikes });
+                setHayLike(nuevoEstadoLike);
+              
+                // Llamada real al backend
+                try {
+                  await assetService.putLikeAsset({ usuario: usuario._id, asset: id });
+                } catch (error) {
+                  console.error("Error al dar like:", error);
+              
+                  // En caso de fallo, revertimos el cambio local
+                  setAsset(assetOriginal); 
+                  setHayLike(!nuevoEstadoLike);
+                }
               }}
               style={{
                 fontSize: "30px",          // Tamaño del icono
@@ -137,7 +209,6 @@ function DetallesAsset() {
     <hr style={{width: "80%", margin: "auto"}}/>
     <div className="comentarios">
       {/* El comentario que ponemos nosotros */}
-      {console.log(asset)}
       <form onSubmit={handleSubmit}>
         <img src={usuario.imagenPerfil} alt='imagen de perfil' style={{width: "45px", height:"45px", borderRadius: "50%",  objectFit: "cover"}}></img>          
         <textarea
@@ -180,9 +251,39 @@ function DetallesAsset() {
                 <p>{comentario.texto}</p>
               </div>
               <FaHeart
-              onClick={() => {
-                // Aquí podrías llamar a una función para gestionar el like, si lo necesitás
+              onClick={async () => {
+                const assetOriginal = asset;
+              
+                // 1. Clonamos los comentarios para evitar mutaciones directas
+                const nuevosComentarios = asset.comentarios.map(c => {
+                  if (c._id === comentario._id) {
+                    const yaTieneLike = c.likes.includes(usuario._id);
+                    return {
+                      ...c,
+                      likes: yaTieneLike
+                        ? c.likes.filter(id => id !== usuario._id)
+                        : [...c.likes, usuario._id]
+                    };
+                  }
+                  return c;
+                });
+              
+                // 2. Actualizamos visualmente con el nuevo estado
+                setAsset({ ...asset, comentarios: nuevosComentarios });
+              
+                try {
+                  // 3. Llamamos al backend
+                  await comentariosService.putLikeComentario({
+                    usuario: usuario._id,
+                    comentario: comentario._id
+                  });
+                } catch (error) {
+                  console.error("Error al modificar like del comentario:", error);
+                  // 4. Revertimos el estado si falla
+                  setAsset(assetOriginal);
+                }
               }}
+              
               style={{
                 fontSize: "35px",          // Tamaño del icono
                 cursor: "pointer",           // Cambia el cursor para indicar que es clickeable

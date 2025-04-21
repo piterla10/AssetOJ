@@ -67,8 +67,6 @@ const crearComentario = async (req, res) => {
         const nuevoComentario = new Comentario({
             usuario: usuarioExiste._id,
             texto: texto,
-            likes, // esta variable y la de abajo tienen un default en models así que no 
-            fecha  // hace falta asignarle valores ni nada
         });
 
 

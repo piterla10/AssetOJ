@@ -174,6 +174,7 @@ const likeAsset = async (req, res) => {
         const yaDioLike = assetExiste.likes.includes(usuario);
 
         let assetActualizado;
+        let usuarioActualizado;
 
         if (yaDioLike) {
         // Si ya dio like, lo quitamos
@@ -182,11 +183,24 @@ const likeAsset = async (req, res) => {
             { $pull: { likes: usuario } },
             { new: true }
         );
+        // Si el usuario lo tiene guardado, lo quitamos de su lista de guardados
+        usuarioActualizado = await Usuario.findByIdAndUpdate(
+            usuario,
+            { $pull: { guardados: asset } },
+            { new: true }
+        );
+
         } else {
         // Si no dio like, lo agregamos
         assetActualizado = await Asset.findByIdAndUpdate(
             asset,
             { $push: { likes: usuario } },
+            { new: true }
+        );
+         // Si el usuario no lo tiene guardado, lo agregamos a su lista de guardados
+         usuarioActualizado = await Usuario.findByIdAndUpdate(
+            usuario,
+            { $addToSet: { guardados: asset } },
             { new: true }
         );
     }
@@ -195,6 +209,7 @@ const likeAsset = async (req, res) => {
             ok: true,
             msg: "Like del asset modificado correctamente",
             asset: assetActualizado,
+            usuario: usuarioActualizado
         });
 
     } catch (error) {
