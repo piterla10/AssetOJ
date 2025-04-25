@@ -189,7 +189,7 @@ function DetallesAsset() {
             <div className="separador"></div>
             <span><StarRating value={asset.autor.valoracionesNota} lugar={1}/> ({asset.autor.valoracionesNum})</span>
             <div className="separador"></div>
-            <span>❤️({asset.autor.seguidos.length})</span>
+            <span>❤️({asset.autor.seguidores.length})</span>
           </div>
           <hr style={{width: "100%"}}/>
           <div className="autor-desc">
