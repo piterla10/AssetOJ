@@ -18,9 +18,8 @@ router.get('/', [
     validarCampos,
 ], obtenerAssetTodos);
 
-router.post('/', [
+router.post('/:usuario', [
     validarJWT,
-    validarCampos,
 ], crearAsset);
 
 router.put('/like', [

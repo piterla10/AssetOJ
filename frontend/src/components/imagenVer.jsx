@@ -1,12 +1,15 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 
-const ImageUploader = () => {
-  const [imagenes, setImagenes] = useState([]);
+const MAX_IMAGENES = 5;
+const PLACEHOLDER_URL = "imagen.webp";
+
+const ImageUploader = ({ imagenes, setImagenes }) => {
   const inputRef = useRef(null);
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
-    const previews = files.map((file) => ({
+    const nuevosArchivos = files.slice(0, MAX_IMAGENES - imagenes.length);
+    const previews = nuevosArchivos.map((file) => ({
       file,
       url: URL.createObjectURL(file),
     }));
@@ -20,51 +23,69 @@ const ImageUploader = () => {
   };
 
   const openFilePicker = () => {
+    if (imagenes.length >= MAX_IMAGENES) return;
     inputRef.current.click();
   };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-      {/* vista previa (ahora arriba del botón) */}
-      {imagenes.length > 0 && (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', maxHeight: '200px', overflowY: 'auto' }}>
-          {imagenes.map((imagen, index) => (
+      {/* Imagen principal */}
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <img
+          src={imagenes[0]?.url || PLACEHOLDER_URL}
+          alt="Principal"
+          style={{ width: '200px', height: 'auto', marginBottom: '10px' }}
+        />
+      </div>
+
+      {/* Miniaturas (5 siempre) */}
+      <div style={{ display: 'flex', gap: '10px', overflowX: 'auto' }}>
+        {[...Array(MAX_IMAGENES)].map((_, index) => {
+          const imagen = imagenes[index];
+
+          return (
             <div key={index} style={{ position: 'relative' }}>
               <img
-                src={imagen.url}
-                alt={`Preview ${index}`}
-                style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '8px' }}
-              />
-              <button
-                onClick={() => handleRemoveImage(index)}
+                src={imagen?.url || PLACEHOLDER_URL}
+                alt={`Miniatura ${index}`}
                 style={{
-                  position: 'absolute',
-                  top: '-10px',
-                  right: '-10px',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '50%',
-                  width: '28px',
-                  height: '28px',
-                  fontSize: '20px',
-                  fontWeight: 'bold',
-                  cursor: 'pointer',
-                  backgroundColor: 'red',
-                  boxShadow: '0 2px 6px rgba(0,0,0,0.4)',
-                  lineHeight: '1',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  width: '60px',
+                  height: '60px',
+                  objectFit: 'cover',
+                  border: '2px solid white',
+                  borderRadius: '4px',
+                  opacity: imagen ? 1 : 0.4,
                 }}
-              >
-                ×
-              </button>
+              />
+              {imagen && (
+                <button
+                  onClick={() => handleRemoveImage(index)}
+                  style={{
+                    position: 'absolute',
+                    top: '-8px',
+                    right: '-8px',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '50%',
+                    width: '20px',
+                    height: '20px',
+                    fontSize: '14px',
+                    backgroundColor: 'red',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  ×
+                </button>
+              )}
             </div>
-          ))}
-        </div>
-      )}
+          );
+        })}
+      </div>
 
-      {/* input escondido */}
+      {/* Input oculto */}
       <input
         ref={inputRef}
         type="file"
@@ -74,7 +95,7 @@ const ImageUploader = () => {
         style={{ display: 'none' }}
       />
 
-      {/* botón bonito */}
+      {/* Botón de carga */}
       <button
         onClick={openFilePicker}
         style={{
@@ -84,24 +105,15 @@ const ImageUploader = () => {
           padding: '12px 20px',
           border: '1px solid #ccc',
           borderRadius: '4px',
-          cursor: 'pointer',
+          cursor: imagenes.length >= MAX_IMAGENES ? 'not-allowed' : 'pointer',
           textAlign: 'center',
           fontSize: '15px',
           width: '100%',
+          opacity: imagenes.length >= MAX_IMAGENES ? 0.5 : 1,
           transition: 'all 0.3s ease',
         }}
-        onMouseOver={(e) => {
-          e.target.style.background = '#1b1a3a';
-          e.target.style.borderColor = '#fff';
-          e.target.style.color = '#fff';
-        }}
-        onMouseOut={(e) => {
-          e.target.style.background = '#121130';
-          e.target.style.borderColor = '#ccc';
-          e.target.style.color = '#d9d9d9';
-        }}
       >
-        Seleccionar imágenes
+        {imagenes.length >= MAX_IMAGENES ? 'Máximo 5 imágenes' : 'Seleccionar imágenes'}
       </button>
     </div>
   );

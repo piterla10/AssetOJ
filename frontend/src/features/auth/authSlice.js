@@ -4,7 +4,7 @@ import authService from './authService'
 // Los slice son archivos que se crean para gestionar de manera global el estado de unas variables o funciones
 
 // Get user from localStorage
-const user = JSON.parse(localStorage.getItem('user'))
+const user = JSON.parse(localStorage.getItem('usuario'))
 
 const initialState = { // valores de base que tienen las variables globales 
   user: user ? user : null,

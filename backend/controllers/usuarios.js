@@ -3,10 +3,16 @@ const bcrypt = require('bcrypt');
 const {generarJWT} = require('../helpers/jwt');
 const jwt = require('jsonwebtoken');
 const cloudinary = require('../helpers/cloudinary.js');
+const mongoose = require('mongoose');
 const Usuario = require('../models/usuarios.js');
 const obtenerUsuario = async (req, res) => {
     try {
         const { id } = req.params; // Obtener el ID de los parámetros de la URL
+       
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+          return res.status(400).json({ mensaje: 'ID no válido' });
+      }
+   
         const usuario = await Usuario.findById(id).populate([
             {
               path: 'assets',
@@ -21,7 +27,7 @@ const obtenerUsuario = async (req, res) => {
               populate: { path: 'autor' }
             }
         ]); // Buscar usuario en la base de datos
-
+        console.log(usuario);
         if (!usuario) {
             return res.status(404).json({ mensaje: 'Usuario no encontrado' });
         }
@@ -73,7 +79,7 @@ const obtenerSeguidos = async (req, res) => {
       if (!usuario) {
         return res.status(404).json({ mensaje: 'Usuario no encontrado' });
       }
-  
+      
       res.status(200).json(usuario);
     } catch (error) {
       console.error('Error al obtener usuario:', error);
@@ -81,7 +87,8 @@ const obtenerSeguidos = async (req, res) => {
     }
 };
 const crearUsuario = async(req, res) => {
-    var { email, password, name} = req.body;
+    var { email, password1, name} = req.body;
+
     try{
         const existeEmail = await Usuario.findOne({ email });
         if (existeEmail) {
@@ -97,10 +104,11 @@ const crearUsuario = async(req, res) => {
             msg: 'Error al crear usuario'
         });
     }
-   
+     
 
-    const salt = bcrypt.genSaltSync(); // generamos un salt, una cadena aleatoria
-    password_encriptada = bcrypt.hashSync(password, salt); // y aquí ciframos la contraseña
+    const salt = bcrypt.genSaltSync(); // generamos un salt
+ 
+    const password_encriptada = bcrypt.hashSync(password1, salt); // ciframos la
     
     const usuario = new Usuario({
         email,

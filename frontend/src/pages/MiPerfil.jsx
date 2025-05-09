@@ -120,11 +120,14 @@ function MiPerfil() {
    
       const fetchAssets = async () => {
         try {
+          
           const usuarioData = await usuarioService.obtenerUsuario(usuarioLocal._id);
           console.log(usuarioData);
           setUsuario(usuarioData);
           setValoracion(usuarioData.valoracionesNota || 0);
+   
           setDatosUsuario(usuarioData.assets);
+          console.log(usuarioData)
         } catch (error) {
           console.error('Error al obtener los assets:', error);
         }
@@ -142,6 +145,7 @@ function MiPerfil() {
     setActivo(opcion);
     switch (opcion) {
       case 'Mis Assets':
+        {console.log(usuario)}
         setDatosUsuario(usuario.assets);
         break;
       case 'Descargas':
@@ -481,6 +485,7 @@ function MiPerfil() {
         </div>
       </div>
       <div className='contenedor2'>
+        {console.log(datosUsuario)}
         <AssetLista className="lista" cantidad={cantidadAssets} paginacion={paginaActual*cantidadAssets} orden={ordenSeleccionado} cantidadTotal={handleCantidadTotal} datosUsuario={datosUsuario} />
         <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '20px' }}>
           {/* Botón anterior */}

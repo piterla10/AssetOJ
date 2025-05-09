@@ -12,9 +12,10 @@ const obtenerAssetsPorTipo = async (req, res) => {
       
         
         if (assets.length === 0) {
-            return res.status(404).json({
-                ok: false,
-                msg: "No hay assets disponibles para este tipo",
+            return res.json({
+                ok:true,
+                msg: "No hay assets de esta categoría",
+                assets
             });
         }
 
@@ -38,7 +39,7 @@ const obtenerAssetTodos = async (req, res) => {
         // Buscar los assets que coincidan con el tipo
         const assets = await Asset.find().populate('autor');
         
-        console.log(assets);
+
         if (!assets) {
             return res.status(404).json({
                 ok: false,
@@ -76,7 +77,7 @@ const obtenerAsset = async (req, res) => {
             }
         });
 
-        console.log(assets);
+       
         if (!assets) {
             return res.status(404).json({
                 ok: false,
@@ -101,43 +102,77 @@ const obtenerAsset = async (req, res) => {
 
 
 
+const cloudinary = require('cloudinary').v2;
+
+
 const crearAsset = async (req, res) => {
-    const { nombre, descripcion, tipo, visibilidad, etiquetas, imagenes, likes, descargas,valoracion, valoracionNota, comentarios  } = req.body;
+    const {
+      nombre, descripcion, tipo, visibilidad, etiquetas,
+      imagenes = [], likes, descargas, valoracion,
+      valoracionNota, comentarios, contenido
+    } = req.body;
+
+    const usuarioId = req.uid;
     
     try {
-        // Crear el nuevo asset
-        const nuevoAsset = new Asset({
-            nombre,
-            descripcion,
-            tipo,
-            visibilidad,
-            etiquetas, 
-            imagenes,
-            likes, 
-            descargas,
-            valoracion, 
-            valoracionNota, 
-            comentarios
+      const usuario = await Usuario.findById(usuarioId);
+  
+      // Subir imágenes
+      const urlsImagenes = [];
+      for (const img of imagenes) {
+        const uploadRes = await cloudinary.uploader.upload(img, {
+          folder: `${usuario.nombre}/${nombre}/imagenes`
         });
-
-        // Guardar en MongoDB
-        await nuevoAsset.save();
-
-        // Responder con el asset creado
-        res.json({
-            ok: true,
-            msg: "Asset creado correctamente",
-            asset: nuevoAsset
+        urlsImagenes.push(uploadRes.secure_url);
+      }
+  
+      // Subir contenido
+      let urlContenido = '';
+      if (contenido) {
+        const uploadContenido = await cloudinary.uploader.upload(contenido, {
+          folder: `${usuario.nombre}/${nombre}`,
+          public_id: 'contenido',
+          resource_type: 'auto'
         });
-
+        urlContenido = uploadContenido.secure_url;
+      }
+  
+      // Crear y guardar asset
+      const nuevoAsset = new Asset({
+        nombre,
+        descripcion,
+        tipo,
+        visibilidad,
+        etiquetas,
+        autor: usuarioId,
+        imagenes: urlsImagenes,
+        likes,
+        descargas,
+        valoracion,
+        valoracionNota,
+        comentarios,
+        contenido: urlContenido
+      });
+  
+      await nuevoAsset.save();
+      
+      usuario.assets.push(nuevoAsset._id); // Asocia el asset al usuario
+      await usuario.save(); // Guarda el usuario con el nuevo asset agregado
+      res.json({
+        ok: true,
+        msg: "Asset creado correctamente",
+        asset: nuevoAsset
+      });
+  
     } catch (error) {
-        console.error("Error al crear el asset:", error);
-        return res.status(500).json({
-            ok: false,
-            msg: "Error al crear el asset"
-        });
+      console.error("Error al crear el asset:", error);
+      res.status(500).json({
+        ok: false,
+        msg: "Error al crear el asset"
+      });
     }
-};
+  };
+  
 
 
 const likeAsset = async (req, res) => {

@@ -10,7 +10,12 @@ const config = {
     },
 };
 
-// Register user
+const crearAsset = async (body,usuario) => {
+  const response = await axios.post('http://localhost:5000/api/assets/'+usuario._id,
+    body,config)
+
+  return response.data
+}
 const getAssets = async (tipo) => {
   const response = await axios.get('http://localhost:5000/api/assets/'+tipo,config)
 
@@ -48,6 +53,7 @@ const putValoracionAsset = async ({ usuario, asset, valoracion}) => {
 };
 
 const assetService = {
+    crearAsset,
     getAssets,
     getAsset,
     getAssetsTodos,

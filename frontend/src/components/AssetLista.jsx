@@ -7,7 +7,7 @@ import assetService from "../features/assets/assetService";
 // valores que les asignamos debajo.
 const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, paginacion = null, etiquetas = [], valoracion = null, fecha = null, cantidadTotal, orden = null}) => {
   const [assets, setAssets] = useState([]);
-
+  console.log(datosUsuario);
   // esta variable sirve para poner paginación en caso de que nos la hayan pasado
   const inicio = paginacion ? paginacion : 0;
 

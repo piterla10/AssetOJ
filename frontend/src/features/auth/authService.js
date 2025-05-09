@@ -5,8 +5,9 @@ const API_URL = '/api/users/'
 
 // Register user
 const register = async (userData) => {
-  const response = await axios.post('http://localhost:5000/api/usuarios', userData)
   console.log(userData);
+  const response = await axios.post('http://localhost:5000/api/usuarios', userData)
+
   if (response.data) {
     localStorage.setItem('token',response.data.token);
     localStorage.setItem('usuario', JSON.stringify(response.data.usuario));

@@ -27,6 +27,7 @@ function DetallesAsset() {
         // obtengo el asset de la bd
         const data = await assetService.getAsset(id);
         setAsset(data.assets);
+        console.log(data.assets);
         setImgPrincipal(data.assets.imagenes[0]);
       } catch (error) {
         console.error("Error al obtener el asset:", error);
@@ -127,7 +128,17 @@ function DetallesAsset() {
           ))}
         </div>
         <div className='stats'>
-          <span><img src="/descarga.png" style={{height: "30px", width: "30px"}}/> ({asset.descargas})</span>
+          <span><img src="/descarga.png"    onClick={() => {
+            const urlConDescarga = asset.contenido.replace('/upload/', '/upload/fl_attachment/');
+            const link = document.createElement('a');
+            link.href = urlConDescarga;
+            link.setAttribute('download', '');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            }}
+            style={{height: "30px", width: "30px",cursor:'pointer'}}/> ({asset.descargas})
+          </span>
           <span style={{position: "relative"}}>
             <StarRating 
               userValue={valoracionUsuario}

@@ -91,7 +91,7 @@ const Modal = ({ show, onClose, onLogout }) => {
                   name="fontSize"
                   checked={!isLargeFont}
                   onChange={() => changeFontSize(false)}
-                  style={{ transform: 'scale(1.5)', marginBottom: '10px' }}
+                  style={{ transform: 'scale(1.5)', marginBottom: '10px',cursor:'pointer' }}
                 />
               </label>
             </div>
@@ -105,7 +105,7 @@ const Modal = ({ show, onClose, onLogout }) => {
                   name="fontSize"
                   checked={isLargeFont}
                   onChange={() => changeFontSize(true)}
-                  style={{ transform: 'scale(1.5)', marginBottom: '10px' }}
+                  style={{ transform: 'scale(1.5)', marginBottom: '10px' ,cursor:'pointer'}}
                 />
               </label>
             </div>
@@ -126,7 +126,7 @@ const Modal = ({ show, onClose, onLogout }) => {
                   name="theme"
                   checked={!isDarkTheme}
                   onChange={() => changeTheme(false)}
-                  style={{ transform: 'scale(1.5)', marginBottom: '10px' }}
+                  style={{ transform: 'scale(1.5)', marginBottom: '10px',cursor:'pointer' }}
                 />
               </label>
             </div>
@@ -140,7 +140,7 @@ const Modal = ({ show, onClose, onLogout }) => {
                   name="theme"
                   checked={isDarkTheme}
                   onChange={() => changeTheme(true)}
-                  style={{ transform: 'scale(1.5)', marginBottom: '10px' }}
+                  style={{ transform: 'scale(1.5)', marginBottom: '10px',cursor:'pointer' }}
                 />
               </label>
             </div>
@@ -161,7 +161,7 @@ const Modal = ({ show, onClose, onLogout }) => {
                   name="privacy"
                   checked={isPrivate}
                   onChange={() => changePrivacy(true)}
-                  style={{ transform: 'scale(1.5)', marginBottom: '10px' }}
+                  style={{ transform: 'scale(1.5)', marginBottom: '10px',cursor:'pointer' }}
                 />
               </label>
             </div>
@@ -175,7 +175,7 @@ const Modal = ({ show, onClose, onLogout }) => {
                   name="privacy"
                   checked={!isPrivate}
                   onChange={() => changePrivacy(false)}
-                  style={{ transform: 'scale(1.5)', marginBottom: '10px' }}
+                  style={{ transform: 'scale(1.5)', marginBottom: '10px',cursor:'pointer' }}
                 />
               </label>
             </div>

@@ -1,35 +1,36 @@
-import { FaSignInAlt, FaSignOutAlt, FaUser } from 'react-icons/fa'
-import { Link, useNavigate } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import { logout, reset } from '../features/auth/authSlice'
+import { FaUser } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout, reset } from '../features/auth/authSlice';
 import { useState, useEffect } from "react";
 import usuarioService from '../features/usuarios/usuarioService';
 
 function Header() {
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [usuario, setUsuario] = useState(null);
-  const { user } = useSelector((state) => state.auth)
+  const { user } = useSelector((state) => state.auth);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    const usuarioLocal = JSON.parse(localStorage.getItem('usuario'));
-    
-    if (usuarioLocal) {
-      const fetchAssets = async () => {
-        try {
-          const usuarioData = await usuarioService.obtenerUsuario(usuarioLocal._id);
-          setUsuario(usuarioData);
-        } catch (error) {
-          console.error('Error al obtener los assets:', error);
-        }
-      };
 
-      fetchAssets();
-    }
-  }, []);
+    const fetchUsuario = async () => {
+      try {
+        console.log(user);
+        const usuarioData = await usuarioService.obtenerUsuario(user._id);
+        setUsuario(usuarioData);
+      } catch (error) {
+        console.error('Error al obtener el usuario:', error);
+        setUsuario(null);
+      }
+    };
   
-  if (!usuario) return <div>Cargando...</div>;
+    if (user && user._id) {
+      fetchUsuario();
+    } else {
+      setUsuario(null);
+    }
+  }, [user]);
 
   const handleChange = (e) => setSearchTerm(e.target.value);
 
@@ -44,21 +45,21 @@ function Header() {
     <header className='header'>
       <div className='logo'>
         <Link to='/'>
-          <img src='/Logo_con_fondo_mas_letras.png' alt='AssetsOJ' className="logo"/>
+          <img src='/Logo_con_fondo_mas_letras.png' alt='AssetsOJ' className="logo" />
         </Link>
       </div>
 
       <div className='enlacesPaginas'>
         {user && (
-          <>  
+          <>
             <div className='enlace'>
               <Link to='/SubirAsset'>Subir Asset</Link>
             </div>
-            <div className="separador"></div> 
+            <div className="separador"></div>
             <div className='enlace'>
               <Link to='/Siguiendo'>Siguiendo</Link>
             </div>
-            <div className="separador"></div> 
+            <div className="separador"></div>
           </>
         )}
         <div className='enlace'>
@@ -81,7 +82,11 @@ function Header() {
           <li>
             <div className='logo'>
               <Link to='/MiPerfil'>
-                <img src={usuario.imagenPerfil}  className="logoPerfil" alt="Imagen del proyecto"/>
+                {usuario && usuario.imagenPerfil ? (
+                  <img src={usuario.imagenPerfil} className="logoPerfil" alt="Imagen del perfil" />
+                ) : (
+                  <FaUser className="logoPerfil" />
+                )}
               </Link>
             </div>
           </li>
@@ -101,7 +106,7 @@ function Header() {
         )}
       </ul>
     </header>
-  )
+  );
 }
 
-export default Header
+export default Header;
