@@ -109,7 +109,8 @@ const crearAsset = async (req, res) => {
     const {
       nombre, descripcion, tipo, visibilidad, etiquetas,
       imagenes = [], likes, descargas, valoracion,
-      valoracionNota, comentarios, contenido
+      valoracionNota, comentarios, contenido, fecha,
+      extension, baseName,
     } = req.body;
 
     const usuarioId = req.uid;
@@ -128,11 +129,13 @@ const crearAsset = async (req, res) => {
   
       // Subir contenido
       let urlContenido = '';
+      console.log(contenido);
       if (contenido) {
         const uploadContenido = await cloudinary.uploader.upload(contenido, {
           folder: `${usuario.nombre}/${nombre}`,
-          public_id: 'contenido',
-          resource_type: 'auto'
+          public_id: baseName,
+          resource_type: 'auto',
+          format: extension
         });
         urlContenido = uploadContenido.secure_url;
       }
@@ -151,7 +154,8 @@ const crearAsset = async (req, res) => {
         valoracion,
         valoracionNota,
         comentarios,
-        contenido: urlContenido
+        contenido: urlContenido,
+        fecha
       });
   
       await nuevoAsset.save();
@@ -331,5 +335,74 @@ const valorarAsset = async (req, res) => {
 };
 
 
+const descargaAsset = async (req, res) => {
+    try { // tanto usuario como comentario son los id de cada uno
+        const { usuario, asset} = req.body;
 
-module.exports = { obtenerAssetsPorTipo , crearAsset, obtenerAsset, obtenerAssetTodos, likeAsset,  valorarAsset}
+        // Validar que los datos obligatorios estén presentes
+        if (!usuario || !asset) {
+            return res.status(400).json({
+                ok: false,
+                msg: "Usuario y asset son obligatorios",
+            });
+        }
+
+        // Comporbación de que existe el usuario
+        const usuarioExiste = await Usuario.findById(usuario);
+        if (!usuarioExiste) {
+            return res.status(404).json({
+                ok: false,
+                msg: "Usuario no encontrado",
+            });
+        }
+
+        // Comporbación de que existe el asset
+        const assetExiste = await Asset.findById(asset);
+        if (!assetExiste) {
+            return res.status(404).json({
+                ok: false,
+                msg: "Asset no encontrado",
+            });
+        }
+
+        // Verificar si el usuario ya se lo habia descargado
+        const yadescargado = usuarioExiste.descargas.includes(asset);
+
+        let assetActualizado;
+        let usuarioActualizado;
+
+        if (!yadescargado) {
+            // Si es la primera vez que el usuario lo descarga lo guardamos
+            usuarioActualizado = await Usuario.findByIdAndUpdate(
+                usuario,
+                { $addToSet: { descargas: asset } },
+                { new: true }
+            );
+
+        }
+
+        assetActualizado = await Asset.findByIdAndUpdate(
+            asset,
+            { $inc: { descargas: 1 } },  // esto es pa sumarle un uno al contador
+            { new: true }
+        );
+
+
+        res.status(201).json({
+            ok: true,
+            msg: "Descargas del asset modificada correctamente",
+            asset: assetActualizado,
+            usuario: usuarioActualizado
+        });
+
+    } catch (error) {
+        console.error("Error al modificar el asset:", error);
+        res.status(500).json({
+            ok: false,
+            msg: "Error interno al modificar el asset",
+        });
+    }
+};
+
+
+module.exports = { obtenerAssetsPorTipo , crearAsset, obtenerAsset, obtenerAssetTodos, likeAsset,  valorarAsset, descargaAsset}

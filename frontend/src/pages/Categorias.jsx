@@ -3,7 +3,7 @@ import assetService from '../features/assets/assetService'; // Asegúrate de imp
 import FiltrosPorCategoria from '../components/Filtros';
 import AssetLista from '../components/AssetLista';
 function Categorias() {
-  const categorias = ['3D', '2D', 'Audio', 'Add-Ons'];
+  const categorias = ['3D', '2D', 'Audio', 'Add-On'];
   const [filtrosSeleccionados, setFiltrosSeleccionados] = useState([]);
   const [fechaSeleccionada, setFechaSeleccionada] = useState('Todo');
   const [valoracionSeleccionada, setValoraciónSeleccionada] = useState('0');

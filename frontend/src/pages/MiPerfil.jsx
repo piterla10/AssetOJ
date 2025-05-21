@@ -484,46 +484,50 @@ function MiPerfil() {
           )}
         </div>
       </div>
-      <div className='contenedor2'>
-        {console.log(datosUsuario)}
-        <AssetLista className="lista" cantidad={cantidadAssets} paginacion={paginaActual*cantidadAssets} orden={ordenSeleccionado} cantidadTotal={handleCantidadTotal} datosUsuario={datosUsuario} />
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '20px' }}>
-          {/* Botón anterior */}
-          <button
-            onClick={() => setPaginaActual((prev) => Math.max(prev - 1, 0))}
-            disabled={paginaActual === 0}
-            style={{
-              padding: '8px 12px',
-              backgroundColor: '#121130',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: paginaActual === 0 ? 'not-allowed' : 'pointer',
-            }}
-          >
-            ←
-          </button>
+      <div className='contenedorPrincipal'>
+        <div className='contenedor'>
+          <div className='contenedor2'>
+            {console.log(datosUsuario)}
+            <AssetLista className="lista" cantidad={cantidadAssets} paginacion={paginaActual*cantidadAssets} orden={ordenSeleccionado} cantidadTotal={handleCantidadTotal} datosUsuario={datosUsuario} />
+            <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '20px' }}>
+              {/* Botón anterior */}
+              <button
+                onClick={() => setPaginaActual((prev) => Math.max(prev - 1, 0))}
+                disabled={paginaActual === 0}
+                style={{
+                  padding: '8px 12px',
+                  backgroundColor: '#121130',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: paginaActual === 0 ? 'not-allowed' : 'pointer',
+                }}
+              >
+                ←
+              </button>
 
-          {/* Página actual (mostramos +1 al usuario) */}
-          <span style={{ alignSelf: 'center', fontWeight: 'bold', color: 'white' }}>
-            Página {paginaActual + 1} de {paginasTotales}
-          </span>
+              {/* Página actual (mostramos +1 al usuario) */}
+              <span style={{ alignSelf: 'center', fontWeight: 'bold', color: 'white' }}>
+                Página {paginaActual + 1} de {paginasTotales}
+              </span>
 
-          {/* Botón siguiente */}
-          <button
-            onClick={() => setPaginaActual((prev) => Math.min(prev + 1, paginasTotales - 1))}
-            disabled={paginaActual === paginasTotales - 1}
-            style={{
-              padding: '8px 12px',
-              backgroundColor: '#121130',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: paginaActual === paginasTotales - 1 ? 'not-allowed' : 'pointer',
-            }}
-          >
-            →
-          </button>
+              {/* Botón siguiente */}
+              <button
+                onClick={() => setPaginaActual((prev) => Math.min(prev + 1, paginasTotales - 1))}
+                disabled={paginaActual === paginasTotales - 1}
+                style={{
+                  padding: '8px 12px',
+                  backgroundColor: '#121130',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: paginaActual === paginasTotales - 1 ? 'not-allowed' : 'pointer',
+                }}
+              >
+                →
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 

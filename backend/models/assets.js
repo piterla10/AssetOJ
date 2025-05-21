@@ -9,7 +9,7 @@ const assetSchema = new mongoose.Schema({
     imagenes: {type: [String]},
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Usuario", default: [] }],
     autor: { type: mongoose.Schema.Types.ObjectId, ref: "Usuario" },
-    fecha:{type: Date, required:false},
+    fecha:{type: Date, required:true},
     descargas: {type:Number, required:false},
     valoracion: {
         type: [[mongoose.Schema.Types.Mixed]], // puede contener [ObjectId, Number]

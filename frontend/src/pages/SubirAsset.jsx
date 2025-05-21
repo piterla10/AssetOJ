@@ -15,7 +15,7 @@ function SubirAsset() {
   const [modalMensaje, setModalMensaje] = useState('');
   const [imagenes, setImagenes] = useState([]);
   const categorias = ['3D', '2D', 'Audio','Add-On'];
-  const opcionesVisibilidad = ['Público', 'Privado'];
+  const opcionesVisibilidad = ['publico', 'privado'];
   const opcionesEtiquetas = [
     'Animaciones', 'Personajes', 'Fondos', 'Vehículos',
     'Vegetación', 'GUI', 'Animales', 'Formas', 'Accesorios'
@@ -58,7 +58,12 @@ function SubirAsset() {
       if (!usuario || !usuario._id) {
         throw new Error("Usuario no encontrado en localStorage");
       }
-  
+      
+      // para subir al cloudinary el archivo con su nombre real y extensión
+      const originalName = archivoCargado.name;                   // ej. "miModelo.glb"
+      const extension    = originalName.split('.').pop();         // ej. "glb"
+      const baseName     = originalName.replace(/\.[^/.]+$/, ''); // ej. "miModelo"
+
       // 4. Armar body para enviar al backend
       const datosAsset = {
         nombre: document.querySelector('input[placeholder="Título"]').value,
@@ -68,11 +73,16 @@ function SubirAsset() {
         etiquetas,
         imagenes: imagenesBase64,
         contenido: contenidoBase64,
+        // estas dos de abajo son para la extensión y el nombre del archivo
+        extension,                           // "glb"
+        baseName,                            // "miModelo"
+
         likes: [],
         descargas: 0,
         valoracion: [],
         valoracionNota: 0,
         comentarios: [],
+        fecha: new Date().toISOString(),
       };
   
       console.log("📤 Enviando al backend:", datosAsset);

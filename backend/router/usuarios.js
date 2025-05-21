@@ -5,6 +5,7 @@ const {validarJWT} = require('../middlewares/validar-jwt');
 const {crearUsuario,obtenerUsuario,obtenerUsuarios,actualizarUsuario,cambiarContrasena, subirImagenPerfil,obtenerSeguidos} = require('../controllers/usuarios');
 const router = Router();
 const upload = require('../middlewares/multer');
+
 router.post('/', [
     check('email', 'El argumento email es obligatorio').not().isEmpty(),
     check('password1', 'El argumento password es obligatorio').not().isEmpty(),

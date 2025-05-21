@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const cloudinary = require('../helpers/cloudinary.js');
 const mongoose = require('mongoose');
 const Usuario = require('../models/usuarios.js');
+
 const obtenerUsuario = async (req, res) => {
     try {
         const { id } = req.params; // Obtener el ID de los parámetros de la URL

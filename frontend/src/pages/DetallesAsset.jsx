@@ -68,6 +68,22 @@ function DetallesAsset() {
       console.error("Error al valorar el asset", error);
     }
   };  
+  
+  // controlador para cambiar las descargas y tal
+  const handleDescarga = async () => {
+    try {
+      await assetService.putDescarga({
+        usuario: usuario._id, 
+        asset: id, 
+      });
+  
+      // Refresca las descargas del asset 
+      const data = await assetService.getAsset(id);
+      setAsset(data.assets);
+    } catch (error) {
+      console.error("Error al cambiar los datos al descargar el asset", error);
+    }
+  }
 
   // controlador para subir un comentario
   const handleSubmit = async (e) => {
@@ -135,8 +151,10 @@ function DetallesAsset() {
             link.setAttribute('download', '');
             document.body.appendChild(link);
             link.click();
-            document.body.removeChild(link);
-            }}
+            document.body.removeChild(link);  
+            handleDescarga();
+          }}
+          
             style={{height: "30px", width: "30px",cursor:'pointer'}}/> ({asset.descargas})
           </span>
           <span style={{position: "relative"}}>
