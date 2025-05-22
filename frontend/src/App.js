@@ -27,7 +27,7 @@ function App() {
             <Route path='/Busqueda' element={<Busqueda />} />
             <Route path='/Categorias' element={<Categorias />} />
             <Route path='/DetallesAsset/:id' element={<DetallesAsset />} />
-            <Route path='/EditarAsset' element={<EditarAsset />} />
+            <Route path='/EditarAsset/:id' element={<EditarAsset />} />
             <Route path='/MiPerfil' element={<MiPerfil />} />
             <Route path='/OtroPerfil/:id' element={<OtroPerfil />} />
             <Route path='/Siguiendo' element={<Siguiendo />} />

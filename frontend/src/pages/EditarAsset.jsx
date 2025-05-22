@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DropdownEtiquetas from '../components/EtiquetasDrop';
 import assetService from '../features/assets/assetService';
 import ImageUploader from '../components/imagenVer'; 
@@ -10,8 +10,11 @@ function EditarAsset() {
   const [categoria, setCategoria] = useState('');
   // id del asset
   const { id } = useParams();
+  const [asset, setAsset] = useState(null);
   const [visibilidad, setVisibilidad] = useState('');
   const [etiquetas, setEtiquetas] = useState([]);
+  const [descripcion, setDescripcion] = useState('');
+  const [titulo, setTitulo] = useState('');
   const [showCategorias, setShowCategorias] = useState(false);
   const [showVisibilidad, setShowVisibilidad] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -32,6 +35,32 @@ function EditarAsset() {
       setArchivoCargado(archivo);
     }
   };
+
+       
+       
+  // 1. Efecto para cargar el asset
+  useEffect(() => {
+    const fetchAsset = async () => {
+      try {
+         const data = await assetService.getAsset(id);
+        setAsset(data.assets);
+      } catch (error) {
+        console.error("Error al obtener el asset:", error);
+      }
+    };
+    fetchAsset();
+  }, [id]);
+
+  // 2. Efecto que corre **solo** cuando `asset` cambie
+  useEffect(() => {
+    if (!asset) return;
+    setCategoria(asset.tipo);
+    setVisibilidad(asset.visibilidad);
+    setEtiquetas(asset.etiquetas);
+    setDescripcion(asset.descripcion || '');
+    setTitulo(asset.nombre);
+  }, [asset]);
+
   const handleConfirmar = async () => {
     if (!archivoCargado || !categoria || !visibilidad) {
       setModalMensaje("Por favor, completa todos los campos obligatorios.");
@@ -146,7 +175,7 @@ function EditarAsset() {
         </div>
       )}
       <div style={{ padding: '15px', background: '#121130', width: '50%', height: '100%', boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)', display: 'flex', flexDirection: 'column', alignItems: 'center', color: 'white' }}>
-        <h1>Subir Asset</h1>
+        <h1>Editar Asset</h1>
         <hr style={{ width: '80%' }} />
         <div style={{ display: 'flex', justifyContent: 'center', width: '100%', height: '100%', alignItems: 'center', gap: '10px' ,padding:'10px'}}>
         <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', gap: '10px', padding:'10px' }}>
@@ -194,15 +223,16 @@ function EditarAsset() {
               e.target.style.color = '#d9d9d9';
             }}
           >
-            Seleccionar archivo (3D, imagen, sonido, Add-On)
+            Cambiar archivo (3D, imagen, sonido, Add-On)
           </button>
+          ❗Seleccionar archivo o imagenes solo en caso de querer cambiarlos❗
 
      
         </div>
           <div style={{height: '100%', width: '100%', display: 'flex', flexDirection: 'column', padding: '10px', gap: '10px' }}>
-            <input type="text" placeholder='Título' style={{ width: '100%', padding: '8px', border: '1px solid white', background: '#131232', color: '#ccc' }} />
+            <input type="text" placeholder='Título' value={titulo} onChange={e => setTitulo(e.target.value)}style={{ width: '100%', padding: '8px', border: '1px solid white', background: '#131232', color: '#ccc' }} />
 
-            <textarea placeholder="Descripción" style={{  maxHeight: '150px', resize: 'vertical', width: '100%', backgroundColor: '#131232', color: '#ccc', border: '1px solid #ccc', padding: '10px', fontSize: '16px' }} />
+            <textarea placeholder="Descripción" value={descripcion} onChange={e => setDescripcion(e.target.value)} style={{  maxHeight: '150px', resize: 'vertical', width: '100%', backgroundColor: '#131232', color: '#ccc', border: '1px solid #ccc', padding: '10px', fontSize: '16px' }} />
 
             {/* Categoría Dropdown */}
             <select value={categoria} onChange={(e) => setCategoria(e.target.value)} style={{ padding: '15px',  border: '1px solid white', background: '#131232', color: '#ccc' }}>
@@ -248,7 +278,7 @@ function EditarAsset() {
               e.target.style.background = '#252360';
             }}
           >
-            Confirmar
+            Modificar
           </button>
         </div>
 
