@@ -215,7 +215,11 @@ function DetallesAsset() {
           <hr style={{width: "100%"}}/>
           <div className="autor-box">
           <Link
-              to={`/OtroPerfil/${asset.autor._id}`}
+                   to={
+                        asset.autor?._id === usuario._id
+                          ? "/miperfil"
+                          : `/OtroPerfil/${asset.autor?._id}`
+                      }
               className="autor-link"
               style={{ display: "flex", alignItems: "center", gap: "10px", cursor:"pointer", color: "inherit" }}
             >
@@ -284,7 +288,11 @@ function DetallesAsset() {
               <div className="comentario-contenido">
                 <div className='contenido-comentario-nombre'>
                     <Link 
-                    to={`/OtroPerfil/${comentario.usuario?._id}`} 
+                      to={
+                        comentario.usuario?._id === usuario._id
+                          ? "/miperfil"
+                          : `/OtroPerfil/${comentario.usuario?._id}`
+                      }
                     className="autor-link"
                     style={{ color: "inherit", display: "flex", alignItems: "center", gap: "10px" }}
                   >

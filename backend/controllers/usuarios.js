@@ -56,6 +56,7 @@ const obtenerUsuarios = async (req, res) => {
 };
 const seguirUsuario = async (req, res) => {
   const { idSeguidor, idSeguido } = req.body;
+  console.log('Datos recibidos:', req.body);
 
   if (!idSeguidor || !idSeguido) {
     return res.status(400).json({ mensaje: 'Faltan datos: idSeguidor e idSeguido son requeridos' });
@@ -73,22 +74,24 @@ const seguirUsuario = async (req, res) => {
       return res.status(404).json({ mensaje: 'Usuario no encontrado' });
     }
 
-    // Verificar si ya sigue al usuario
-    if (usuarioSeguidor.seguidos.includes(idSeguido)) {
+    // Convierte los ids almacenados a string para comparar con idSeguido
+    const seguidosIds = usuarioSeguidor.seguidos.map(id => id.toString());
+
+    if (seguidosIds.includes(idSeguido)) {
       return res.status(400).json({ mensaje: 'Ya sigues a este usuario' });
     }
 
-    // Añadir idSeguido al array seguidos del seguidor
+    // Agrega idSeguido al array seguidos
     usuarioSeguidor.seguidos.push(idSeguido);
 
-    // Añadir idSeguidor al array seguidores del seguido
+    // Agrega idSeguidor al array seguidores
     usuarioSeguido.seguidores.push(idSeguidor);
-
-    // Guardar ambos usuarios
+    console.log('se guardan bien');
     await usuarioSeguidor.save();
     await usuarioSeguido.save();
 
     res.status(200).json({ mensaje: 'Usuario seguido correctamente' });
+
   } catch (error) {
     console.error('Error al seguir usuario:', error);
     res.status(500).json({ mensaje: 'Error del servidor' });

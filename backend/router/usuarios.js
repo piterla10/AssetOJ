@@ -26,7 +26,17 @@ router.get('/obtenerSeguidos/:id', [
     validarJWT
     
 ], obtenerSeguidos);
+router.put('/seguidos/seguir', [
 
+    validarJWT
+],
+seguirUsuario);
+
+router.put('/seguidos/dejarSeguir', [
+
+    
+],
+DejarseguirUsuario);
 router.put('/:usuario', [
     validarJWT
     
@@ -37,13 +47,7 @@ router.put('/cambioPassword/:usuario', [
     
 ], cambiarContrasena);
 
-router.post('/seguir', [
-    validarJWT],
-seguirUsuario);
 
-router.post('/dejarSeguir', [
-    validarJWT],
-DejarseguirUsuario);
 
 router.put('/cambioImagenPerfil/:usuario', [
     validarJWT,

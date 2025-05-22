@@ -17,12 +17,14 @@ const obtenerUsuario = async (email) => {
 }
 
 const seguirUsuario = async (body) => {
-  const response = await axios.get('http://localhost:5000/seguir',body, config)
+   console.log('Config headers:', body);
+  const response = await axios.put('http://localhost:5000/api/usuarios/seguidos/seguir',body, config)
+
 
   return response.data
 }
 const DejarseguirUsuario = async (body) => {
-  const response = await axios.get('http://localhost:5000/dejarSeguir',body, config)
+  const response = await axios.put('http://localhost:5000/api/usuarios/seguidos/dejarSeguir',body, config)
 
   return response.data
 }

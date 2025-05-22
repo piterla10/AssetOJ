@@ -1,15 +1,13 @@
-
-import React, { useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import usuarioService from '../features/usuarios/usuarioService';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import StarRating from '../components/estrellas';
 import AssetLista from '../components/AssetLista';
 import { logout, reset } from '../features/auth/authSlice';
 import Modal from '../components/Modal';
 import ModalCambiarContrasena from '../components/ModalCambiarContrasena';
 import assetService from '../features/assets/assetService';
-import { useParams } from 'react-router-dom';
 
 function OtroPerfil() {
   const { id } = useParams();
@@ -17,32 +15,37 @@ function OtroPerfil() {
   const [esSeguido, setEsSeguido] = useState(false);
   const [usuario, setUsuario] = useState(null);
   const [activo, setActivo] = useState('Mis Assets');
-  const [datosUsuario, setDatosUsuario] = useState([]);
+  const [datosUsuario, setDatosUsuario] = useState([]); // Aquí guardas assets
   const [valoracionNota, setValoracion] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isEditingName, setIsEditingName] = useState(false); // Control de edición para el nombre
-  const [isEditingDescripcion, setIsEditingDescripcion] = useState(false); // Control de edición para la descripción
-  const [isEditingEmail, setIsEditingEmail] = useState(false); 
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [isEditingDescripcion, setIsEditingDescripcion] = useState(false);
+  const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [newName, setNewName] = useState('');
   const [newEmail, setNewEmail] = useState('');
   const [newDescripcion, setNewDescripcion] = useState('');
   const [imagenPerfil, setImagenPerfil] = useState(null);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const [cantidadAssets, setCantidadAssets] = useState(20);
-  const [listaVisible, setListaVisible] = useState(false); // Controla si la lista está visible
-  const [ordenSeleccionado, setOrdenSeleccionado] = useState('Seleccionar'); // Valor por defecto
-  const [resultadosVisible, setResultadosVisible] = useState(false); // Para "Resultados"
-  const [cantidadAssetsTotal, setAssetsTotal] = useState(0); // Para "Resultados"
+  const [listaVisible, setListaVisible] = useState(false);
+  const [ordenSeleccionado, setOrdenSeleccionado] = useState('Seleccionar');
+  const [resultadosVisible, setResultadosVisible] = useState(false);
+  const [cantidadAssetsTotal, setAssetsTotal] = useState(0);
   const [paginasTotales, setPaginasTotales] = useState(0);
   const [paginaActual, setPaginaActual] = useState(0);
-  const listaRef = useRef(null); // Referencia para la lista desplegable
+
+  const listaRef = useRef(null);
   const toggleButtonRef = useRef(null);
-  // Ref para el botón de resultados
   const resultadosListaRef = useRef(null);
   const resultadosToggleRef = useRef(null);
-  
+
+  // Obtener id del usuario logueado desde localStorage
+  const usuarioLogueadoId = JSON.parse(localStorage.getItem('usuario'))._id;
+
   // Función para mostrar u ocultar la lista
   const toggleLista = () => {
     setListaVisible(!listaVisible);
@@ -50,14 +53,13 @@ function OtroPerfil() {
 
   // Función para manejar la selección de un valor
   const handleSeleccionar = (valor) => {
-    setOrdenSeleccionado(valor); // Cambia el valor seleccionado
-    setListaVisible(false); // Cierra la lista al hacer una selección
+    setOrdenSeleccionado(valor);
+    setListaVisible(false);
   };
 
   const handleClickOutside = (event) => {
     const target = event.target;
-  
-    // Cerrar lista de "Ordenar Por"
+
     if (
       listaRef.current &&
       toggleButtonRef.current &&
@@ -66,8 +68,7 @@ function OtroPerfil() {
     ) {
       setListaVisible(false);
     }
-  
-    // Cerrar lista de "Resultados"
+
     if (
       resultadosListaRef.current &&
       resultadosToggleRef.current &&
@@ -77,84 +78,76 @@ function OtroPerfil() {
       setResultadosVisible(false);
     }
   };
+
   const handleCantidadTotal = (total) => {
     setAssetsTotal(total);
 
     const paginas = Math.max(1, Math.ceil(total / cantidadAssets));
-   
     setPaginasTotales(paginas);
   };
-
 
   const handleCalculoPaginas = () => {
     const paginas = Math.ceil(cantidadAssetsTotal / cantidadAssets);
- 
     setPaginasTotales(paginas);
   };
-  
+
   useEffect(() => {
-    if (usuario && datosUsuario) {
-      setEsSeguido(usuario.seguidores.includes(datosUsuario._id));
+
+    if (usuario) {
+      console.log(usuario);
+      setEsSeguido(usuario.seguidores.includes(usuarioLogueadoId));
     }
-  }, [usuario, datosUsuario]);
+  }, [usuario, usuarioLogueadoId]);
+
   useEffect(() => {
-    // Solo al montar/desmontar
     document.addEventListener('click', handleClickOutside);
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
   }, []);
+
   useEffect(() => {
     if (cantidadAssets > 0 && cantidadAssetsTotal > 0) {
       handleCalculoPaginas();
     }
   }, [cantidadAssets, cantidadAssetsTotal]);
-    const handleToggleSeguir = async () => {
-    const body = {
-      idSeguidor:datosUsuario._id,
-      idSeguido:usuario._id
-    }
-    try {
-      if (esSeguido) {
-        await usuarioService.DejarseguirUsuario(body);
-      } else {
-        await usuarioService.seguirUsuario(body);
-      }
-      {console.log(esSeguido)}
-      // Refresca el usuario visualmente (ideal si vuelves a pedir el usuario)
-      const usuarioActualizado = await usuarioService.obtenerUsuario(usuario._id);
-      setUsuario(usuarioActualizado);
-    } catch (error) {
-      console.error("Error al cambiar estado de seguimiento:", error);
-    }
+
+const handleToggleSeguir = async () => {
+  console.log("handleToggleSeguir ejecutado");
+  const body = {
+    idSeguidor: usuarioLogueadoId,
+    idSeguido: usuario._id,
   };
 
-
+  try {
+    if (esSeguido) {
+      await usuarioService.DejarseguirUsuario(body);
+      setEsSeguido(false);
+    } else {
+      await usuarioService.seguirUsuario(body);
+      setEsSeguido(true);
+    }
+    window.location.reload();
+  } catch (error) {
+    console.error("Error al cambiar estado de seguimiento:", error);
+  }
+};
 
   useEffect(() => {
-    const usuarioLocal = id;
-
-    if (usuarioLocal) {
-   
+    if (id) {
       const fetchAssets = async () => {
         try {
-          
-          const usuarioData = await usuarioService.obtenerUsuario(usuarioLocal);
-          console.log(usuarioData);
+          const usuarioData = await usuarioService.obtenerUsuario(id);
           setUsuario(usuarioData);
           setValoracion(usuarioData.valoracionesNota || 0);
-      
-          setDatosUsuario(usuarioData.assets);
-          console.log(usuarioData)
+          setDatosUsuario(usuarioData.assets || []);
         } catch (error) {
           console.error('Error al obtener los assets:', error);
         }
       };
-
       fetchAssets();
     }
-  }, []); // Solo se ejecuta al cargar el componente
-
+  }, [id]);
   if (!usuario) {
     return <div>Cargando...</div>;
   }
@@ -194,16 +187,16 @@ function OtroPerfil() {
             </div>
               
           </div>
-          <div style={{textAlign:'left',marginLeft:'80px',marginTop:'50px'}} >
-          {datosUsuario._id !== usuario._id && (
-                <button
-                  onClick={handleToggleSeguir}
-                  className='inputField'
-                  style={{width:'70px',padding:'10px'}}
-                >
-                  {esSeguido ? 'Dejar de seguir' : 'Seguir'}
-                </button>
-              )}
+          <div style={{textAlign:'left',marginLeft:'60px',marginTop:'50px'}} >
+                      {usuarioLogueadoId !== usuario._id && (
+              <button
+                onClick={handleToggleSeguir}
+                className='inputField'
+                style={{ width: '160px', padding: '10px' }}
+              >
+                {esSeguido ? 'Dejar de seguir' : 'Seguir'}
+              </button>
+            )}
             </div>
           <div className='campos'>
             <h2 className='subtituloPerfil'>Email:</h2>
