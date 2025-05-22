@@ -65,7 +65,8 @@ function SubirAsset() {
       if (!usuario || !usuario._id) {
         throw new Error("Usuario no encontrado en localStorage");
       }
-
+      
+      // para subir al cloudinary el archivo con su nombre real y extensión
       const originalName = archivoCargado.name;
       const extension = originalName.split('.').pop();
       const baseName = originalName.replace(/\.[^/.]+$/, '');

@@ -17,8 +17,9 @@ const assetSchema = new mongoose.Schema({
     },
     valoracionNota: {type:Number, required:false},
     comentarios: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comentario", default: [] }],
-    contenido: { type: String, default: "" }
-
+    contenido: { type: String, default: "" },
+    extension: { type: String, required: false },
+    nombreArchivo: { type: String, required: false },
 });
 
 const Assets = mongoose.model('Assets', assetSchema);

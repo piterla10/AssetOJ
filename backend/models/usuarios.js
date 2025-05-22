@@ -3,7 +3,7 @@ const mongoose = require("mongoose"); // Importa mongoose correctamente
 const usuarioSchema = new mongoose.Schema({
     nombre: { type: String, required: false },
     informacionAutor:{ type: String, required: false},
-    estado:{ type:String, required:false},
+    estado:{ type:String, required:true, default: "Publico"},
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     imagenPerfil: { type: String, default: '' }, // URL de la imagen de perfil

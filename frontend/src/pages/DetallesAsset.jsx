@@ -131,7 +131,7 @@ function DetallesAsset() {
   }
 
 
-  if (!asset) return <p>Error al cargar el asset</p>;
+  if (!asset) return <></>;
 
   return (
     <>
@@ -144,19 +144,51 @@ function DetallesAsset() {
           ))}
         </div>
         <div className='stats'>
-          <span><img src="/descarga.png"    onClick={() => {
-            const urlConDescarga = asset.contenido.replace('/upload/', '/upload/fl_attachment/');
-            const link = document.createElement('a');
-            link.href = urlConDescarga;
-            link.setAttribute('download', '');
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);  
-            handleDescarga();
-          }}
-          
-            style={{height: "30px", width: "30px",cursor:'pointer'}}/> ({asset.descargas})
+          <span>
+            <img
+              src="/descarga.png"
+              onClick={async () => {
+                try {
+                  // 1) Hacemos fetch del recurso (asset.contenido es la URL directa)
+                  const res = await fetch(asset.contenido);
+                  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+                  // 2) Lo convertimos a Blob
+                  const blob = await res.blob();
+
+                  // 3) Creamos un objeto URL a partir del Blob
+                  const blobUrl = window.URL.createObjectURL(blob);
+
+                  // 4) Preparamos el nombre de descarga
+                  let nombre = asset.nombreArchivo || 'archivo';
+                  if (asset.extension === 'zip') {
+                    nombre += '.zip';
+                  }
+
+                  // 5) Creamos y clickamos el <a>
+                  const link = document.createElement('a');
+                  link.href = blobUrl;
+                  link.download = nombre;
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+
+                  // 6) Liberamos el blob URL
+                  window.URL.revokeObjectURL(blobUrl);
+
+                  // 7) Contamos la descarga
+                  handleDescarga();
+                } catch (err) {
+                  console.error('Error descargando el asset:', err);
+                  // aquí podrías mostrar un mensaje al usuario
+                }
+              }}
+              style={{ height: 30, width: 30, cursor: 'pointer' }}
+            />
+            ({asset.descargas})
           </span>
+
+
           <span style={{position: "relative"}}>
             <StarRating 
               userValue={valoracionUsuario}

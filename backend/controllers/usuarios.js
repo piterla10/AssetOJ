@@ -144,38 +144,54 @@ const DejarseguirUsuario = async (req, res) => {
 
 
 const obtenerSeguidos = async (req, res) => {
-    try {
-      const { id } = req.params;
-  
-      const usuario = await Usuario.findById(id).populate([
-        {
-          path: 'assets',
-          populate: { path: 'autor' }
-        },
-        {
-          path: 'descargas',
-          populate: { path: 'autor' }
-        },
-        {
-          path: 'guardados',
-          populate: { path: 'autor' }, 
-        },
-        {
-          path: 'seguidos',
-          populate: { path: 'assets' }, 
+  try {
+    const { id } = req.params;
+
+    const usuario = await Usuario.findById(id).populate([
+      {
+        path: 'assets',
+        populate: {
+          path: 'autor',
+          select: 'nombre estado'
         }
-      ]);
-  
-      if (!usuario) {
-        return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+      },
+      {
+        path: 'descargas',
+        populate: {
+          path: 'autor',
+          select: 'nombre estado'
+        }
+      },
+      {
+        path: 'guardados',
+        populate: {
+          path: 'autor',
+          select: 'nombre estado'
+        }
+      },
+      {
+        path: 'seguidos',
+        populate: {
+          path: 'assets',
+          populate: {
+            path: 'autor',
+            select: 'nombre estado'
+          }
+        }
       }
-      
-      res.status(200).json(usuario);
-    } catch (error) {
-      console.error('Error al obtener usuario:', error);
-      res.status(500).json({ mensaje: 'Error del servidor' });
+    ]);
+
+    if (!usuario) {
+      return res.status(404).json({ mensaje: 'Usuario no encontrado' });
     }
+
+    res.status(200).json(usuario);
+  } catch (error) {
+    console.error('Error al obtener usuario:', error);
+    res.status(500).json({ mensaje: 'Error del servidor' });
+  }
 };
+
 const crearUsuario = async(req, res) => {
     var { email, password1, name} = req.body;
 

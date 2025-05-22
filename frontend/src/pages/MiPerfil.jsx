@@ -488,7 +488,7 @@ function MiPerfil() {
         <div className='contenedor'>
           <div className='contenedor2'>
             {console.log(datosUsuario)}
-            <AssetLista className="lista" cantidad={cantidadAssets} paginacion={paginaActual*cantidadAssets} orden={ordenSeleccionado} cantidadTotal={handleCantidadTotal} datosUsuario={datosUsuario} />
+            <AssetLista className="lista" cantidad={cantidadAssets} paginacion={paginaActual*cantidadAssets} orden={ordenSeleccionado} cantidadTotal={handleCantidadTotal} datosUsuario={datosUsuario} privAsset={true} privAutor={true}/>
             <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '20px' }}>
               {/* Botón anterior */}
               <button
