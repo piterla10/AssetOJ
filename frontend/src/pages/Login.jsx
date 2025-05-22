@@ -32,6 +32,7 @@ function Login() {
 
     if (isSuccess || user) {
       navigate('/')
+      window.location.reload();
     }
 
     dispatch(reset()) // función para ejecutar acciones del slice

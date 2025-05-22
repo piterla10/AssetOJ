@@ -14,7 +14,7 @@ function SubirAsset() {
   const [imagenes, setImagenes] = useState([]);
   const [archivoCargado, setArchivoCargado] = useState(null);
   const navigate = useNavigate();
-
+   const [botonDisabled, setBotonDisabled] = useState(false);
   const categorias = ['3D', '2D', 'Audio', 'Add-On'];
   const opcionesVisibilidad = ['publico', 'privado'];
 
@@ -39,6 +39,7 @@ function SubirAsset() {
   };
 
   const handleConfirmar = async () => {
+    setBotonDisabled(true);
     if (!archivoCargado || !categoria || !visibilidad) {
       setModalMensaje("Por favor, completa todos los campos obligatorios.");
       setModalVisible(true);
@@ -94,7 +95,7 @@ function SubirAsset() {
 
       setModalMensaje("El asset: " + datosAsset.nombre + " ha sido subido correctamente");
       setModalVisible(true);
-
+      setBotonDisabled(true);
       setTimeout(() => navigate('/'), 2000);
     } catch (error) {
       console.error("❌ Error al subir el asset:", error);
@@ -186,13 +187,18 @@ function SubirAsset() {
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
           <button
             onClick={handleConfirmar}
+            disabled={botonDisabled}
             style={{
               background: '#252360', color: 'white', fontWeight: 'bold',
               padding: '12px 30px', border: 'none', borderRadius: '6px',
               cursor: 'pointer', fontSize: '16px'
             }}
-            onMouseOver={(e) => { e.target.style.background = '#02360'; }}
-            onMouseOut={(e) => { e.target.style.background = '#252360'; }}
+              onMouseOver={(e) => {
+                if (!botonDisabled) e.target.style.background = '#02360';
+              }}
+              onMouseOut={(e) => {
+                if (!botonDisabled) e.target.style.background = '#252360';
+              }}
           >
             Confirmar
           </button>

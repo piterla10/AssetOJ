@@ -504,7 +504,7 @@ h3 {
 }
 
 .descripcion{
-  padding: 10px;
+  padding: 20px;
   margin-top: 25px;
   margin-left: 13%;
   margin-right: 13%;
@@ -512,6 +512,7 @@ h3 {
   border: 1px solid #bababa;
   background-color: #252360;
   align-items: center;
+
 }
 
 .descripcion p{

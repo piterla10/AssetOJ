@@ -29,9 +29,9 @@ function Inicio() {
       </div>
        
       <div className='contenedor'>
-        <h1 className='titulo2'>Addons</h1>
+        <h1 className='titulo2'>Add-On</h1>
         <div className='contenedor2'>
-          <AssetLista  className="lista"  cantidad={6} categoria={'Addons'}/>
+          <AssetLista  className="lista"  cantidad={6} categoria={'Add-On'}/>
         </div>
       </div>
      </div>

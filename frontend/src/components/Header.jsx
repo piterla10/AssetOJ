@@ -76,12 +76,12 @@ function Header() {
         />
         <button type="submit">Buscar</button>
       </form>
-
       <ul>
         {user ? (
           <li>
             <div className='logo'>
               <Link to='/MiPerfil'>
+              
                 {usuario && usuario.imagenPerfil ? (
                   <img src={usuario.imagenPerfil} className="logoPerfil" alt="Imagen del perfil" />
                 ) : (

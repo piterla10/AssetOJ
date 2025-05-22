@@ -77,12 +77,12 @@ const Modal = ({ show, onClose, onLogout }) => {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        {/* Tamaño de Fuente */}
+        {/* Tamaño de Fuente 
         <div>
           <h1 style={{ fontSize: '21px', margin: '0' }}>Tamaño de Fuente</h1>
           <hr />
           <div style={{ display: 'flex', gap: '30px', justifyContent: 'center', alignItems: 'center' }}>
-            {/* Normal */}
+        
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <h1 style={{ fontSize: '16px' }}>Normal:</h1>
               <label>
@@ -96,7 +96,7 @@ const Modal = ({ show, onClose, onLogout }) => {
               </label>
             </div>
 
-            {/* Grande */}
+          
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <h1 style={{ fontSize: '16px' }}>Grande:</h1>
               <label>
@@ -111,13 +111,13 @@ const Modal = ({ show, onClose, onLogout }) => {
             </div>
           </div>
         </div>
-
-        {/* Tema */}
+        */}
+        {/* Tema 
         <div>
           <h1 style={{ fontSize: '21px', margin: '20px 0 0 0' }}>Tema</h1>
           <hr />
           <div style={{ display: 'flex', gap: '30px', justifyContent: 'center', alignItems: 'center' }}>
-            {/* Claro */}
+            
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <h1 style={{ fontSize: '16px' }}>Claro:</h1>
               <label>
@@ -131,7 +131,6 @@ const Modal = ({ show, onClose, onLogout }) => {
               </label>
             </div>
 
-            {/* Oscuro */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <h1 style={{ fontSize: '16px' }}>Oscuro:</h1>
               <label>
@@ -145,7 +144,7 @@ const Modal = ({ show, onClose, onLogout }) => {
               </label>
             </div>
           </div>
-        </div>
+        </div>*/}
 
         {/* Privacidad */}
         <div>

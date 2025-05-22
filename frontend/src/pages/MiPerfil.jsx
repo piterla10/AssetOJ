@@ -238,7 +238,7 @@ function MiPerfil() {
         <div className='parte1'>
           <div className='marginLeft'>
             <img
-              src={imagenPerfil || usuario.imagenPerfil}
+              src={usuario?.imagenPerfil || '/fotoPerfil.png'}
               alt="Imagen de perfil"
               className="cambiarImagen"
               onClick={handleImageClick}
@@ -339,8 +339,8 @@ function MiPerfil() {
         </div>
       </div>
       <div className='parte3'>
-        <h2 className='subtituloPerfil'>Descripción:</h2>
-        <div className='contenedorDescripcion'>
+        <h2 className='subtituloPerfil' style={{fontSize:'25px'}}>Descripción</h2>
+       
           {isEditingDescripcion ? (
             <input
               type="text"
@@ -362,7 +362,7 @@ function MiPerfil() {
             <h2 className='descripcion'>{usuario.informacionAutor}</h2>
           )}
           <img className='botonIcono' src='/editar.png' onClick={handleEditDescripcion} />
-        </div>
+     
       </div>
       <div className='parte4'>
         {['Mis Assets', 'Descargas', 'Guardados'].map((titulo, index) => (
