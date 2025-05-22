@@ -663,6 +663,15 @@ h3 {
   object-fit: cover;
 
 }
+.imagenOtroPerfil{
+  width: 250px;
+  height: 250px;
+  margin-right: 20px;
+  transition: all 0.5s ease-in-out;
+  border-radius: 50%;
+  object-fit: cover;
+
+}
 .cambiarImagen:hover{
   cursor: pointer;
   transform: scale(0.9);
@@ -707,7 +716,6 @@ h3 {
   padding: 10px;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
    
 }
 .parte4{
@@ -898,7 +906,10 @@ label {
   display: block;
   margin: 10px 0;
 }
-
+.autor-link:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
 @keyframes spin {
   0% {
     transform: rotate(0deg);
