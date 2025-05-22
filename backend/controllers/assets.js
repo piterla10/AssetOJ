@@ -8,7 +8,7 @@ const obtenerAssetsPorTipo = async (req, res) => {
         const { tipo } = req.params; // Se obtiene el tipo desde los parámetros de la URL
 
         // Buscar los assets que coincidan con el tipo
-        const assets = await Asset.find({ tipo }).populate('autor', 'nombre');
+        const assets = await Asset.find({ tipo }).populate('autor', 'nombre estado');
       
         
         if (assets.length === 0) {
@@ -110,7 +110,7 @@ const crearAsset = async (req, res) => {
       nombre, descripcion, tipo, visibilidad, etiquetas,
       imagenes = [], likes, descargas, valoracion,
       valoracionNota, comentarios, contenido, fecha,
-      extension, baseName,
+      extension, nombreArchivo,
     } = req.body;
 
     const usuarioId = req.uid;
@@ -133,9 +133,8 @@ const crearAsset = async (req, res) => {
       if (contenido) {
         const uploadContenido = await cloudinary.uploader.upload(contenido, {
           folder: `${usuario.nombre}/${nombre}`,
-          public_id: baseName,
+          public_id: nombreArchivo,
           resource_type: 'auto',
-          format: extension
         });
         urlContenido = uploadContenido.secure_url;
       }
@@ -155,9 +154,12 @@ const crearAsset = async (req, res) => {
         valoracionNota,
         comentarios,
         contenido: urlContenido,
-        fecha
+        fecha,
+        extension,
+        nombreArchivo
       });
-  
+      
+      console.log("Nuevo asset: " + nuevoAsset);
       await nuevoAsset.save();
       
       usuario.assets.push(nuevoAsset._id); // Asocia el asset al usuario

@@ -5,7 +5,7 @@ import assetService from "../features/assets/assetService";
 // pasamos la cantidad de asset de cierta categoría que queremos mostrar, las etiquetas en caso de que queramos
 // filtrarlos y lo mismo con la valoración y la fecha, en caso de que no nos pasen estos parámetros, obtendrán los
 // valores que les asignamos debajo.
-const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, paginacion = null, etiquetas = [], valoracion = null, fecha = null, cantidadTotal, orden = null}) => {
+const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, paginacion = null, etiquetas = [], valoracion = null, fecha = null, cantidadTotal, orden = null, privAsset = null, privAutor = null}) => {
   const [assets, setAssets] = useState([]);
   console.log(datosUsuario);
   // esta variable sirve para poner paginación en caso de que nos la hayan pasado
@@ -36,6 +36,20 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
         if ((!data || !Array.isArray(data.assets)) && !datosUsuario) {
           setAssets([]);
           return;
+        }
+
+        // Este filtrado es para que no se vean los asset si tienen el campo de visibilidad en privado a no ser que estemos en misAssets
+        // ya que en ese caso privAsset sería true
+        if (!privAsset) {
+          // Si no nos pasan true en privAsset, mostramos sólo públicos
+          filteredAssets = filteredAssets.filter(a => a.visibilidad === 'publico');
+        }
+
+        // Este filtrado es para que no se vean los asset si su autor tiene el campo de estado en privado a no ser que estemos en
+        // misAssets ya que en ese caso privAsset sería true
+        if (!privAutor) {
+          // Si no nos pasan true en privAsset, mostramos sólo públicos
+          filteredAssets = filteredAssets.filter(a => a.autor.estado === 'Publico');
         }
 
         // Filtrado de etiquetas si se pasan
@@ -97,40 +111,39 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
         }
 
         // Solo actualizamos el estado si el componente sigue montado
-        
-             // Ordenamiento según la prop "orden"
-             if (orden) {
-               switch (orden) {
-                 case 'Likes':
-                    filteredAssets.sort((a, b) => b.likes - a.likes);
-                   break;
-     
-                 case 'Nombre':
-                   filteredAssets.sort((a, b) => a.nombre.localeCompare(b.nombre));
-                   break;
-     
-                 case 'Descargas':
-                   filteredAssets.sort((a, b) => b.descargas - a.descargas);
-                   break;
-     
-                 case 'Popularidad':
-                   const haceUnMes = new Date();
-                   haceUnMes.setMonth(haceUnMes.getMonth() - 1);
-     
-                   filteredAssets = filteredAssets
-                     .filter(asset => new Date(asset.fecha) >= haceUnMes)
-                     .sort((a, b) => b.likes - a.likes);
-                   break;
-     
-                 default:
-                   break;
-               }
-             }
+  
+        // Ordenamiento según la prop "orden"
+        if (orden) {
+          switch (orden) {
+            case 'Likes':
+              filteredAssets.sort((a, b) => b.likes - a.likes);
+              break;
+
+            case 'Nombre':
+              filteredAssets.sort((a, b) => a.nombre.localeCompare(b.nombre));
+              break;
+
+            case 'Descargas':
+              filteredAssets.sort((a, b) => b.descargas - a.descargas);
+              break;
+
+            case 'Popularidad':
+              const haceUnMes = new Date();
+              haceUnMes.setMonth(haceUnMes.getMonth() - 1);
+
+              filteredAssets = filteredAssets
+                .filter(asset => new Date(asset.fecha) >= haceUnMes)
+                .sort((a, b) => b.likes - a.likes);
+              break;
+
+            default:
+              break;
+          }
+        }
     
-          // Filtrar los assets nulos o vacíos
+        // Filtrar los assets nulos o vacíos
         const validAssets = filteredAssets.filter(asset => asset != null && asset.nombre);
         setAssets(validAssets.slice(inicio, inicio + cantidad));
-
       } catch (error) {
         console.error("Error al obtener los assets:", error);
       }

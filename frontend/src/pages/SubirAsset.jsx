@@ -62,7 +62,7 @@ function SubirAsset() {
       // para subir al cloudinary el archivo con su nombre real y extensión
       const originalName = archivoCargado.name;                   // ej. "miModelo.glb"
       const extension    = originalName.split('.').pop();         // ej. "glb"
-      const baseName     = originalName.replace(/\.[^/.]+$/, ''); // ej. "miModelo"
+      const nombreArchivo     = originalName.replace(/\.[^/.]+$/, ''); // ej. "miModelo"
 
       // 4. Armar body para enviar al backend
       const datosAsset = {
@@ -75,7 +75,7 @@ function SubirAsset() {
         contenido: contenidoBase64,
         // estas dos de abajo son para la extensión y el nombre del archivo
         extension,                           // "glb"
-        baseName,                            // "miModelo"
+        nombreArchivo,                       // "miModelo"
 
         likes: [],
         descargas: 0,
