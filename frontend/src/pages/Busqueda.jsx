@@ -15,7 +15,7 @@ function Busqueda() {
   const [resultados, setResultados] = useState([]);
   const [cantidadAssets, setCantidadAssets] = useState(20);
   const [listaVisible, setListaVisible] = useState(false); // Controla si la lista está visible
-  const [ordenSeleccionado, setOrdenSeleccionado] = useState('Seleccionar'); // Valor por defecto
+  const [ordenSeleccionado, setOrdenSeleccionado] = useState(null); // Valor por defecto
   const [resultadosVisible, setResultadosVisible] = useState(false); // Para "Resultados"
   const [cantidadAssetsTotal, setAssetsTotal] = useState(0); // Para "Resultados"
   const [paginasTotales, setPaginasTotales] = useState(0);
@@ -189,7 +189,7 @@ function Busqueda() {
 
           {/* Mostrar el valor seleccionado */}
           <div  ref={toggleButtonRef} onClick={toggleLista}  style={{marginLeft:'10px', padding:'5px 10px',marginTop:'3px', fontSize: '14px', fontWeight: 'bold', cursor:'pointer',background:'#252360'}}>
-            {ordenSeleccionado}
+            {ordenSeleccionado || 'Seleccionar'}
           </div>
           <div style={{ marginLeft: '20px',  display: 'flex', alignItems:'center',gap:'10px' }}>
             <h1 style={{ fontSize: '18px', margin: '0' }}>Resultados</h1>
@@ -247,8 +247,9 @@ function Busqueda() {
             )}
           </div>
         </div>
-        <AssetLista  paginacion={paginaActual*cantidadAssets} datosUsuario={resultados}  etiquetas={filtrosSeleccionados} fecha={fechaSeleccionada} orden={ordenSeleccionado} valoracion={valoracionSeleccionada} cantidadTotal={handleCantidadTotal} cantidad={resultados.length}></AssetLista>
+
         <div className='assetsContainer' style={{width:'70%', alignSelf:'center', marginTop:'10px',marginLeft:'10%'}}>
+          <AssetLista  paginacion={paginaActual*cantidadAssets} datosUsuario={resultados}  etiquetas={filtrosSeleccionados} fecha={fechaSeleccionada}  categoria={ordenSeleccionado} orden={ordenSeleccionado} valoracion={valoracionSeleccionada} cantidadTotal={handleCantidadTotal} cantidad={resultados.length}></AssetLista>
           <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '20px' }}>
           {/* Botón anterior */}
           <button

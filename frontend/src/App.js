@@ -29,7 +29,7 @@ function App() {
             <Route path='/DetallesAsset/:id' element={<DetallesAsset />} />
             <Route path='/EditarAsset' element={<EditarAsset />} />
             <Route path='/MiPerfil' element={<MiPerfil />} />
-            <Route path='/OtroPerfil' element={<OtroPerfil />} />
+            <Route path='/OtroPerfil/:id' element={<OtroPerfil />} />
             <Route path='/Siguiendo' element={<Siguiendo />} />
             <Route path='/SubirAsset' element={<SubirAsset />} />
           </Routes>

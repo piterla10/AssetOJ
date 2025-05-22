@@ -2,7 +2,7 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 const {validarCampos} = require('../middlewares/validar-campos');
 const {validarJWT} = require('../middlewares/validar-jwt');
-const {crearUsuario,obtenerUsuario,obtenerUsuarios,actualizarUsuario,cambiarContrasena, subirImagenPerfil,obtenerSeguidos} = require('../controllers/usuarios');
+const {crearUsuario,obtenerUsuario,DejarseguirUsuario,seguirUsuario,obtenerUsuarios,actualizarUsuario,cambiarContrasena, subirImagenPerfil,obtenerSeguidos} = require('../controllers/usuarios');
 const router = Router();
 const upload = require('../middlewares/multer');
 
@@ -36,6 +36,14 @@ router.put('/cambioPassword/:usuario', [
     validarJWT
     
 ], cambiarContrasena);
+
+router.post('/seguir', [
+    validarJWT],
+seguirUsuario);
+
+router.post('/dejarSeguir', [
+    validarJWT],
+DejarseguirUsuario);
 
 router.put('/cambioImagenPerfil/:usuario', [
     validarJWT,

@@ -15,6 +15,17 @@ const obtenerUsuario = async (email) => {
 
   return response.data
 }
+
+const seguirUsuario = async (body) => {
+  const response = await axios.get('http://localhost:5000/seguir',body, config)
+
+  return response.data
+}
+const DejarseguirUsuario = async (body) => {
+  const response = await axios.get('http://localhost:5000/dejarSeguir',body, config)
+
+  return response.data
+}
 const obtenerUsuarios = async (email) => {
     const response = await axios.get('http://localhost:5000'+ API_URL, config)
     console.log(response.data);
@@ -48,7 +59,7 @@ const obtenerSeguidos = async (id) => {
 }
 
 const usuarioService = {
-    obtenerUsuarios,obtenerUsuario,actualizarUsuario,actualizarContrasena,actualizarImagenPerfil,obtenerSeguidos
+    obtenerUsuarios,obtenerUsuario,actualizarUsuario,actualizarContrasena,actualizarImagenPerfil,obtenerSeguidos,seguirUsuario,DejarseguirUsuario
 }
 
 export default usuarioService

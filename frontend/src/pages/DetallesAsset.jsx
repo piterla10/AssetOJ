@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import assetService from '../features/assets/assetService';
 import StarRating from '../components/estrellas';
 import usuarioService from '../features/usuarios/usuarioService';
@@ -246,7 +246,18 @@ function DetallesAsset() {
           <h2>Información del autor</h2>
           <hr style={{width: "100%"}}/>
           <div className="autor-box">
-            <span> <img src={asset.autor.imagenPerfil} alt="imagen del autor" style={{width: "45px", height:"45px", borderRadius: "50%", objectFit: "cover"}}/>{asset.autor.nombre}</span>
+          <Link
+              to={`/OtroPerfil/${asset.autor._id}`}
+              className="autor-link"
+              style={{ display: "flex", alignItems: "center", gap: "10px", cursor:"pointer", color: "inherit" }}
+            >
+              <img 
+                src={asset.autor.imagenPerfil} 
+                alt="imagen del autor" 
+                style={{ width: "45px", height:"45px", borderRadius: "50%", objectFit: "cover" }}
+              />
+              <span>{asset.autor.nombre}</span>
+            </Link>
             <div className="separador"></div>
             <span><StarRating value={asset.autor.valoracionesNota} lugar={1}/> ({asset.autor.valoracionesNum})</span>
             <div className="separador"></div>
@@ -304,7 +315,13 @@ function DetallesAsset() {
             <img src={comentario.usuario?.imagenPerfil} alt="imagen de perfil" style={{ width: "45px", height: "45px", borderRadius: "50%", objectFit: "cover" }}/>
               <div className="comentario-contenido">
                 <div className='contenido-comentario-nombre'>
+                    <Link 
+                    to={`/OtroPerfil/${comentario.usuario?._id}`} 
+                    className="autor-link"
+                    style={{ color: "inherit", display: "flex", alignItems: "center", gap: "10px" }}
+                  >
                   <strong>{comentario.usuario?.nombre}</strong>
+                  </Link>
                   <p style={{ fontStyle: "italic" }}>
                     {valor !== null ? <StarRating value={valor} lugar={2}/> : "Sin valoración"}
                   </p>

@@ -54,6 +54,92 @@ const obtenerUsuarios = async (req, res) => {
         res.status(500).json({ mensaje: 'Error del servidor' });
     }
 };
+const seguirUsuario = async (req, res) => {
+  const { idSeguidor, idSeguido } = req.body;
+
+  if (!idSeguidor || !idSeguido) {
+    return res.status(400).json({ mensaje: 'Faltan datos: idSeguidor e idSeguido son requeridos' });
+  }
+
+  if (idSeguidor === idSeguido) {
+    return res.status(400).json({ mensaje: 'No puedes seguirte a ti mismo' });
+  }
+
+  try {
+    const usuarioSeguidor = await Usuario.findById(idSeguidor);
+    const usuarioSeguido = await Usuario.findById(idSeguido);
+
+    if (!usuarioSeguidor || !usuarioSeguido) {
+      return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    }
+
+    // Verificar si ya sigue al usuario
+    if (usuarioSeguidor.seguidos.includes(idSeguido)) {
+      return res.status(400).json({ mensaje: 'Ya sigues a este usuario' });
+    }
+
+    // Añadir idSeguido al array seguidos del seguidor
+    usuarioSeguidor.seguidos.push(idSeguido);
+
+    // Añadir idSeguidor al array seguidores del seguido
+    usuarioSeguido.seguidores.push(idSeguidor);
+
+    // Guardar ambos usuarios
+    await usuarioSeguidor.save();
+    await usuarioSeguido.save();
+
+    res.status(200).json({ mensaje: 'Usuario seguido correctamente' });
+  } catch (error) {
+    console.error('Error al seguir usuario:', error);
+    res.status(500).json({ mensaje: 'Error del servidor' });
+  }
+};
+const DejarseguirUsuario = async (req, res) => {
+  const { idSeguidor, idSeguido } = req.body;
+
+  if (!idSeguidor || !idSeguido) {
+    return res.status(400).json({ mensaje: 'Faltan datos: idSeguidor e idSeguido son requeridos' });
+  }
+
+  if (idSeguidor === idSeguido) {
+    return res.status(400).json({ mensaje: 'No puedes dejar de seguirte a ti mismo' });
+  }
+
+  try {
+    const usuarioSeguidor = await Usuario.findById(idSeguidor);
+    const usuarioSeguido = await Usuario.findById(idSeguido);
+
+    if (!usuarioSeguidor || !usuarioSeguido) {
+      return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    }
+
+    // Verificar si el usuario efectivamente sigue al otro
+    if (!usuarioSeguidor.seguidos.includes(idSeguido)) {
+      return res.status(400).json({ mensaje: 'No sigues a este usuario' });
+    }
+
+    // Eliminar idSeguido del array seguidos del seguidor
+    usuarioSeguidor.seguidos = usuarioSeguidor.seguidos.filter(
+      seguidoId => seguidoId.toString() !== idSeguido
+    );
+
+    // Eliminar idSeguidor del array seguidores del seguido
+    usuarioSeguido.seguidores = usuarioSeguido.seguidores.filter(
+      seguidorId => seguidorId.toString() !== idSeguidor
+    );
+
+    // Guardar ambos usuarios
+    await usuarioSeguidor.save();
+    await usuarioSeguido.save();
+
+    res.status(200).json({ mensaje: 'Has dejado de seguir al usuario correctamente' });
+  } catch (error) {
+    console.error('Error al dejar de seguir usuario:', error);
+    res.status(500).json({ mensaje: 'Error del servidor' });
+  }
+};
+
+
 const obtenerSeguidos = async (req, res) => {
     try {
       const { id } = req.params;
@@ -230,4 +316,4 @@ const subirImagenPerfil = async (req, res) => {
       res.status(500).json({ message: 'Error al subir imagen', error });
     }
 }
-module.exports = {crearUsuario,obtenerUsuario,obtenerUsuarios,actualizarUsuario,cambiarContrasena, subirImagenPerfil,obtenerSeguidos}
+module.exports = {crearUsuario,obtenerUsuario,obtenerUsuarios,actualizarUsuario,cambiarContrasena,DejarseguirUsuario, subirImagenPerfil,obtenerSeguidos,seguirUsuario}
