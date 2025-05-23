@@ -2,7 +2,7 @@ import axios from 'axios'
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 const API_URL = '/api/users/'
 
-
+console.log('apiUrl', apiUrl); 
 // Register user
 const register = async (userData) => {
   console.log(userData);
