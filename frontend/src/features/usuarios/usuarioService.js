@@ -1,5 +1,5 @@
 import axios from 'axios'
-
+const apiUrl = process.env.API_URL;
 const API_URL = '/api/usuarios/'
 const token = localStorage.getItem('token'); // Recuperar el token almacenado
 
@@ -11,50 +11,50 @@ const config = {
 };
 
 const obtenerUsuario = async (email) => {
-  const response = await axios.get('http://localhost:5000'+ API_URL + email, config)
+  const response = await axios.get(apiUrl+ API_URL + email, config)
 
   return response.data
 }
 
 const seguirUsuario = async (body) => {
    console.log('Config headers:', body);
-  const response = await axios.put('http://localhost:5000/api/usuarios/seguidos/seguir',body, config)
+  const response = await axios.put(apiUrl + '/api/usuarios/seguidos/seguir',body, config)
 
 
   return response.data
 }
 const DejarseguirUsuario = async (body) => {
-  const response = await axios.put('http://localhost:5000/api/usuarios/seguidos/dejarSeguir',body, config)
+  const response = await axios.put(apiUrl + '/api/usuarios/seguidos/dejarSeguir',body, config)
 
   return response.data
 }
 const obtenerUsuarios = async (email) => {
-    const response = await axios.get('http://localhost:5000'+ API_URL, config)
+    const response = await axios.get(apiUrl + API_URL, config)
     console.log(response.data);
   
     return response.data
 }
 const actualizarUsuario = async (id,body) => {
-    const response = await axios.put('http://localhost:5000'+ API_URL + id, body, config)
+    const response = await axios.put(apiUrl + API_URL + id, body, config)
     console.log(response.data);
   
     return response.data
 }
 const actualizarContrasena = async (id,body) => {
-    const response = await axios.put('http://localhost:5000'+API_URL+'cambioPassword/'+id, body, config)
+    const response = await axios.put(apiUrl + API_URL+'cambioPassword/'+id, body, config)
     console.log(response.data);
   
     return response.data
 }
 
 const actualizarImagenPerfil = async (id,body) => {
-    const response = await axios.put('http://localhost:5000'+API_URL+'cambioImagenPerfil/'+id, body, config)
+    const response = await axios.put(apiUrl + API_URL+'cambioImagenPerfil/'+id, body, config)
     console.log(response.data);
   
     return response.data
 }
 const obtenerSeguidos = async (id) => {
-    const response = await axios.get('http://localhost:5000'+ API_URL+'/obtenerSeguidos/'+id, config)
+    const response = await axios.get(apiUrl + API_URL+'/obtenerSeguidos/'+id, config)
     console.log(response.data);
   
     return response.data

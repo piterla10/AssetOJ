@@ -1,5 +1,5 @@
 import axios from 'axios'
-
+const apiUrl = process.env.API_URL;
 const API_URL = '/api/assets/'
 const token = localStorage.getItem('token'); // Recuperar el token almacenado
 
@@ -11,30 +11,30 @@ const config = {
 };
 
 const crearAsset = async (body,usuario) => {
-  const response = await axios.post('http://localhost:5000/api/assets/'+usuario._id,
+  const response = await axios.post(apiUrl +'/api/assets/'+usuario._id,
     body,config)
 
   return response.data
 }
 const getAssets = async (tipo) => {
-  const response = await axios.get('http://localhost:5000/api/assets/'+tipo,config)
+  const response = await axios.get(apiUrl + '/api/assets/'+tipo,config)
 
   return response.data
 }
 const getAssetsTodos = async () => {
-    const response = await axios.get('http://localhost:5000/api/assets/',config)
+    const response = await axios.get(apiUrl + '/api/assets/',config)
   
     return response.data
   }
 const getAsset = async (tipo) => {
-    const response = await axios.get('http://localhost:5000/api/assets/obtenerUnAsset/'+tipo,config)
+    const response = await axios.get(apiUrl + '/api/assets/obtenerUnAsset/'+tipo,config)
   
     return response.data
 }
 
 const putLikeAsset = async ({ usuario, asset }) => {
     const response = await axios.put(
-      'http://localhost:5000/api/assets/like',
+      apiUrl + '/api/assets/like',
       { usuario, asset }, // <- body de la petición
       config              // <- cabeceras (como el token, si lo necesitas)
     );
@@ -44,7 +44,7 @@ const putLikeAsset = async ({ usuario, asset }) => {
 
 const putValoracionAsset = async ({ usuario, asset, valoracion}) => {
     const response = await axios.put(
-      'http://localhost:5000/api/assets/valoracion',
+     apiUrl + '/api/assets/valoracion',
       { usuario, asset, valoracion },
       config
     );
@@ -54,7 +54,7 @@ const putValoracionAsset = async ({ usuario, asset, valoracion}) => {
 
 const putDescarga = async ({ usuario, asset }) => {
     const response = await axios.put(
-      'http://localhost:5000/api/assets/descarga',
+      apiUrl + '/api/assets/descarga',
       { usuario, asset }, // <- body de la petición
       config              // <- cabeceras (como el token, si lo necesitas)
     );
