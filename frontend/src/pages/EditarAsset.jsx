@@ -102,18 +102,23 @@ function EditarAsset() {
 
       // Solo convertir imágenes si hay nuevas
       let imagenesBase64 = null;
-      if (imagenes.length > 0) {
-        imagenesBase64 = await Promise.all(imagenes.map((img) => convertToBase64(img.file)));
+       // Filtramos solo aquellas con .file (las precargadas tienen file === null)
+      const nuevasImgs = imagenes.filter(img => img.file);
+      if (nuevasImgs.length > 0) {
+        imagenesBase64 = await Promise.all(
+          nuevasImgs.map(img => convertToBase64(img.file))
+        );
       }
 
       // Solo convertir archivo si hay uno nuevo
       let contenidoBase64 = null;
       let extension = asset?.extension || '';
       let nombreArchivo = asset?.nombreArchivo || '';
-      if (archivoCargado) {
+      // Solo si es un File (no el objeto precargado que usamos para mostrar nombre)
+      if (archivoCargado instanceof File) {
         contenidoBase64 = await convertToBase64(archivoCargado);
         const originalName = archivoCargado.name;
-        extension = originalName.split('.').pop();
+        extension     = originalName.split('.').pop();
         nombreArchivo = originalName.replace(/\.[^/.]+$/, '');
       }
 
