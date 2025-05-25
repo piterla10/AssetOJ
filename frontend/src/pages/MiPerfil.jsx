@@ -484,7 +484,30 @@ function MiPerfil() {
       <div className='contenedorPrincipal'>
         <div className='contenedor'>
           <div className='contenedor2'>
-            <AssetLista className="lista" cantidad={cantidadAssets} paginacion={paginaActual*cantidadAssets} orden={ordenSeleccionado} cantidadTotal={handleCantidadTotal} datosUsuario={datosUsuario} privAsset={true} privAutor={true}/>
+            {activo === 'Mis Assets'
+              ? (
+                <AssetLista
+                  className="lista"
+                  cantidad={cantidadAssets}
+                  paginacion={paginaActual * cantidadAssets}
+                  orden={ordenSeleccionado}
+                  cantidadTotal={handleCantidadTotal}
+                  datosUsuario={datosUsuario}
+                  privAsset={true}
+                  privAutor={true}
+                />
+              )
+              : (
+                <AssetLista
+                  className="lista"
+                  cantidad={cantidadAssets}
+                  paginacion={paginaActual * cantidadAssets}
+                  orden={ordenSeleccionado}
+                  cantidadTotal={handleCantidadTotal}
+                  datosUsuario={datosUsuario}
+                />
+              )
+            }
             <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '20px' }}>
               {/* Botón anterior */}
               <button
