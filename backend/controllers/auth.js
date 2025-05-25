@@ -1,5 +1,5 @@
 const { response } = require('express');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const {generarJWT} = require('../helpers/jwt');
 const jwt = require('jsonwebtoken');
 const Usuario = require('../models/usuarios.js');

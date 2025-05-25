@@ -1,11 +1,12 @@
 import axios from 'axios'
-
+const apiUrl = process.env.REACT_APP_API_URL;
 const API_URL = '/api/users/'
 
-
+console.log('apiUrl', apiUrl); 
 // Register user
 const register = async (userData) => {
-  const response = await axios.post('http://localhost:5000/api/usuarios', userData)
+  console.log(userData);
+  const response = await axios.post(apiUrl+'/api/usuarios', userData)
 
   if (response.data) {
     localStorage.setItem('token',response.data.token);
@@ -17,7 +18,8 @@ const register = async (userData) => {
 
 // Login user
 const login = async (userData) => {
-  const response = await axios.post('http://localhost:5000/api/login', userData)
+  console.log(userData);
+  const response = await axios.post(apiUrl + '/api/login', userData)
 
   if (response.data) {
    
