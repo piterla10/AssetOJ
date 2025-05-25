@@ -70,7 +70,7 @@ function SubirAsset() {
       // para subir al cloudinary el archivo con su nombre real y extensión
       const originalName = archivoCargado.name;
       const extension = originalName.split('.').pop();
-      const baseName = originalName.replace(/\.[^/.]+$/, '');
+      const nombreArchivo = originalName.replace(/\.[^/.]+$/, '');
 
       const datosAsset = {
         nombre: document.querySelector('input[placeholder="Título"]').value,
@@ -81,7 +81,7 @@ function SubirAsset() {
         imagenes: imagenesBase64,
         contenido: contenidoBase64,
         extension,
-        baseName,
+        nombreArchivo,
         likes: [],
         descargas: 0,
         valoracion: [],
@@ -91,7 +91,6 @@ function SubirAsset() {
       };
 
       const response = await assetService.crearAsset(datosAsset, usuario);
-      console.log("📦 Respuesta del backend:", response);
 
       setModalMensaje("El asset: " + datosAsset.nombre + " ha sido subido correctamente");
       setModalVisible(true);

@@ -6,32 +6,32 @@ function Inicio() {
     <>
     <div className='contenedorPrincipal'>
       <section className='contenedorTitulo'>
-        <h1 className='tituloinicio'>Más populares</h1>
+        <h1 className='tituloinicio'>Más recientes</h1>
       </section>
       <div className='contenedor'>
         <h1 className='titulo2'>3D</h1>
         <div className='contenedor2'>
-          <AssetLista className="lista" cantidad={6} categoria={'3D'}/>
+          <AssetLista className="lista" cantidad={6} categoria={'3D'} orden={"Novedad"}/>
         </div>
       </div>
       <div className='contenedor'>
         <h1 className='titulo2'>2D</h1>
         <div className='contenedor2'>
-          <AssetLista  className="lista"  cantidad={6} categoria={'2D'} />
+          <AssetLista  className="lista"  cantidad={6} categoria={'2D'} orden={"Novedad"}/>
         </div>
       </div>
        
       <div className='contenedor'>
         <h1 className='titulo2'>Audio</h1>
         <div className='contenedor2'>
-          <AssetLista  className="lista"  cantidad={6} categoria={'Audio'}/>
+          <AssetLista  className="lista"  cantidad={6} categoria={'Audio'} orden={"Novedad"}/>
         </div>
       </div>
        
       <div className='contenedor'>
         <h1 className='titulo2'>Add-On</h1>
         <div className='contenedor2'>
-          <AssetLista  className="lista"  cantidad={6} categoria={'Add-On'}/>
+          <AssetLista  className="lista"  cantidad={6} categoria={'Add-On'} orden={"Novedad"}/>
         </div>
       </div>
      </div>

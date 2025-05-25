@@ -28,7 +28,6 @@ const obtenerUsuario = async (req, res) => {
               populate: { path: 'autor' }
             }
         ]); // Buscar usuario en la base de datos
-        console.log(usuario);
         if (!usuario) {
             return res.status(404).json({ mensaje: 'Usuario no encontrado' });
         }
@@ -56,7 +55,6 @@ const obtenerUsuarios = async (req, res) => {
 };
 const seguirUsuario = async (req, res) => {
   const { idSeguidor, idSeguido } = req.body;
-  console.log('Datos recibidos:', req.body);
 
   if (!idSeguidor || !idSeguido) {
     return res.status(400).json({ mensaje: 'Faltan datos: idSeguidor e idSeguido son requeridos' });
@@ -86,7 +84,6 @@ const seguirUsuario = async (req, res) => {
 
     // Agrega idSeguidor al array seguidores
     usuarioSeguido.seguidores.push(idSeguidor);
-    console.log('se guardan bien');
     await usuarioSeguidor.save();
     await usuarioSeguido.save();
 

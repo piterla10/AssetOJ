@@ -6,7 +6,6 @@ const Usuario = require('../models/usuarios.js');
 
 const login = async (req, res) => {
     const { email, password1 } = req.body;
-    console.log(password1)
     try {
         // Buscar usuario en la base de datos por email
         const usuarioBD = await Usuario.findOne({ email }).populate([

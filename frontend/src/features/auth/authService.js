@@ -5,7 +5,6 @@ const API_URL = '/api/users/'
 
 // Register user
 const register = async (userData) => {
-  console.log(userData);
   const response = await axios.post('http://localhost:5000/api/usuarios', userData)
 
   if (response.data) {
@@ -18,7 +17,6 @@ const register = async (userData) => {
 
 // Login user
 const login = async (userData) => {
-  console.log(userData);
   const response = await axios.post('http://localhost:5000/api/login', userData)
 
   if (response.data) {

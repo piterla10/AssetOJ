@@ -122,12 +122,10 @@ function MiPerfil() {
         try {
           
           const usuarioData = await usuarioService.obtenerUsuario(usuarioLocal._id);
-          console.log(usuarioData);
           setUsuario(usuarioData);
           setValoracion(usuarioData.valoracionesNota || 0);
    
           setDatosUsuario(usuarioData.assets);
-          console.log(usuarioData)
         } catch (error) {
           console.error('Error al obtener los assets:', error);
         }
@@ -145,7 +143,6 @@ function MiPerfil() {
     setActivo(opcion);
     switch (opcion) {
       case 'Mis Assets':
-        {console.log(usuario)}
         setDatosUsuario(usuario.assets);
         break;
       case 'Descargas':
@@ -291,7 +288,7 @@ function MiPerfil() {
               <h2 className='subtituloPerfil'>Seguidos</h2>
               <h2 className='subtituloPerfil'>{usuario.seguidos.length || 0}</h2>
             </div>
-            <img src='https://lh3.googleusercontent.com/d/1lmEovHAO0x41N51UcK63nEXlBQ0tJ9je' onClick={openModal} className='ajustes' />
+            <img src='/engranaje.png' onClick={openModal} className='ajustes' />
             <Modal
               show={isModalOpen}
               onClose={closeModal}
@@ -487,7 +484,6 @@ function MiPerfil() {
       <div className='contenedorPrincipal'>
         <div className='contenedor'>
           <div className='contenedor2'>
-            {console.log(datosUsuario)}
             <AssetLista className="lista" cantidad={cantidadAssets} paginacion={paginaActual*cantidadAssets} orden={ordenSeleccionado} cantidadTotal={handleCantidadTotal} datosUsuario={datosUsuario} privAsset={true} privAutor={true}/>
             <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '20px' }}>
               {/* Botón anterior */}

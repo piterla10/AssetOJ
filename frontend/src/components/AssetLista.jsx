@@ -7,7 +7,6 @@ import assetService from "../features/assets/assetService";
 // valores que les asignamos debajo.
 const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, paginacion = null, etiquetas = [], valoracion = null, fecha = null, cantidadTotal, orden = null, privAsset = null, privAutor = null}) => {
   const [assets, setAssets] = useState([]);
-  console.log(datosUsuario);
   // esta variable sirve para poner paginación en caso de que nos la hayan pasado
   const inicio = paginacion ? paginacion : 0;
 
@@ -20,11 +19,9 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
         let filteredAssets;
         if (datosUsuario && categoria) {
           filteredAssets = datosUsuario.filter(asset => asset.tipo === categoria);
-          console.log(filteredAssets);
           cantidadTotal?.(filteredAssets.length);
         } else if(datosUsuario) {
           filteredAssets = datosUsuario;
-          console.log(filteredAssets);
           cantidadTotal?.(filteredAssets.length);
         }else {
           data = await assetService.getAssets(categoria);
@@ -115,6 +112,10 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
         // Ordenamiento según la prop "orden"
         if (orden) {
           switch (orden) {
+            case 'Novedad':
+              // Asume que asset.fecha es un string ISO o algo parseable por Date
+              filteredAssets.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+              break;
             case 'Likes':
               filteredAssets.sort((a, b) => b.likes - a.likes);
               break;
@@ -156,7 +157,7 @@ const AssetLista = ({ cantidad = null, categoria = null, datosUsuario = null, pa
     return (
       <div className="listaAssets">
         {assets.map(asset => (
-          <AssetCarta key={asset._id} asset={asset} />
+          <AssetCarta key={asset._id} asset={asset} editar={privAsset}/>
         ))}
       </div>
     );

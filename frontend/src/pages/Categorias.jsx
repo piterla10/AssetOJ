@@ -82,7 +82,6 @@ function Categorias() {
     setAssets([]);
     const fetchAssets = async () => {
       try {
-        console.log(categoriaActiva);
         const data = await assetService.getAssets(categoriaActiva);
         setAssets(data || []); // Aseguramos que siempre sea un array
       } catch (error) {

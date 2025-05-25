@@ -62,13 +62,11 @@ function Siguiendo() {
       setAssetsTotal(total);
       
       const paginas = Math.max(1, Math.ceil(total / cantidadAssets));
-      console.log(paginas);
       setPaginasTotales(paginas);
     };
   
     const handleCalculoPaginas = () => {
       const paginas = Math.ceil(cantidadAssetsTotal / cantidadAssets);
-      console.log(paginas);
       setPaginasTotales(paginas);
     };
     useEffect(() => {
@@ -91,12 +89,10 @@ function Siguiendo() {
         const fetchAssets = async () => {
           try {
             const usuarioData = await usuarioService.obtenerSeguidos(usuarioLocal._id);
-            console.log(usuarioData);
             setUsuario(usuarioData);
         
             // Recoger todos los assets de los usuarios seguidos
             const todosLosAssets = usuarioData.seguidos.flatMap(usuario => usuario.assets);
-            console.log(todosLosAssets);
             // Guardarlos en el estado
             setDatosUsuario(todosLosAssets);
           } catch (error) {
@@ -221,7 +217,6 @@ function Siguiendo() {
           </div>
         </div>
         <div className='assetsContainer' style={{width:'70%', alignSelf:'center', marginTop:'10px',marginLeft:'10%'}}>
-            {console.log(ordenSeleccionado)}
           <AssetLista 
             cantidad={cantidadAssets} 
             categoria={ordenSeleccionado}

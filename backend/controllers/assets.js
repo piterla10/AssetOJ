@@ -2,6 +2,7 @@ const { response } = require('express');
 const Usuario = require('../models/usuarios.js');
 const Comentario = require('../models/comentario.js');
 const Asset = require('../models/assets.js');
+const cloudinary = require('cloudinary').v2;
 
 const obtenerAssetsPorTipo = async (req, res) => {
     try {
@@ -33,6 +34,7 @@ const obtenerAssetsPorTipo = async (req, res) => {
         });
     }
 };
+
 const obtenerAssetTodos = async (req, res) => {
     try {
       
@@ -100,11 +102,6 @@ const obtenerAsset = async (req, res) => {
     }
 };
 
-
-
-const cloudinary = require('cloudinary').v2;
-
-
 const crearAsset = async (req, res) => {
     const {
       nombre, descripcion, tipo, visibilidad, etiquetas,
@@ -129,7 +126,6 @@ const crearAsset = async (req, res) => {
   
       // Subir contenido
       let urlContenido = '';
-      console.log(contenido);
       if (contenido) {
         const uploadContenido = await cloudinary.uploader.upload(contenido, {
           folder: `${usuario.nombre}/${nombre}`,
@@ -159,7 +155,6 @@ const crearAsset = async (req, res) => {
         nombreArchivo
       });
       
-      console.log("Nuevo asset: " + nuevoAsset);
       await nuevoAsset.save();
       
       usuario.assets.push(nuevoAsset._id); // Asocia el asset al usuario
@@ -177,9 +172,7 @@ const crearAsset = async (req, res) => {
         msg: "Error al crear el asset"
       });
     }
-  };
-  
-
+};
 
 const likeAsset = async (req, res) => {
     try { // tanto usuario como comentario son los id de cada uno
@@ -336,7 +329,6 @@ const valorarAsset = async (req, res) => {
     }
 };
 
-
 const descargaAsset = async (req, res) => {
     try { // tanto usuario como comentario son los id de cada uno
         const { usuario, asset} = req.body;
@@ -406,5 +398,98 @@ const descargaAsset = async (req, res) => {
     }
 };
 
+const editarAsset = async (req, res) => {
+  const { id } = req.params;
+  const { asset, usuario } = req.body;
 
-module.exports = { obtenerAssetsPorTipo , crearAsset, obtenerAsset, obtenerAssetTodos, likeAsset,  valorarAsset, descargaAsset}
+  try {
+    // 1. Buscar asset y usuario
+    const assetExistente = await Asset.findById(id);
+    if (!assetExistente) {
+      return res.status(404).json({ ok: false, msg: 'Asset no encontrado' });
+    }
+    const usuarioDB = await Usuario.findById(usuario._id);
+    if (!usuarioDB) {
+      return res.status(404).json({ ok: false, msg: 'Usuario no encontrado' });
+    }
+
+    // 2. Campos básicos
+    const actualizaciones = {
+      nombre:       asset.nombre       || assetExistente.nombre,
+      descripcion:  asset.descripcion  || assetExistente.descripcion,
+      tipo:         asset.tipo         || assetExistente.tipo,
+      visibilidad:  asset.visibilidad  || assetExistente.visibilidad,
+      etiquetas:    asset.etiquetas    || assetExistente.etiquetas,
+      fecha:        asset.fechaModificacion || new Date()
+    };
+
+    // 3. Imágenes nuevas: elimino las viejas y subo las recibidas
+    if (asset.imagenes && asset.imagenes.length > 0) {
+      for (const url of assetExistente.imagenes) {
+        const publicId = extraerPublicId(url);
+        await cloudinary.uploader.destroy(publicId, { resource_type: 'image' });
+      }
+      const nuevasUrls = [];
+      for (const img of asset.imagenes) {
+        const subida = await cloudinary.uploader.upload(img, {
+          folder: `${usuarioDB.nombre}/${actualizaciones.nombre}/imagenes`,
+          resource_type: 'image'
+        });
+        nuevasUrls.push(subida.secure_url);
+      }
+      actualizaciones.imagenes = nuevasUrls;
+    }
+
+    // 4. Contenido nuevo: elimino el anterior (sea zip, audio, glb…) y subo el nuevo
+    if (asset.contenido) {
+        if (assetExistente.contenido) {
+        
+            const publicIdContenidoPrevio = extraerPublicId(assetExistente.contenido);
+            const tipoPrevio = getResourceType(assetExistente.extension);
+            await cloudinary.uploader.destroy(publicIdContenidoPrevio, { resource_type: tipoPrevio });
+        }
+        const subidaContenido = await cloudinary.uploader.upload(asset.contenido, {
+            folder: `${usuarioDB.nombre}/${actualizaciones.nombre}`,
+            public_id: asset.nombreArchivo,
+            resource_type: 'auto'
+        });
+        actualizaciones.contenido     = subidaContenido.secure_url;
+        actualizaciones.extension     = asset.extension;
+        actualizaciones.nombreArchivo = asset.nombreArchivo;
+    }
+
+    // 5. Guardar cambios
+    const assetActualizado = await Asset.findByIdAndUpdate(id, actualizaciones, { new: true });
+    return res.json({ ok: true, msg: 'Asset actualizado correctamente', asset: assetActualizado });
+
+  } catch (error) {
+    console.error('❌ Error al editar el asset:', error);
+    return res.status(500).json({ ok: false, msg: 'Error al editar el asset' });
+  }
+};
+
+// Utilidad para extraer public_id de una URL de Cloudinary
+const extraerPublicId = (url) => {
+  // 1. Partir tras 'upload/'
+  const partes     = url.split('/upload/')[1];                  // "v1748013696/usuario/Asset%20Name/miArchivo.mp3"
+  // 2. Eliminar prefijo de versión "v1234567890/"
+  const sinVersion = partes.replace(/^v\d+\//, '');            // "usuario/Asset%20Name/miArchivo.mp3"
+  // 3. Decodificar %20, %2F, etc.
+  const decoded    = decodeURIComponent(sinVersion);           // "usuario/Asset Name/miArchivo.mp3"
+  // 4. Quitar extensión
+  const sinExt     = decoded.replace(/\.[^/.]+$/, '');         // "usuario/Asset Name/miArchivo"
+  return sinExt;
+};
+
+// Uilidad que sirve para decirle al cloudinary que tipo de archivo es el contenido para borrarlo
+const getResourceType = (extension) => {
+  const imgExts   = ['png','jpg','jpeg','gif','webp','svg'];
+  const videoExts = ['mp4','mov','avi','webm'];
+  if (imgExts.includes(extension.toLowerCase()))   return 'image';
+  if (videoExts.includes(extension.toLowerCase())) return 'video';
+  // Por defecto, todo lo demás (audio, zip, glb, etc.) lo tratamos como 'raw'
+  return 'raw';
+};
+
+
+module.exports = { obtenerAssetsPorTipo , crearAsset, obtenerAsset, obtenerAssetTodos, likeAsset,  valorarAsset, descargaAsset, editarAsset}

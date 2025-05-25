@@ -62,6 +62,16 @@ const putDescarga = async ({ usuario, asset }) => {
     return response.data;
 };
 
+const editarAsset = async ({id, asset, usuario}) =>{
+  const response = await axios.put(
+    'http://localhost:5000/api/assets/editarAsset/' + id,
+    {asset, usuario},
+    config
+  );
+
+  return response.data;
+}
+
 const assetService = {
     crearAsset,
     getAssets,
@@ -69,7 +79,8 @@ const assetService = {
     getAssetsTodos,
     putLikeAsset,
     putValoracionAsset,
-    putDescarga
+    putDescarga,
+    editarAsset
 }
 
 export default assetService

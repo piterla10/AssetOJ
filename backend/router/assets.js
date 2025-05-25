@@ -2,7 +2,7 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 const {validarCampos} = require('../middlewares/validar-campos');
 const {validarJWT} = require('../middlewares/validar-jwt');
-const {obtenerAssetsPorTipo, crearAsset, obtenerAsset, obtenerAssetTodos, likeAsset, valorarAsset, descargaAsset} = require('../controllers/assets');
+const {obtenerAssetsPorTipo, crearAsset, obtenerAsset, obtenerAssetTodos, likeAsset, valorarAsset, descargaAsset, editarAsset} = require('../controllers/assets');
 const router = Router();
 
 router.get('/:tipo', [
@@ -37,9 +37,10 @@ router.put('/descarga', [
     validarCampos,
 ], descargaAsset);
 
-
-
-
+router.put('/editarAsset/:id', [
+    validarJWT,
+    validarCampos,
+], editarAsset);
 
 
 module.exports = router;

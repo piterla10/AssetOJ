@@ -94,7 +94,6 @@ function OtroPerfil() {
   useEffect(() => {
 
     if (usuario) {
-      console.log(usuario);
       setEsSeguido(usuario.seguidores.includes(usuarioLogueadoId));
     }
   }, [usuario, usuarioLogueadoId]);
@@ -113,7 +112,6 @@ function OtroPerfil() {
   }, [cantidadAssets, cantidadAssetsTotal]);
 
 const handleToggleSeguir = async () => {
-  console.log("handleToggleSeguir ejecutado");
   const body = {
     idSeguidor: usuarioLogueadoId,
     idSeguido: usuario._id,
@@ -335,7 +333,6 @@ const handleToggleSeguir = async () => {
         <div className='contenedorPrincipal'>
         <div className='contenedor'>
           <div className='contenedor2'>
-            {console.log(datosUsuario)}
             <AssetLista className="lista" cantidad={cantidadAssets} paginacion={paginaActual*cantidadAssets} orden={ordenSeleccionado} cantidadTotal={handleCantidadTotal} datosUsuario={datosUsuario} />
             <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '20px' }}>
               {/* Botón anterior */}

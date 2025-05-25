@@ -68,13 +68,11 @@ function Busqueda() {
       setAssetsTotal(total);
       
       const paginas = Math.max(1, Math.ceil(total / cantidadAssets));
-      console.log(paginas);
       setPaginasTotales(paginas);
     };
   
     const handleCalculoPaginas = () => {
       const paginas = Math.ceil(cantidadAssetsTotal / cantidadAssets);
-      console.log(paginas);
       setPaginasTotales(paginas);
     };
     useEffect(() => {

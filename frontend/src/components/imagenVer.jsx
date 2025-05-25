@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 
 const MAX_IMAGENES = 5;
-const PLACEHOLDER_URL = "imagen.webp";
+const PLACEHOLDER_URL = "/imagen.webp";
 
 const ImageUploader = ({ imagenes, setImagenes }) => {
   const inputRef = useRef(null);

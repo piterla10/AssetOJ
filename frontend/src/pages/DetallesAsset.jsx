@@ -27,7 +27,6 @@ function DetallesAsset() {
         // obtengo el asset de la bd
         const data = await assetService.getAsset(id);
         setAsset(data.assets);
-        console.log(data.assets);
         setImgPrincipal(data.assets.imagenes[0]);
       } catch (error) {
         console.error("Error al obtener el asset:", error);
@@ -97,7 +96,6 @@ function DetallesAsset() {
         }
         
         const respuesta = await comentariosService.postComentario(data);
-        console.log("Comentario creado: ", respuesta);
         setComentario('');
         
         // para actualizar la lista de comentarios lo que hacemos es actualizar 

@@ -16,7 +16,6 @@ function Header() {
 
     const fetchUsuario = async () => {
       try {
-        console.log(user);
         const usuarioData = await usuarioService.obtenerUsuario(user._id);
         setUsuario(usuarioData);
       } catch (error) {
